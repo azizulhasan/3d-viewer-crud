@@ -210,3 +210,67 @@ APP CUSTOM CSS
     transform: scale(1.05);
     opacity: 0.95;
   }
+
+
+
+/***********************************************************
+DIMENSION CUSTOM CSS
+************************************************************/
+
+          .dot {
+            display: none;
+          }
+
+          .dim {
+            border-radius: 4px;
+            border: none;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            color: rgba(0, 0, 0, 0.8);
+            display: block;
+            font-family: 'Inter', 'Futura', 'Helvetica Neue', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            max-width: 128px;
+            overflow-wrap: break-word;
+            padding: 0.5em 1em;
+            position: absolute;
+            width: max-content;
+            height: max-content;
+            transform: translate3d(-50%, -50%, 0);
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            --min-hotspot-opacity: 0;
+          }
+
+          @media only screen and (max-width: 800px) {
+            .dim {
+              font-size: 3vw;
+            }
+          }
+
+          .dimensionLineContainer {
+            pointer-events: none;
+            display: block;
+          }
+
+          .dimensionLine {
+            stroke: #3b82f6;
+            stroke-width: 2;
+            stroke-dasharray: 4 2;
+            opacity: 0.8;
+          }
+
+          .hide {
+            display: none;
+          }
+
+          /* Glass effect for better visibility */
+          .dim {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px) contrast(0.89) saturate(1.27);
+            -webkit-backdrop-filter: blur(8px) contrast(0.89) saturate(1.27);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+          }
+

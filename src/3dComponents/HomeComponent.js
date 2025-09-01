@@ -1,14 +1,13 @@
-
 import { useState } from "react";
 import { Section } from "./Shared.js";
 
 export const HomeComponent = () => (
-  <div className="grid md:grid-cols-2 gap-6">
+  <div className="art-grid md:art-grid-cols-2 art-gap-6">
     <Section
       title="Welcome"
       description="This is a 4-page React demo using the @google/model-viewer web component."
     >
-      <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+      <ul className="art-list-disc art-pl-5 art-text-sm art-text-slate-700 art-space-y-1">
         <li>Hotspots with labels</li>
         <li>Simple Dimensions readout</li>
         <li>Annotations & Variants selector</li>
@@ -16,7 +15,7 @@ export const HomeComponent = () => (
       </ul>
     </Section>
     <Section title="Quick Tips">
-      <ol className="list-decimal pl-5 text-sm space-y-1 text-slate-700">
+      <ol className="art-list-decimal art-pl-5 art-text-sm art-space-y-1 art-text-slate-700">
         <li>
           Replace <code>/models/*.glb</code> with your files.
         </li>
@@ -27,7 +26,7 @@ export const HomeComponent = () => (
             href="https://modelviewer.dev"
             target="_blank"
             rel="noreferrer"
-            className="text-blue-600 underline"
+            className="art-text-blue-600 art-underline"
           >
             modelviewer.dev
           </a>

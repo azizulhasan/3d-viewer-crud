@@ -7,23 +7,23 @@ export const SliderComponent = () => {
   const defaultModels = [
     // { 
     //   id: 1, 
-    //   src: "/src/Components/Chair.glb", 
+    //   src: "3dModels/Chair.glb", 
     //   label: "Chair", 
-    //   thumbnail: "/src/Components/Chair.webp",
+    //   thumbnail: "3dModels/Chair.webp",
     //   isDefault: true 
     // },
     // { 
     //   id: 2, 
-    //   src: "/src/Components/Astronaut.glb", 
+    //   src: "3dModels/Astronaut.glb", 
     //   label: "Astronaut", 
-    //   thumbnail: "/src/Components/Astronaut.webp",
+    //   thumbnail: "3dModels/Astronaut.webp",
     //   isDefault: true 
     // },
     // { 
     //   id: 3, 
-    //   src: "/src/Components/lambo.glb", 
+    //   src: "3dModels/lambo.glb", 
     //   label: "Car", 
-    //   thumbnail: "/src/Components/lambo.webp",
+    //   thumbnail: "3dModels/lambo.webp",
     //   isDefault: true 
     // },
   ];
@@ -245,8 +245,8 @@ export const SliderComponent = () => {
                     disabled={uploadProgress !== null || isUploading}
                     className="art-w-full art-bg-blue-600 art-text-white art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-blue-700 art-disabled:art-bg-gray-300 art-flex art-items-center art-justify-center art-gap-2"
                   >
-                    <input type="file"></input>
-                    Uload
+            
+               
                     {uploadProgress !== null ? `Uploading ${uploadProgress}%` : 'Upload GLB File'}
                   </button>
                   <p className="art-text-xs art-text-slate-500">

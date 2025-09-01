@@ -7,13 +7,13 @@ import { NavLink } from "react-router-dom";
 // Shared UI Components
 // =====================
 export const Shell = ({ children }) => (
-  <div className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-white text-slate-800 font-inter">
-    <header className="sticky top-0 z-10 bg-white/70 backdrop-blur-xl border-b shadow-sm">
-      <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="font-bold text-xl tracking-tight text-slate-900">
+  <div className="art-min-h-screen art-bg-gradient-to-b art-from-slate-100 art-via-slate-50 art-to-white art-text-slate-800 art-font-inter">
+    <header className="art-sticky art-top-0 art-z-10 art-bg-white/70 art-backdrop-blur-xl art-border-b art-shadow-sm">
+      <nav className="art-max-w-6xl art-mx-auto art-px-4 art-py-4 art-flex art-items-center art-justify-between">
+        <div className="art-font-bold art-text-xl art-tracking-tight art-text-slate-900">
           🚀 3D Model Viewer
         </div>
-        <div className="flex flex-wrap gap-2 text-sm">
+        <div className="art-flex art-flex-wrap art-gap-2 art-text-sm">
           <Tab to="/">Home</Tab>
           <Tab to="/hotspots">Hotspots</Tab>
           <Tab to="/dimensions">Dimensions</Tab>
@@ -23,7 +23,7 @@ export const Shell = ({ children }) => (
         </div>
       </nav>
     </header>
-    <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">{children}</main>
+    <main className="art-max-w-6xl art-mx-auto art-px-4 art-py-10 art-space-y-8">{children}</main>
   </div>
 );
 
@@ -31,10 +31,10 @@ export const Tab = ({ to, children }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `px-4 py-2 rounded-xl border transition-all duration-200 ${
+      `art-px-4 art-py-2 art-rounded-xl art-border art-transition-all art-duration-200 ${
         isActive
-          ? "bg-slate-900 text-white border-slate-900 shadow-md"
-          : "bg-white/80 hover:bg-slate-100 border-slate-300"
+          ? "art-bg-slate-900 art-text-black art-border-slate-900 art-shadow-md"
+          : "art-bg-white/80 hover:art-bg-slate-100 art-border-slate-300"
       }`
     }
     end
@@ -47,11 +47,11 @@ export const Section = ({ title, children, description }) => (
   <div
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
-    className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 hover:shadow-lg transition"
+    className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-6 hover:art-shadow-lg art-transition"
   >
-    <h2 className="text-2xl font-semibold mb-2 text-slate-800">{title}</h2>
+    <h2 className="art-text-2xl art-font-semibold art-mb-2 art-text-slate-800">{title}</h2>
     {description ? (
-      <p className="text-sm text-slate-600 mb-4">{description}</p>
+      <p className="art-text-sm art-text-slate-600 art-mb-4">{description}</p>
     ) : null}
     {children}
   </div>
@@ -68,7 +68,7 @@ export const MV = React.forwardRef(function MV({ src, children, style, ...rest }
     else refFromProps.current = innerRef.current;
   }, [refFromProps]);
   return (
-    <div className="w-full">
+    <div className="art-w-full">
       <model-viewer
         ref={innerRef}
         src={src}
@@ -92,5 +92,3 @@ export const MV = React.forwardRef(function MV({ src, children, style, ...rest }
     </div>
   );
 });
-
-  

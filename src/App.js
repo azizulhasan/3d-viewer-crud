@@ -5,12 +5,11 @@
 // App.js
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
-// import { Shell } from "./3dComponents/Shared.jsx";
 import { HomeComponent } from "./3dComponents/HomeComponent.js";
-// import { HotspotsComponent } from "./3dComponents/HotspotsComponent.jsx";
-// import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
-// import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
-// import { CameraComponent } from "./3dComponents/CameraComponent.jsx";
+import { HotspotsComponent } from "./3dComponents/HotspotsComponent.js";
+import { DimensionsComponent } from "./3dComponents/DimensionsComponent.js";
+import { VariantsComponent } from "./3dComponents/VariantsComponent.js";
+import { CameraComponent } from "./3dComponents/CameraComponent.js";
 import { SliderComponent } from "./3dComponents/SliderComponent.js";
 import { Shell } from "./3dComponents/Shared.js";
 
@@ -21,26 +20,26 @@ const Home = () => (
   </Shell>
 );
 
-// const Hotspots = () => (
-//   <Shell>
-//     <HotspotsComponent />
-//   </Shell>
-// );
-// const Dimensions = () => (
-//   <Shell>
-//     <DimensionsComponent />
-//   </Shell>
-// );
-// const Variants = () => (
-//   <Shell>
-//     <VariantsComponent />
-//   </Shell>
-// );
-// const Camera = () => (
-//   <Shell>
-//     <CameraComponent />
-//   </Shell>
-// );
+const Hotspots = () => (
+  <Shell>
+    <HotspotsComponent />
+  </Shell>
+);
+const Dimensions = () => (
+  <Shell>
+    <DimensionsComponent />
+  </Shell>
+);
+const Variants = () => (
+  <Shell>
+    <VariantsComponent />
+  </Shell>
+);
+const Camera = () => (
+  <Shell>
+    <CameraComponent />
+  </Shell>
+);
 const Slider = () => (
   <Shell>
     <SliderComponent />
@@ -54,12 +53,17 @@ export default function App() {
     <HashRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+           <Route path="/hotspots" element={<Hotspots />} />
+              <Route path="/dimensions" element={<Dimensions />} />
+                <Route path="/variants" element={<Variants />} />
+                  <Route path="/camera" element={<Camera />} /> 
+                        <Route path="/slider" element={<Slider />} />
         {/* 
-        <Route path="/hotspots" element={<Hotspots />} />
-        <Route path="/dimensions" element={<Dimensions />} />
-        <Route path="/variants" element={<Variants />} />
-        <Route path="/camera" element={<Camera />} /> */}
-        <Route path="/slider" element={<Slider />} />
+     
+     
+      
+      
+  
         {/* ... other routes */}
       </Routes>
     </HashRouter>
