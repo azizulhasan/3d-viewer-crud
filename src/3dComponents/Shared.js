@@ -1,8 +1,6 @@
 // components/Shared.js
 import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
-import "@google/model-viewer";
 
 
 // =====================
@@ -46,7 +44,7 @@ export const Tab = ({ to, children }) => (
 );
 
 export const Section = ({ title, children, description }) => (
-  <motion.section
+  <div
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 hover:shadow-lg transition"
@@ -56,7 +54,7 @@ export const Section = ({ title, children, description }) => (
       <p className="text-sm text-slate-600 mb-4">{description}</p>
     ) : null}
     {children}
-  </motion.section>
+  </div>
 );
 
 // =====================
@@ -95,33 +93,4 @@ export const MV = React.forwardRef(function MV({ src, children, style, ...rest }
   );
 });
 
-// =====================
-// Styles (Auto-inject)
-// =====================
-const styleEl = document.createElement("style");
-styleEl.innerHTML = `
-  model-viewer::part(default-progress-bar) {
-    height: 3px;
-    background: linear-gradient(to right, #3b82f6, #9333ea);
-  }
-  .Hotspot {
-    border: none;
-    background: transparent;
-    transform: translate(-50%, -50%);
-  }
-  .Hotspot div {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 0.5rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    backdrop-filter: blur(6px);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .Hotspot:hover div {
-    transform: scale(1.05);
-    opacity: 0.95;
-  }
-`;
-document.head.appendChild(styleEl);
+  

@@ -1,17 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useRef } from "react";
 import { Section } from "./Shared";
 import { motion } from "framer-motion";
 import "@google/model-viewer";
 import { MV } from "./Shared";
-import { useRef } from "react";
-
-
-
-
 
 export const CameraComponent = () => {
   const mv = useRef(null);
+
   const targets = [
     {
       name: "Isometric",
@@ -47,42 +42,58 @@ export const CameraComponent = () => {
     el.setAttribute("field-of-view", t.fov);
   };
 
-  return (
-    <Section
-      title="Camera Fly-to"
-      description="Jump the camera to preset targets/orbits."
-    >
-      <div className="flex flex-wrap gap-2 mb-3">
-        {targets.map((t) => (
-          <button
-            key={t.name}
-            onClick={() => flyTo(t)}
-            className="px-4 py-2 rounded-xl border bg-white hover:bg-slate-100 text-sm shadow-sm transition"
-          >
-            {t.name}
-          </button>
-        ))}
-      </div>
-      <MV ref={mv} src="/src/Components/Astronaut.glb" camera-controls auto-rotate>
-        <button
-          slot="hotspot-front"
-          data-position="0 0.05 0.2"
-          data-normal="0 1 0"
-          data-visibility-attribute="visible"
-          className="Hotspot"
-        >
-          <div>Front Target</div>
-        </button>
-        <button
-          slot="hotspot-side"
-          data-position="0.2 0.05 0"
-          data-normal="0 1 0"
-          data-visibility-attribute="visible"
-          className="Hotspot"
-        >
-          <div>Side Target</div>
-        </button>
-      </MV>
-    </Section>
+  return React.createElement(
+    Section,
+    {
+      title: "Camera Fly-to",
+      description: "Jump the camera to preset targets/orbits.",
+    },
+    React.createElement(
+      "div",
+      { className: "flex flex-wrap gap-2 mb-3" },
+      targets.map((t) =>
+        React.createElement(
+          "button",
+          {
+            key: t.name,
+            onClick: () => flyTo(t),
+            className:
+              "px-4 py-2 rounded-xl border bg-white hover:bg-slate-100 text-sm shadow-sm transition",
+          },
+          t.name
+        )
+      )
+    ),
+    React.createElement(
+      MV,
+      {
+        ref: mv,
+        src: "/src/Components/Astronaut.glb",
+        "camera-controls": true,
+        "auto-rotate": true,
+      },
+      React.createElement(
+        "button",
+        {
+          slot: "hotspot-front",
+          "data-position": "0 0.05 0.2",
+          "data-normal": "0 1 0",
+          "data-visibility-attribute": "visible",
+          className: "Hotspot",
+        },
+        React.createElement("div", null, "Front Target")
+      ),
+      React.createElement(
+        "button",
+        {
+          slot: "hotspot-side",
+          "data-position": "0.2 0.05 0",
+          "data-normal": "0 1 0",
+          "data-visibility-attribute": "visible",
+          className: "Hotspot",
+        },
+        React.createElement("div", null, "Side Target")
+      )
+    )
   );
 };

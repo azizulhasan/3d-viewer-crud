@@ -1,46 +1,46 @@
 // import React, { useEffect, useMemo, useRef, useState } from "react";
 // import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 // import { motion } from "framer-motion";
-// import "@google/model-viewer"; // Web Component (JS only)
 
 // App.js
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { Shell } from "./3dComponents/Shared.jsx";
-import { HomeComponent } from "./3dComponents/HomeComponent.jsx";
-import { HotspotsComponent } from "./3dComponents/HotspotsComponent.jsx";
-import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
-import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
-import { CameraComponent } from "./3dComponents/CameraComponent.jsx";
-import { SliderComponent } from "./3dComponents/SliderComponent.jsx";
+// import { Shell } from "./3dComponents/Shared.jsx";
+// import { HomeComponent } from "./3dComponents/HomeComponent.jsx";
+// import { HotspotsComponent } from "./3dComponents/HotspotsComponent.jsx";
+// import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
+// import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
+// import { CameraComponent } from "./3dComponents/CameraComponent.jsx";
+import { SliderComponent } from "./3dComponents/SliderComponent.js";
+import { Shell } from "./3dComponents/Shared.js";
 
 
-const Home = () => (
-  <Shell>
-    <HomeComponent />
-  </Shell>
-);
+// const Home = () => (
+//   <Shell>
+//     <HomeComponent />
+//   </Shell>
+// );
 
-const Hotspots = () => (
-  <Shell>
-    <HotspotsComponent />
-  </Shell>
-);
-const Dimensions = () => (
-  <Shell>
-    <DimensionsComponent />
-  </Shell>
-);
-const Variants = () => (
-  <Shell>
-    <VariantsComponent />
-  </Shell>
-);
-const Camera = () => (
-  <Shell>
-    <CameraComponent />
-  </Shell>
-);
+// const Hotspots = () => (
+//   <Shell>
+//     <HotspotsComponent />
+//   </Shell>
+// );
+// const Dimensions = () => (
+//   <Shell>
+//     <DimensionsComponent />
+//   </Shell>
+// );
+// const Variants = () => (
+//   <Shell>
+//     <VariantsComponent />
+//   </Shell>
+// );
+// const Camera = () => (
+//   <Shell>
+//     <CameraComponent />
+//   </Shell>
+// );
 const Slider = () => (
   <Shell>
     <SliderComponent />
@@ -50,48 +50,22 @@ const Slider = () => (
 
 export default function App() {
   return (
+    <>
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} />
         <Route path="/hotspots" element={<Hotspots />} />
         <Route path="/dimensions" element={<Dimensions />} />
         <Route path="/variants" element={<Variants />} />
-        <Route path="/camera" element={<Camera />} />
-        <Route path="/slider" element={<Slider />} />
+        <Route path="/camera" element={<Camera />} /> */}
+        <Route path="/" element={<Slider />} />
         {/* ... other routes */}
       </Routes>
     </HashRouter>
+    </>
   );
 }
 
-
-const styleEl = document.createElement("style");
-styleEl.innerHTML = `
-  model-viewer::part(default-progress-bar) {
-    height: 3px;
-    background: linear-gradient(to right, #3b82f6, #9333ea);
-  }
-  .Hotspot {
-    border: none;
-    background: transparent;
-    transform: translate(-50%, -50%);
-  }
-  .Hotspot div {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 0.5rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    backdrop-filter: blur(6px);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .Hotspot:hover div {
-    transform: scale(1.05);
-    opacity: 0.95;
-  }
-`;
-document.head.appendChild(styleEl);
 
 
 

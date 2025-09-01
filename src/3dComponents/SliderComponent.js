@@ -1,10 +1,8 @@
 import React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Section } from "./Shared";
-import { motion } from "framer-motion";
-import "@google/model-viewer";
-import { MV } from "./Shared";
-import { Upload, Trash2, Eye, EyeOff, Image, Play, FileImage } from "lucide-react";
+import { Section } from "./Shared.js";
+import { MV } from "./Shared.js";
+import { Upload, Trash2, Image, Play, FileImage } from "lucide-react";
 
 export const SliderComponent = () => {
   // Default models
@@ -43,6 +41,11 @@ export const SliderComponent = () => {
   const fileInputRef = useRef(null);
   const thumbnailInputRef = useRef(null);
   const mvRef = useRef(null);
+
+  useEffect(()=>{
+    console.log("Im for test purpose.");
+    
+  },[])
 
   // Handle GLB file upload
   const handleFileUpload = useCallback((event) => {
@@ -212,49 +215,42 @@ export const SliderComponent = () => {
   }, [autoPlay, models.length]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div className="art-flex  art-gap-6">
       {/* Left Panel - Model Manager */}
-      <div className="lg:col-span-1">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-white rounded-2xl shadow-md border border-slate-200 p-4 sticky top-24"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg text-slate-800 flex items-center gap-2">
-              <Image size={18} />
-              Model Manager
-            </h3>
+      <div className="art-w-1/3 art-lg:art-col-span-1">
+        <div className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24">
+          <div className="art-flex art-items-center art-justify-between art-mb-4">
+            <h3 className="art-font-semibold art-text-lg art-text-slate-800 art-flex art-items-center art-gap-2"/>
             <button
               onClick={() => setShowEditor(!showEditor)}
-              className="p-1 hover:bg-slate-100 rounded"
+              className="art-p-1 art-hover:art-bg-slate-100 art-rounded"
             >
-              {showEditor ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showEditor ? 'icon' : 'iconof' }
             </button>
           </div>
 
           {showEditor && (
-            <div className="space-y-4">
+            <div className="art-space-y-4">
               {/* Upload Section */}
-              <div className="border-b pb-4">
-                <h4 className="text-sm font-medium mb-2 text-slate-700">Upload 3D Model</h4>
-                <div className="space-y-2">
+              <div className="art-border-b art-pb-4">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">Upload 3D Model</h4>
+                <div className="art-space-y-2">
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept=".glb"
                     onChange={handleFileUpload}
-                    className="hidden"
+                    className="art-hidden"
                   />
                   <button
                     onClick={() => !isUploading && fileInputRef.current?.click()}
                     disabled={uploadProgress !== null || isUploading}
-                    className="w-full bg-blue-600 text-white px-3 py-2 rounded-lg text-xs hover:bg-blue-700 disabled:bg-gray-300 flex items-center justify-center gap-2"
+                    className="art-w-full art-bg-blue-600 art-text-white art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-blue-700 art-disabled:art-bg-gray-300 art-flex art-items-center art-justify-center art-gap-2"
                   >
                     <Upload size={14} />
                     {uploadProgress !== null ? `Uploading ${uploadProgress}%` : 'Upload GLB File'}
                   </button>
-                  <p className="text-xs text-slate-500">
+                  <p className="art-text-xs art-text-slate-500">
                     Supports .glb files only. Max size: 50MB
                   </p>
                 </div>
@@ -262,72 +258,70 @@ export const SliderComponent = () => {
 
               {/* Pending Model - Thumbnail Upload */}
               {pendingModel && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="border-2 border-dashed border-blue-300 rounded-lg p-3 bg-blue-50"
+                <div
+                  className="art-border-2 art-border-dashed art-border-blue-300 art-rounded-lg art-p-3 art-bg-blue-50"
                 >
-                  <h4 className="text-sm font-medium mb-2 text-blue-700">Add Thumbnail (Optional)</h4>
-                  <p className="text-xs text-blue-600 mb-2">
+                  <h4 className="art-text-sm art-font-medium art-mb-2 art-text-blue-700">Add Thumbnail (Optional)</h4>
+                  <p className="art-text-xs art-text-blue-600 art-mb-2">
                     Model "{pendingModel.label}" uploaded successfully!
                   </p>
                   
-                  <div className="space-y-2">
+                  <div className="art-space-y-2">
                     <input
                       ref={thumbnailInputRef}
                       type="file"
                       accept="image/*"
                       onChange={handleThumbnailUpload}
-                      className="hidden"
+                      className="art-hidden"
                     />
                     <button
                       onClick={() => thumbnailInputRef.current?.click()}
-                      className="w-full bg-white border-2 border-blue-300 text-blue-700 px-3 py-2 rounded-lg text-xs hover:bg-blue-50 flex items-center justify-center gap-2"
+                      className="art-w-full art-bg-white art-border-2 art-border-blue-300 art-text-blue-700 art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-blue-50 art-flex art-items-center art-justify-center art-gap-2"
                     >
                       <FileImage size={14} />
                       Upload Thumbnail
                     </button>
-                    <p className="text-xs text-slate-500">
+                    <p className="art-text-xs art-text-slate-500">
                       PNG, JPG, WEBP supported. Recommended: 200x200px
                     </p>
                     
-                    <div className="flex gap-2">
+                    <div className="art-flex art-gap-2">
                       <button
                         onClick={addModelWithDefaultThumbnail}
-                        className="flex-1 bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700"
+                        className="art-flex-1 art-bg-green-600 art-text-white art-px-2 art-py-1 art-rounded art-text-xs art-hover:art-bg-green-700"
                       >
                         Use Default
                       </button>
                       <button
                         onClick={cancelPendingModel}
-                        className="flex-1 bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700"
+                        className="art-flex-1 art-bg-red-600 art-text-white art-px-2 art-py-1 art-rounded art-text-xs art-hover:art-bg-red-700"
                       >
                         Cancel
                       </button>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Display Controls */}
-              <div className="border-b pb-4">
-                <h4 className="text-sm font-medium mb-2 text-slate-700">Display Options</h4>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-xs">
+              <div className="art-border-b art-pb-4">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">Display Options</h4>
+                <div className="art-space-y-2">
+                  <label className="art-flex art-items-center art-gap-2 art-text-xs">
                     <input
                       type="checkbox"
                       checked={showSlider}
                       onChange={(e) => setShowSlider(e.target.checked)}
-                      className="rounded"
+                      className="art-rounded"
                     />
                     Show model slider
                   </label>
-                  <label className="flex items-center gap-2 text-xs">
+                  <label className="art-flex art-items-center art-gap-2 art-text-xs">
                     <input
                       type="checkbox"
                       checked={autoPlay}
                       onChange={(e) => setAutoPlay(e.target.checked)}
-                      className="rounded"
+                      className="art-rounded"
                     />
                     <Play size={12} />
                     Auto-play carousel (3s)
@@ -337,36 +331,36 @@ export const SliderComponent = () => {
 
               {/* Model List */}
               <div>
-                <h4 className="text-sm font-medium mb-2 text-slate-700">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">
                   Models ({models.length})
                 </h4>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="art-space-y-2 art-max-h-64 art-overflow-y-auto">
                   {models.map((model, index) => (
                     <div
                       key={model.id}
-                      className={`border rounded-lg p-2 cursor-pointer transition-all ${
+                      className={`art-border art-rounded-lg art-p-2 art-cursor-pointer art-transition-all ${
                         selectedIndex === index 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
+                          ? 'art-border-blue-500 art-bg-blue-50' 
+                          : 'art-border-slate-200 art-bg-slate-50 art-hover:art-bg-slate-100'
                       }`}
                       onClick={() => selectModel(index)}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                      <div className="art-flex art-items-center art-justify-between">
+                        <div className="art-flex art-items-center art-gap-2">
                           <img
                             src={model.thumbnail}
                             alt={model.label}
-                            className="w-8 h-8 rounded bg-slate-200 object-cover"
+                            className="art-w-8 art-h-8 art-rounded art-bg-slate-200 art-object-cover"
                             onError={(e) => {
                               e.target.style.backgroundColor = '#e2e8f0';
                               e.target.style.display = 'block';
                             }}
                           />
                           <div>
-                            <div className="text-xs font-medium text-slate-800">
+                            <div className="art-text-xs art-font-medium art-text-slate-800">
                               {model.label}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="art-text-xs art-text-slate-500">
                               {model.isDefault ? 'Default' : 'Uploaded'}
                             </div>
                           </div>
@@ -377,7 +371,7 @@ export const SliderComponent = () => {
                               e.stopPropagation();
                               removeModel(model.id);
                             }}
-                            className="p-1 hover:bg-red-100 text-red-600 rounded"
+                            className="art-p-1 art-hover:art-bg-red-100 art-text-red-600 art-rounded"
                             title="Remove model"
                           >
                             <Trash2 size={12} />
@@ -390,9 +384,9 @@ export const SliderComponent = () => {
               </div>
 
               {/* Model Info */}
-              <div className="bg-slate-50 rounded-lg p-3">
-                <h4 className="text-sm font-medium mb-1 text-slate-700">Current Model</h4>
-                <div className="text-xs text-slate-600">
+              <div className="art-bg-slate-50 art-rounded-lg art-p-3">
+                <h4 className="art-text-sm art-font-medium art-mb-1 art-text-slate-700">Current Model</h4>
+                <div className="art-text-xs art-text-slate-600">
                   <div><strong>Name:</strong> {models[selectedIndex]?.label}</div>
                   <div><strong>Type:</strong> {models[selectedIndex]?.isDefault ? 'Default' : 'User Uploaded'}</div>
                   <div><strong>Index:</strong> {selectedIndex + 1} of {models.length}</div>
@@ -400,16 +394,16 @@ export const SliderComponent = () => {
               </div>
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {/* Right Panel - 3D Model Viewer with Slider */}
-      <div className="lg:col-span-3">
+      <div className="art-w-full art-lg:art-col-span-3">
         <Section
           title="3D Model Carousel"
           description="Browse through multiple 3D models with thumbnail slider. Upload your own GLB files to add to the collection."
         >
-          <div className="relative">
+          <div className="art-relative">
             {/* Main Model Viewer */}
             <MV 
               ref={mvRef}
@@ -430,7 +424,7 @@ export const SliderComponent = () => {
 
               {/* AR Prompt */}
               <div id="ar-prompt">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                <div className="art-w-8 art-h-8 art-bg-white art-rounded-full art-flex art-items-center art-justify-center">
                   👋
                 </div>
               </div>
@@ -443,12 +437,12 @@ export const SliderComponent = () => {
 
             {/* Bottom Slider */}
             {showSlider && (
-              <div className="slider">
-                <div className="slides">
+              <div className="art-slider">
+                <div className="art-slides">
                   {models.map((model, index) => (
                     <button
                       key={model.id}
-                      className={`slide ${selectedIndex === index ? 'selected' : ''}`}
+                      className={`art-slide ${selectedIndex === index ? 'art-selected' : ''}`}
                       onClick={() => selectModel(index)}
                       style={{
                         backgroundImage: `url('${model.thumbnail}')`,
@@ -458,10 +452,10 @@ export const SliderComponent = () => {
                       }}
                       title={model.label}
                     >
-                      <div className="slide-overlay">
-                        <span className="slide-label">{model.label}</span>
+                      <div className="art-slide-overlay">
+                        <span className="art-slide-label">{model.label}</span>
                         {model.needsThumbnail && (
-                          <div className="absolute top-1 right-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
+                          <div className="art-absolute art-top-1 art-right-1 art-w-3 art-h-3 art-bg-yellow-400 art-rounded-full"></div>
                         )}
                       </div>
                     </button>
@@ -472,65 +466,63 @@ export const SliderComponent = () => {
 
             {/* Upload Progress Overlay */}
             {uploadProgress !== null && (
-              <motion.div
+              <div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl"
+                className="art-absolute art-inset-0 art-bg-black/50 art-flex art-items-center art-justify-center art-rounded-2xl"
               >
-                <div className="bg-white rounded-lg p-4 text-center">
-                  <Upload className="mx-auto mb-2" size={24} />
-                  <div className="text-sm font-medium">Uploading Model...</div>
-                  <div className="w-48 bg-gray-200 rounded-full h-2 mt-2">
+                <div className="art-bg-white art-rounded-lg art-p-4 art-text-center">
+                  <Upload className="art-mx-auto art-mb-2" size={24} />
+                  <div className="art-text-sm art-font-medium">Uploading Model...</div>
+                  <div className="art-w-48 art-bg-gray-200 art-rounded-full art-h-2 art-mt-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="art-bg-blue-600 art-h-2 art-rounded-full art-transition-all art-duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">{uploadProgress}%</div>
+                  <div className="art-text-xs art-text-gray-500 art-mt-1">{uploadProgress}%</div>
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {/* Pending Model Overlay */}
             {pendingModel && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl"
+              <div
+                className="art-absolute art-inset-0 art-bg-black/50 art-flex art-items-center art-justify-center art-rounded-2xl"
               >
-                <div className="bg-white rounded-lg p-6 text-center max-w-sm">
-                  <FileImage className="mx-auto mb-3 text-blue-600" size={32} />
-                  <h3 className="text-lg font-semibold mb-2">Model Uploaded!</h3>
-                  <p className="text-sm text-slate-600 mb-4">
+                <div className="art-bg-white art-rounded-lg art-p-6 art-text-center art-max-w-sm">
+                  <FileImage className="art-mx-auto art-mb-3 art-text-blue-600" size={32} />
+                  <h3 className="art-text-lg art-font-semibold art-mb-2">Model Uploaded!</h3>
+                  <p className="art-text-sm art-text-slate-600 art-mb-4">
                     "{pendingModel.label}" is ready. Add a custom thumbnail or use the default one.
                   </p>
                   
-                  <div className="space-y-3">
+                  <div className="art-space-y-3">
                     <button
                       onClick={() => thumbnailInputRef.current?.click()}
-                      className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 flex items-center justify-center gap-2"
+                      className="art-w-full art-bg-blue-600 art-text-white art-px-4 art-py-2 art-rounded-lg art-text-sm art-hover:art-bg-blue-700 art-flex art-items-center art-justify-center art-gap-2"
                     >
                       <Upload size={14} />
                       Upload Custom Thumbnail
                     </button>
                     
-                    <div className="flex gap-2">
+                    <div className="art-flex art-gap-2">
                       <button
                         onClick={addModelWithDefaultThumbnail}
-                        className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-xs hover:bg-green-700"
+                        className="art-flex-1 art-bg-green-600 art-text-white art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-green-700"
                       >
                         Use Default
                       </button>
                       <button
                         onClick={cancelPendingModel}
-                        className="flex-1 bg-gray-500 text-white px-3 py-2 rounded-lg text-xs hover:bg-gray-600"
+                        className="art-flex-1 art-bg-gray-500 art-text-white art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-gray-600"
                       >
                         Cancel
                       </button>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
         </Section>
@@ -541,159 +533,8 @@ export const SliderComponent = () => {
           type="file"
           accept="image/*"
           onChange={handleThumbnailUpload}
-          className="hidden"
+          className="art-hidden"
         />
-
-        {/* Embedded Styles */}
-        <style jsx>{`
-          #ar-button {
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjNDI4NWY0Ii8+Cjwvc3ZnPgo=');
-            background-repeat: no-repeat;
-            background-size: 20px 20px;
-            background-position: 12px 50%;
-            background-color: #fff;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            bottom: 132px;
-            padding: 0px 16px 0px 40px;
-            font-family: 'Inter', 'Roboto Regular', 'Helvetica Neue', sans-serif;
-            font-size: 14px;
-            color: #4285f4;
-            height: 36px;
-            line-height: 36px;
-            border-radius: 18px;
-            border: 1px solid #DADCE0;
-            cursor: pointer;
-          }
-
-          #ar-button:active {
-            background-color: #E8EAED;
-          }
-
-          #ar-button:focus {
-            outline: none;
-          }
-
-          #ar-button:focus-visible {
-            outline: 1px solid #4285f4;
-          }
-
-          #ar-prompt {
-            position: absolute;
-            left: 50%;
-            bottom: 175px;
-            transform: translateX(-50%);
-            display: none;
-            animation: bounce 2s infinite ease-in-out;
-          }
-
-          model-viewer[ar-status="session-started"] #ar-prompt {
-            display: block;
-          }
-
-          #ar-failure {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 175px;
-            display: none;
-            background: #ff4444;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            border: none;
-          }
-
-          model-viewer[ar-tracking="not-tracking"] #ar-failure {
-            display: block;
-          }
-
-          .slider {
-            width: 100%;
-            text-align: center;
-            overflow: hidden;
-            position: absolute;
-            bottom: 16px;
-            left: 0;
-            right: 0;
-          }
-
-          .slides {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            padding: 0 20px;
-            gap: 10px;
-          }
-
-          .slide {
-            scroll-snap-align: start;
-            flex-shrink: 0;
-            width: 100px;
-            height: 100px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: #fff;
-            border-radius: 10px;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: end;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-          }
-
-          .slide:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-          }
-
-          .slide.selected {
-            border: 2px solid #4285f4;
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-          }
-
-          .slide:focus {
-            outline: none;
-          }
-
-          .slide:focus-visible {
-            outline: 1px solid #4285f4;
-          }
-
-          .slide-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            padding: 8px 4px 4px;
-          }
-
-          .slide-label {
-            color: white;
-            font-size: 10px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-          }
-
-          @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-          }
-
-          .hide {
-            display: none !important;
-          }
-        `}</style>
       </div>
     </div>
   );
