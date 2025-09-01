@@ -1,9 +1,6 @@
-import React from "react";
+
 import { useState } from "react";
-import { Section } from "./Shared";
-import { motion } from "framer-motion";
-import "@google/model-viewer";
-import { MV } from "./Shared";
+import { Section } from "./Shared.js";
 
 export const HomeComponent = () => (
   <div className="grid md:grid-cols-2 gap-6">

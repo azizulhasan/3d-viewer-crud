@@ -6,7 +6,7 @@
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 // import { Shell } from "./3dComponents/Shared.jsx";
-// import { HomeComponent } from "./3dComponents/HomeComponent.jsx";
+import { HomeComponent } from "./3dComponents/HomeComponent.js";
 // import { HotspotsComponent } from "./3dComponents/HotspotsComponent.jsx";
 // import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
 // import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
@@ -15,11 +15,11 @@ import { SliderComponent } from "./3dComponents/SliderComponent.js";
 import { Shell } from "./3dComponents/Shared.js";
 
 
-// const Home = () => (
-//   <Shell>
-//     <HomeComponent />
-//   </Shell>
-// );
+const Home = () => (
+  <Shell>
+    <HomeComponent />
+  </Shell>
+);
 
 // const Hotspots = () => (
 //   <Shell>
@@ -53,12 +53,13 @@ export default function App() {
     <>
     <HashRouter>
       <Routes>
-        {/* <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        {/* 
         <Route path="/hotspots" element={<Hotspots />} />
         <Route path="/dimensions" element={<Dimensions />} />
         <Route path="/variants" element={<Variants />} />
         <Route path="/camera" element={<Camera />} /> */}
-        <Route path="/" element={<Slider />} />
+        <Route path="/slider" element={<Slider />} />
         {/* ... other routes */}
       </Routes>
     </HashRouter>

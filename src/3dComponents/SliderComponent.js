@@ -1,8 +1,6 @@
-import React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
-import { Upload, Trash2, Image, Play, FileImage } from "lucide-react";
 
 export const SliderComponent = () => {
   // Default models
@@ -247,7 +245,8 @@ export const SliderComponent = () => {
                     disabled={uploadProgress !== null || isUploading}
                     className="art-w-full art-bg-blue-600 art-text-white art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-blue-700 art-disabled:art-bg-gray-300 art-flex art-items-center art-justify-center art-gap-2"
                   >
-                    <Upload size={14} />
+                    <input type="file"></input>
+                    Uload
                     {uploadProgress !== null ? `Uploading ${uploadProgress}%` : 'Upload GLB File'}
                   </button>
                   <p className="art-text-xs art-text-slate-500">
@@ -278,7 +277,7 @@ export const SliderComponent = () => {
                       onClick={() => thumbnailInputRef.current?.click()}
                       className="art-w-full art-bg-white art-border-2 art-border-blue-300 art-text-blue-700 art-px-3 art-py-2 art-rounded-lg art-text-xs art-hover:art-bg-blue-50 art-flex art-items-center art-justify-center art-gap-2"
                     >
-                      <FileImage size={14} />
+                      
                       Upload Thumbnail
                     </button>
                     <p className="art-text-xs art-text-slate-500">
@@ -323,7 +322,7 @@ export const SliderComponent = () => {
                       onChange={(e) => setAutoPlay(e.target.checked)}
                       className="art-rounded"
                     />
-                    <Play size={12} />
+                    
                     Auto-play carousel (3s)
                   </label>
                 </div>
@@ -374,7 +373,7 @@ export const SliderComponent = () => {
                             className="art-p-1 art-hover:art-bg-red-100 art-text-red-600 art-rounded"
                             title="Remove model"
                           >
-                            <Trash2 size={12} />
+                            delete
                           </button>
                         )}
                       </div>
@@ -472,7 +471,7 @@ export const SliderComponent = () => {
                 className="art-absolute art-inset-0 art-bg-black/50 art-flex art-items-center art-justify-center art-rounded-2xl"
               >
                 <div className="art-bg-white art-rounded-lg art-p-4 art-text-center">
-                  <Upload className="art-mx-auto art-mb-2" size={24} />
+                  <input type="file"/>
                   <div className="art-text-sm art-font-medium">Uploading Model...</div>
                   <div className="art-w-48 art-bg-gray-200 art-rounded-full art-h-2 art-mt-2">
                     <div 
@@ -491,7 +490,7 @@ export const SliderComponent = () => {
                 className="art-absolute art-inset-0 art-bg-black/50 art-flex art-items-center art-justify-center art-rounded-2xl"
               >
                 <div className="art-bg-white art-rounded-lg art-p-6 art-text-center art-max-w-sm">
-                  <FileImage className="art-mx-auto art-mb-3 art-text-blue-600" size={32} />
+                  Upload
                   <h3 className="art-text-lg art-font-semibold art-mb-2">Model Uploaded!</h3>
                   <p className="art-text-sm art-text-slate-600 art-mb-4">
                     "{pendingModel.label}" is ready. Add a custom thumbnail or use the default one.
@@ -502,7 +501,8 @@ export const SliderComponent = () => {
                       onClick={() => thumbnailInputRef.current?.click()}
                       className="art-w-full art-bg-blue-600 art-text-white art-px-4 art-py-2 art-rounded-lg art-text-sm art-hover:art-bg-blue-700 art-flex art-items-center art-justify-center art-gap-2"
                     >
-                      <Upload size={14} />
+                      
+                      <input type="file" />
                       Upload Custom Thumbnail
                     </button>
                     
