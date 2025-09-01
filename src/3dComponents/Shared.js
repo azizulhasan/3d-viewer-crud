@@ -33,7 +33,7 @@ export const Tab = ({ to, children }) => (
     className={({ isActive }) =>
       `art-px-4 art-py-2 art-rounded-xl art-border art-transition-all art-duration-200 ${
         isActive
-          ? "art-bg-slate-900 art-text-black art-border-slate-900 art-shadow-md"
+          ? " art-text-black art-border-slate-900 art-shadow-md"
           : "art-bg-white/80 hover:art-bg-slate-100 art-border-slate-300"
       }`
     }

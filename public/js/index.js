@@ -43999,7 +43999,7 @@ var Tab = function Tab(_ref2) {
     to: to,
     className: function className(_ref3) {
       var isActive = _ref3.isActive;
-      return "art-px-4 art-py-2 art-rounded-xl art-border art-transition-all art-duration-200 ".concat(isActive ? "art-bg-slate-900 art-text-black art-border-slate-900 art-shadow-md" : "art-bg-white/80 hover:art-bg-slate-100 art-border-slate-300");
+      return "art-px-4 art-py-2 art-rounded-xl art-border art-transition-all art-duration-200 ".concat(isActive ? " art-text-black art-border-slate-900 art-shadow-md" : "art-bg-white/80 hover:art-bg-slate-100 art-border-slate-300");
     },
     end: true,
     children: children
