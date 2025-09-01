@@ -13,10 +13,7 @@ import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
 import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
 import { CameraComponent } from "./3dComponents/CameraComponent.jsx";
 import { SliderComponent } from "./3dComponents/SliderComponent.jsx";
-import "./index.css"
 
-
-// ... import other components
 
 const Home = () => (
   <Shell>
