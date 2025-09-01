@@ -6,6 +6,7 @@ import "@google/model-viewer";
 import { MV } from "./Shared";
 import { Eye, EyeOff, RotateCcw, Package } from "lucide-react";
 
+
 export const DimensionsComponent = () => {
   const [showDimensions, setShowDimensions] = useState(true);
   const [showEditor, setShowEditor] = useState(true);
@@ -162,36 +163,36 @@ export const DimensionsComponent = () => {
   }, [showDimensions]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div className="art-grid art-grid-cols-1 lg:art-grid-cols-4 art-gap-6">
       {/* Left Panel - Dimensions Editor */}
-      <div className="lg:col-span-1">
+      <div className="lg:art-col-span-1">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white rounded-2xl shadow-md border border-slate-200 p-4 sticky top-24"
+          className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg text-slate-800 flex items-center gap-2">
+          <div className="art-flex art-items-center art-justify-between art-mb-4">
+            <h3 className="art-font-semibold art-text-lg art-text-slate-800 art-flex art-items-center art-gap-2">
               <Package size={18} />
               Dimensions
             </h3>
             <button
               onClick={() => setShowEditor(!showEditor)}
-              className="p-1 hover:bg-slate-100 rounded"
+              className="art-p-1 art-hover:art-bg-slate-100 art-rounded"
             >
               {showEditor ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
 
           {showEditor && (
-            <div className="space-y-4">
+            <div className="art-space-y-4">
               {/* Model Selection */}
-              <div className="border-b pb-4">
-                <h4 className="text-sm font-medium mb-2 text-slate-700">Product:</h4>
+              <div className="art-border-b art-pb-4">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">Product:</h4>
                 <select
                   value={selectedModel}
                   onChange={(e) => setSelectedModel(e.target.value)}
-                  className="w-full text-xs rounded border px-2 py-1"
+                  className="art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1"
                 >
                   {models.map((model) => (
                     <option key={model.value} value={model.value}>
@@ -202,46 +203,46 @@ export const DimensionsComponent = () => {
               </div>
 
               {/* Display Controls */}
-              <div className="border-b pb-4">
-                <h4 className="text-sm font-medium mb-2 text-slate-700">Display Options</h4>
-                <label className="flex items-center gap-2 text-xs">
+              <div className="art-border-b art-pb-4">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">Display Options</h4>
+                <label className="art-flex art-items-center art-gap-2 art-text-xs">
                   <input
                     type="checkbox"
                     checked={showDimensions}
                     onChange={(e) => setShowDimensions(e.target.checked)}
-                    className="rounded"
+                    className="art-rounded"
                   />
                   Show Dimensions
                 </label>
               </div>
 
               {/* Dimension Readout */}
-              <div className="bg-slate-50 rounded-lg p-3">
-                <h4 className="text-sm font-medium mb-2 text-slate-700">Measurements</h4>
-                <div className="space-y-1 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Width (X):</span>
-                    <span className="font-mono font-semibold">{(dimensions.x * 100).toFixed(1)} cm</span>
+              <div className="art-bg-slate-50 art-rounded-lg art-p-3">
+                <h4 className="art-text-sm art-font-medium art-mb-2 art-text-slate-700">Measurements</h4>
+                <div className="art-space-y-1 art-text-xs">
+                  <div className="art-flex art-justify-between">
+                    <span className="art-text-slate-600">Width (X):</span>
+                    <span className="art-font-mono art-font-semibold">{(dimensions.x * 100).toFixed(1)} cm</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Height (Y):</span>
-                    <span className="font-mono font-semibold">{(dimensions.y * 100).toFixed(1)} cm</span>
+                  <div className="art-flex art-justify-between">
+                    <span className="art-text-slate-600">Height (Y):</span>
+                    <span className="art-font-mono art-font-semibold">{(dimensions.y * 100).toFixed(1)} cm</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Depth (Z):</span>
-                    <span className="font-mono font-semibold">{(dimensions.z * 100).toFixed(1)} cm</span>
+                  <div className="art-flex art-justify-between">
+                    <span className="art-text-slate-600">Depth (Z):</span>
+                    <span className="art-font-mono art-font-semibold">{(dimensions.z * 100).toFixed(1)} cm</span>
                   </div>
-                  <hr className="my-2" />
-                  <div className="flex justify-between font-semibold">
-                    <span className="text-slate-700">Volume:</span>
-                    <span className="font-mono">{(dimensions.x * dimensions.y * dimensions.z * 1000000).toFixed(0)} cm³</span>
+                  <hr className="art-my-2" />
+                  <div className="art-flex art-justify-between art-font-semibold">
+                    <span className="art-text-slate-700">Volume:</span>
+                    <span className="art-font-mono">{(dimensions.x * dimensions.y * dimensions.z * 1000000).toFixed(0)} cm³</span>
                   </div>
                 </div>
               </div>
 
               {/* Info */}
-              <div className="text-xs text-slate-500 bg-blue-50 border border-blue-200 rounded-lg p-2">
-                <p className="mb-1">📏 <strong>Bounding Box Dimensions</strong></p>
+              <div className="art-text-xs art-text-slate-500 art-bg-blue-50 art-border art-border-blue-200 art-rounded-lg art-p-2">
+                <p className="art-mb-1">📏 <strong>Bounding Box Dimensions</strong></p>
                 <p>Automatically calculated from the 3D model's actual size. Dimensions show the object's width, height, and depth with connecting lines.</p>
               </div>
             </div>
@@ -250,7 +251,7 @@ export const DimensionsComponent = () => {
       </div>
 
       {/* Right Panel - 3D Model Viewer */}
-      <div className="lg:col-span-3">
+      <div className="lg:art-col-span-3">
         <Section
           title="3D Bounding Box Dimensions"
           description="Automatic dimension calculation with visual bounding box display and connecting lines."

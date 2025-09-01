@@ -2,7 +2,7 @@
 // import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 // import { motion } from "framer-motion";
 // import "@google/model-viewer"; // Web Component (JS only)
-// import './index.css'
+
 // App.js
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
@@ -13,6 +13,9 @@ import { DimensionsComponent } from "./3dComponents/DimensionsComponent.jsx";
 import { VariantsComponent } from "./3dComponents/VariantsComponent.jsx";
 import { CameraComponent } from "./3dComponents/CameraComponent.jsx";
 import { SliderComponent } from "./3dComponents/SliderComponent.jsx";
+import "./index.css"
+
+
 // ... import other components
 
 const Home = () => (

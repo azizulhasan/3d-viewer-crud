@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tailwind": "npx tailwindcss -i src/index.css -o public/css/ar-try-on.css --watch",
+    "build": "concurrently \"npm run production\" \"npm run tailwind\" \"npm run compile\" \"gulp copyPro\""
   },
   "dependencies": {
     "@google/model-viewer": "^4.1.0",
@@ -28,8 +29,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.12",
-    "vite": "^7.1.2"
+    "tailwindcss": "^3.4.17"
+
   }
 }
