@@ -43050,7 +43050,7 @@ var AccordionComponent = function AccordionComponent() {
     activeAccordion = _useState2[0],
     setActiveAccordion = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-      src: '',
+      src: '3dModels/Shoe.glb',
       alt: '',
       hotspots: [{
         id: "top",
@@ -43091,10 +43091,10 @@ var AccordionComponent = function AccordionComponent() {
       camera: {
         orbit: {
           theta: '45deg',
-          phi: '55deg',
-          radius: '4m'
+          phi: '60deg',
+          radius: '1.2m'
         },
-        autoRotate: false,
+        autoRotate: true,
         autoRotateDelay: 0,
         fieldOfView: '30deg',
         maxZoom: '',
@@ -43249,6 +43249,7 @@ var AccordionComponent = function AccordionComponent() {
       }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "art-p-4 art-bg-gray-50 art-text-gray-700",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__.HotspotsComponent, {
+          src: productModel.src,
           hotspots: productModel.hotspots,
           onUpdateHotspot: updateHotspot,
           onAddHotspot: addHotspot,
@@ -43271,6 +43272,7 @@ var AccordionComponent = function AccordionComponent() {
       }), activeAccordion === "dimensions" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "art-p-4 art-bg-gray-50 art-text-gray-700",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
+          src: productModel.src,
           dimensions: productModel.dimensions,
           onUpdateDimension: updateDimension
         })
@@ -43291,6 +43293,7 @@ var AccordionComponent = function AccordionComponent() {
       }), activeAccordion === "camera" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "art-p-4 art-bg-gray-50 art-text-gray-700",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__.CameraComponent, {
+          src: productModel.src,
           cameraSettings: productModel.camera,
           onUpdateCameraSetting: updateCameraSetting
         })
@@ -43311,6 +43314,7 @@ var AccordionComponent = function AccordionComponent() {
       }), activeAccordion === "variants" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "art-p-4 art-bg-gray-50 art-text-gray-700",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__.VariantsComponent, {
+          src: productModel.src,
           variants: productModel.variants,
           currentVariant: productModel.currentVariant,
           onUpdateVariant: updateVariant,
@@ -43349,13 +43353,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _Shared_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Shared.js */ "./src/3dComponents/Shared.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
 
 
 var CameraComponent = function CameraComponent(_ref) {
   var cameraSettings = _ref.cameraSettings,
-    onUpdateCameraSetting = _ref.onUpdateCameraSetting;
+    onUpdateCameraSetting = _ref.onUpdateCameraSetting,
+    src = _ref.src;
   var mv = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var defaultOrbit = "45deg 90deg 10m";
   var targets = [{
     name: "Isometric",
     target: "0m 0.05m 0m",
@@ -43404,7 +43416,11 @@ var CameraComponent = function CameraComponent(_ref) {
       } else if (field === 'fieldOfView') {
         el.setAttribute("field-of-view", value);
       } else if (field === 'autoRotate') {
-        el.setAttribute("auto-rotate", value);
+        if (value) {
+          el.setAttribute("auto-rotate", "");
+        } else {
+          el.removeAttribute("auto-rotate");
+        }
       }
     }
   };
@@ -43457,12 +43473,13 @@ var CameraComponent = function CameraComponent(_ref) {
     className: "art-block art-text-sm art-font-medium art-mb-1"
   }, "Camera Position"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
     type: "text",
-    value: cameraSettings.orbit,
+    value: typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== "" ? cameraSettings.orbit : defaultOrbit,
+    // ✅ fallback to "45deg 90deg 10m"
     onChange: function onChange(e) {
-      return handleCameraChange('orbit', e.target.value);
+      return handleCameraChange("orbit", e.target.value);
     },
     className: "art-w-full art-border art-rounded art-px-2 art-py-1 art-text-sm",
-    placeholder: "45deg 55deg 4m"
+    placeholder: defaultOrbit
   }))),
   /*#__PURE__*/
   // Preset Buttons
@@ -43479,14 +43496,17 @@ var CameraComponent = function CameraComponent(_ref) {
   })),
   /*#__PURE__*/
   // Model Viewer
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, _objectSpread(_objectSpread({
     ref: mv,
-    src: "3dModels/Astronaut.glb",
-    "camera-controls": true,
-    "auto-rotate": cameraSettings.autoRotate,
-    "camera-orbit": cameraSettings.orbit,
-    "field-of-view": cameraSettings.fieldOfView
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    src: src,
+    "camera-controls": true
+  }, cameraSettings.autoRotate ? {
+    "auto-rotate": true
+  } : {}), {}, {
+    "camera-orbit": typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== "" ? cameraSettings.orbit : defaultOrbit,
+    // ✅ fallback
+    "field-of-view": cameraSettings.fieldOfView || "35deg"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     slot: "hotspot-front",
     "data-position": "0 0.05 0.2",
     "data-normal": "0 1 0",
@@ -43532,12 +43552,13 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 var DimensionsComponent = function DimensionsComponent(_ref) {
   var dimensions = _ref.dimensions,
-    onUpdateDimension = _ref.onUpdateDimension;
+    onUpdateDimension = _ref.onUpdateDimension,
+    src = _ref.src;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
     showEditor = _useState2[0],
     setShowEditor = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("3dModels/Chair.glb"),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(src),
     _useState4 = _slicedToArray(_useState3, 2),
     selectedModel = _useState4[0],
     setSelectedModel = _useState4[1];
@@ -43550,21 +43571,16 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
     currentDimensions = _useState6[0],
     setCurrentDimensions = _useState6[1];
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var models = [{
-    value: "3dModels/Chair.glb",
-    label: "Chair"
-  }, {
-    value: "3dModels/Astronaut.glb",
-    label: "Astronaut"
-  }, {
-    value: "3dModels/lambo.glb",
-    label: "Car"
-  }];
+  var models = [
+    // { value: "3dModels/Chair.glb", label: "Chair" },
+    // { value: "3dModels/Astronaut.glb", label: "Astronaut" },
+    // { value: "3dModels/lambo.glb", label: "Car" },
+  ];
 
   // Initialize dimensions to show by default
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     // Ensure dimensions.show is true by default if not already set
-    if (dimensions.show === undefined) {
+    if (dimensions.show === false) {
       onUpdateDimension('show', true);
     }
   }, []);
@@ -44012,7 +44028,8 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
   var hotspots = _ref.hotspots,
     onUpdateHotspot = _ref.onUpdateHotspot,
     onAddHotspot = _ref.onAddHotspot,
-    onRemoveHotspot = _ref.onRemoveHotspot;
+    onRemoveHotspot = _ref.onRemoveHotspot,
+    src = _ref.src;
   // Default hotspots - now moved to parent component
   var defaultHotspots = [{
     id: "top",
@@ -44327,7 +44344,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         description: "Click on the model to add hotspots, or use the editor panel to customize them.",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
           ref: mvRef,
-          src: "3dModels/Chair.glb",
+          src: src,
           poster: "",
           onClick: handleModelClick,
           children: hotspots.filter(function (h) {
@@ -45112,86 +45129,57 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-
-
-var VariantsComponent = function VariantsComponent() {
+var VariantsComponent = function VariantsComponent(_ref) {
+  var src = _ref.src;
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     variants = _useState2[0],
     setVariants = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("default"),
     _useState4 = _slicedToArray(_useState3, 2),
-    current = _useState4[0],
-    setCurrent = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
-    _useState6 = _slicedToArray(_useState5, 2),
-    showAnno = _useState6[0],
-    setShowAnno = _useState6[1];
+    currentVariant = _useState4[0],
+    setCurrentVariant = _useState4[1];
 
-  // 🚗 Lamborghini models
-  var models = {
-    huracan: "3dModels/apartment.glb",
-    aventador: "3dModels/lambo_aventador.glb",
-    urus: "3dModels/lambo_urus.glb"
-  };
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("huracan"),
-    _useState8 = _slicedToArray(_useState7, 2),
-    selectedModel = _useState8[0],
-    setSelectedModel = _useState8[1];
-
-  // Detect material variants inside the current model
+  // Load available variants from the GLB after the model fully loads
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var el = mvRef.current;
-    if (!el) return;
-    function onLoad() {
-      var list = el.availableVariants || [];
-      setVariants(list);
-      if (list.length) setCurrent(list[0]);
-    }
-    el.addEventListener("load", onLoad);
-    return function () {
-      return el.removeEventListener("load", onLoad);
+    var modelViewer = mvRef.current;
+    if (!modelViewer) return;
+    var handleLoad = function handleLoad() {
+      var names = modelViewer.availableVariants || [];
+      setVariants(names);
+
+      // Set default variant
+      setCurrentVariant(names.length ? names[0] : "default");
     };
-  }, [selectedModel]);
+    modelViewer.addEventListener("load", handleLoad);
+    return function () {
+      modelViewer.removeEventListener("load", handleLoad);
+    };
+  }, [src]);
 
-  // Apply material variant
+  // Apply selected variant to model-viewer
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var el = mvRef.current;
-    if (!el) return;
-    if (current) el.variantName = current;
-  }, [current]);
+    var modelViewer = mvRef.current;
+    if (!modelViewer) return;
+    modelViewer.variantName = currentVariant === "default" ? null : currentVariant;
+  }, [currentVariant]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
     title: "Variants & Annotations",
-    description: "Switch between Lamborghini models and their material variants.",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    description: "Switch between available material variants.",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "art-flex art-flex-wrap art-items-center art-gap-3 art-mb-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
         className: "art-text-sm art-flex art-items-center art-gap-2",
-        children: ["Model:", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
+        children: ["Variant:", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
           className: "art-rounded art-border art-px-2 art-py-1",
-          value: selectedModel,
+          value: currentVariant,
           onChange: function onChange(e) {
-            return setSelectedModel(e.target.value);
+            return setCurrentVariant(e.target.value);
           },
-          children: Object.keys(models).map(function (m) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
-              value: m,
-              children: m.charAt(0).toUpperCase() + m.slice(1)
-            }, m);
-          })
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
-        className: "art-text-sm art-flex art-items-center art-gap-2",
-        children: ["Material Variant:", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
-          className: "art-rounded art-border art-px-2 art-py-1",
-          value: current,
-          onChange: function onChange(e) {
-            return setCurrent(e.target.value);
-          },
-          children: [variants.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
-            value: "",
-            children: "(no variants found)"
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+            value: "default",
+            children: "Default"
           }), variants.map(function (v) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
               value: v,
@@ -45199,41 +45187,15 @@ var VariantsComponent = function VariantsComponent() {
             }, v);
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
-        className: "art-text-sm art-flex art-items-center art-gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-          type: "checkbox",
-          checked: showAnno,
-          onChange: function onChange(e) {
-            return setShowAnno(e.target.checked);
-          }
-        }), " ", "Show annotations"]
-      })]
+      })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
       ref: mvRef,
-      src: models[selectedModel],
-      reveal: "interaction",
-      children: showAnno && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-          slot: "hotspot-engine",
-          "data-position": "0.2 0.08 0.35",
-          "data-normal": "0 1 0",
-          "data-visibility-attribute": "visible",
-          className: "art-Hotspot",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            children: "Engine"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-          slot: "hotspot-wheel",
-          "data-position": "0.35 0.02 0.0",
-          "data-normal": "0 1 0",
-          "data-visibility-attribute": "visible",
-          className: "art-Hotspot",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            children: "Wheel"
-          })
-        })]
-      })
+      src: src,
+      id: "shoe",
+      "camera-controls": true,
+      "touch-action": "pan-y",
+      ar: true,
+      alt: "3D Shoe Model"
     })]
   });
 };

@@ -6,7 +6,8 @@ export const HotspotsComponent = ({
   hotspots, 
   onUpdateHotspot, 
   onAddHotspot, 
-  onRemoveHotspot 
+  onRemoveHotspot ,
+  src
 }) => {
   // Default hotspots - now moved to parent component
   const defaultHotspots = [
@@ -270,7 +271,7 @@ export const HotspotsComponent = ({
         >
           <MV 
             ref={mvRef}
-            src="3dModels/Chair.glb" 
+            src={src}
             poster=""
             onClick={handleModelClick}
           >

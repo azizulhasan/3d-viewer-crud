@@ -1,76 +1,57 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
-import { useRef, useEffect } from "react";
 
-export const VariantsComponent = () => {
+export const VariantsComponent = ({ src }) => {
   const mvRef = useRef(null);
   const [variants, setVariants] = useState([]);
-  const [current, setCurrent] = useState("");
-  const [showAnno, setShowAnno] = useState(true);
+  const [currentVariant, setCurrentVariant] = useState("default");
+  
 
-  // 🚗 Lamborghini models
-  const models = {
-    huracan: "3dModels/apartment.glb",
-    aventador: "3dModels/lambo_aventador.glb",
-    urus: "3dModels/lambo_urus.glb",
-  };
-  const [selectedModel, setSelectedModel] = useState("huracan");
-
-  // Detect material variants inside the current model
+  // Load available variants from the GLB after the model fully loads
   useEffect(() => {
-    const el = mvRef.current;
-    if (!el) return;
-    function onLoad() {
-      const list = el.availableVariants || [];
-      setVariants(list);
-      if (list.length) setCurrent(list[0]);
-    }
-    el.addEventListener("load", onLoad);
-    return () => el.removeEventListener("load", onLoad);
-  }, [selectedModel]);
+    const modelViewer = mvRef.current;
+    if (!modelViewer) return;
 
-  // Apply material variant
+    const handleLoad = () => {
+      const names = modelViewer.availableVariants || [];
+      setVariants(names);
+
+      // Set default variant
+      setCurrentVariant(names.length ? names[0] : "default");
+    };
+
+    modelViewer.addEventListener("load", handleLoad);
+
+    return () => {
+      modelViewer.removeEventListener("load", handleLoad);
+    };
+  }, [src]);
+
+  // Apply selected variant to model-viewer
   useEffect(() => {
-    const el = mvRef.current;
-    if (!el) return;
-    if (current) el.variantName = current;
-  }, [current]);
+    const modelViewer = mvRef.current;
+    if (!modelViewer) return;
+
+    modelViewer.variantName =
+      currentVariant === "default" ? null : currentVariant;
+  }, [currentVariant]);
 
   return (
     <Section
       title="Variants & Annotations"
-      description="Switch between Lamborghini models and their material variants."
+      description="Switch between available material variants."
     >
       <div className="art-flex art-flex-wrap art-items-center art-gap-3 art-mb-3">
-        {/* Model Selector */}
-        <label className="art-text-sm art-flex art-items-center art-gap-2">
-          Model:
-          <select
-            className="art-rounded art-border art-px-2 art-py-1"
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
-          >
-            {Object.keys(models).map((m) => (
-              <option key={m} value={m}>
-                {m.charAt(0).toUpperCase() + m.slice(1)}
-              </option>
-            ))}
-          </select>
-        </label>
-
         {/* Variant Selector */}
         <label className="art-text-sm art-flex art-items-center art-gap-2">
-          Material Variant:
+          Variant:
           <select
             className="art-rounded art-border art-px-2 art-py-1"
-            value={current}
-            onChange={(e) => setCurrent(e.target.value)}
+            value={currentVariant}
+            onChange={(e) => setCurrentVariant(e.target.value)}
           >
-            {variants.length === 0 && (
-              <option value="">(no variants found)</option>
-            )}
+            <option value="default">Default</option>
             {variants.map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -79,41 +60,18 @@ export const VariantsComponent = () => {
           </select>
         </label>
 
-        {/* Annotation Toggle */}
-        <label className="art-text-sm art-flex art-items-center art-gap-2">
-          <input
-            type="checkbox"
-            checked={showAnno}
-            onChange={(e) => setShowAnno(e.target.checked)}
-          />{" "}
-          Show annotations
-        </label>
       </div>
 
       {/* Model Viewer */}
-      <MV ref={mvRef} src={models[selectedModel]} reveal="interaction">
-        {showAnno && (
-          <>
-            <button
-              slot="hotspot-engine"
-              data-position="0.2 0.08 0.35"
-              data-normal="0 1 0"
-              data-visibility-attribute="visible"
-              className="art-Hotspot"
-            >
-              <div>Engine</div>
-            </button>
-            <button
-              slot="hotspot-wheel"
-              data-position="0.35 0.02 0.0"
-              data-normal="0 1 0"
-              data-visibility-attribute="visible"
-              className="art-Hotspot"
-            >
-              <div>Wheel</div>
-            </button>
-          </>
-        )}
+      <MV
+        ref={mvRef}
+        src={src}
+        id="shoe"
+        camera-controls
+        touch-action="pan-y"
+        ar
+        alt="3D Shoe Model"
+      >
       </MV>
     </Section>
   );

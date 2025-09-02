@@ -8,7 +8,7 @@ import { VariantsComponent } from "./VariantsComponent.js";
 const AccordionComponent = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
   const [productModel, setProductModel] = useState({
-    src: '',
+    src: '3dModels/Shoe.glb',
     alt: '',
     hotspots: [
       {
@@ -42,10 +42,10 @@ const AccordionComponent = () => {
       labelBackground: '#ffffff'
     },
     camera: {
-      orbit: { theta: '45deg', phi: '55deg', radius: '4m' },
-      autoRotate: false,
+      orbit: { theta: '45deg', phi: '60deg', radius: '1.2m' },
+      autoRotate: true,
       autoRotateDelay: 0,
-      fieldOfView: '30deg',
+      fieldOfView: '30deg', 
       maxZoom: '',
       minZoom: '',
     },
@@ -190,6 +190,7 @@ const AccordionComponent = () => {
         {activeAccordion === "hotspot" && (
           <div className="art-p-4 art-bg-gray-50 art-text-gray-700">
             <HotspotsComponent
+              src={productModel.src}  
               hotspots={productModel.hotspots}
               onUpdateHotspot={updateHotspot}
               onAddHotspot={addHotspot}
@@ -212,6 +213,7 @@ const AccordionComponent = () => {
         {activeAccordion === "dimensions" && (
           <div className="art-p-4 art-bg-gray-50 art-text-gray-700">
             <DimensionsComponent
+              src={productModel.src}  
               dimensions={productModel.dimensions}
               onUpdateDimension={updateDimension}
             />
@@ -232,6 +234,7 @@ const AccordionComponent = () => {
         {activeAccordion === "camera" && (
           <div className="art-p-4 art-bg-gray-50 art-text-gray-700">
             <CameraComponent
+              src={productModel.src}  
               cameraSettings={productModel.camera}
               onUpdateCameraSetting={updateCameraSetting}
             />
@@ -252,6 +255,7 @@ const AccordionComponent = () => {
         {activeAccordion === "variants" && (
           <div className="art-p-4 art-bg-gray-50 art-text-gray-700">
             <VariantsComponent
+              src={productModel.src}  
               variants={productModel.variants}
               currentVariant={productModel.currentVariant}
               onUpdateVariant={updateVariant}

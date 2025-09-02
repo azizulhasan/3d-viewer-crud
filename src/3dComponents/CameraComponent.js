@@ -2,8 +2,10 @@ import React, { useRef } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
 
-export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
+export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting, src}) => {
   const mv = useRef(null);
+
+  const defaultOrbit = "45deg 90deg 10m"
 
   const targets = [
     {
@@ -59,8 +61,13 @@ export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
       } else if (field === 'fieldOfView') {
         el.setAttribute("field-of-view", value);
       } else if (field === 'autoRotate') {
-        el.setAttribute("auto-rotate", value);
+        if (value) {
+          el.setAttribute("auto-rotate", "");
+        } else {
+          el.removeAttribute("auto-rotate");
+        }
       }
+
     }
   };
 
@@ -125,11 +132,15 @@ export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
         ),
         React.createElement("input", {
           type: "text",
-          value: cameraSettings.orbit,
-          onChange: (e) => handleCameraChange('orbit', e.target.value),
+          value:
+            typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== ""
+              ? cameraSettings.orbit
+              : defaultOrbit,   // ✅ fallback to "45deg 90deg 10m"
+          onChange: (e) => handleCameraChange("orbit", e.target.value),
           className: "art-w-full art-border art-rounded art-px-2 art-py-1 art-text-sm",
-          placeholder: "45deg 55deg 4m"
+          placeholder: defaultOrbit,
         })
+
       )
     ),
     
@@ -151,16 +162,18 @@ export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
     ),
     
     // Model Viewer
-    React.createElement(
-      MV,
-      {
+      React.createElement(MV, {
         ref: mv,
-        src: "3dModels/Astronaut.glb",
+        src: src,
         "camera-controls": true,
-        "auto-rotate": cameraSettings.autoRotate,
-        "camera-orbit": cameraSettings.orbit,
-        "field-of-view": cameraSettings.fieldOfView,
+        ...(cameraSettings.autoRotate ? { "auto-rotate": true } : {}),
+        "camera-orbit":
+          typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== ""
+            ? cameraSettings.orbit
+            : defaultOrbit,   // ✅ fallback
+        "field-of-view": cameraSettings.fieldOfView || "35deg",
       },
+
       React.createElement(
         "button",
         {

@@ -2,22 +2,22 @@ import { useState, useRef, useEffect } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
 
-export const DimensionsComponent = ({ dimensions, onUpdateDimension }) => {
+export const DimensionsComponent = ({ dimensions, onUpdateDimension, src }) => {
   const [showEditor, setShowEditor] = useState(true);
-  const [selectedModel, setSelectedModel] = useState("3dModels/Chair.glb");
+  const [selectedModel, setSelectedModel] = useState(src);
   const [currentDimensions, setCurrentDimensions] = useState({ x: 0, y: 0, z: 0 });
   const mvRef = useRef(null);
 
   const models = [
-    { value: "3dModels/Chair.glb", label: "Chair" },
-    { value: "3dModels/Astronaut.glb", label: "Astronaut" },
-    { value: "3dModels/lambo.glb", label: "Car" },
+    // { value: "3dModels/Chair.glb", label: "Chair" },
+    // { value: "3dModels/Astronaut.glb", label: "Astronaut" },
+    // { value: "3dModels/lambo.glb", label: "Car" },
   ];
 
   // Initialize dimensions to show by default
   useEffect(() => {
     // Ensure dimensions.show is true by default if not already set
-    if (dimensions.show === undefined) {
+    if (dimensions.show === false) {
       onUpdateDimension('show', true);
     }
   }, []);
