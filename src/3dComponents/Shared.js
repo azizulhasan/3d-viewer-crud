@@ -20,6 +20,8 @@ export const Shell = ({ children }) => (
           <Tab to="/variants">Variants</Tab>
           <Tab to="/camera">Camera</Tab>
           <Tab to="/slider">Slider</Tab>
+          <Tab to="/accordion">Accordion</Tab>
+          
         </div>
       </nav>
     </header>

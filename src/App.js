@@ -11,6 +11,9 @@ import { DimensionsComponent } from "./3dComponents/DimensionsComponent.js";
 import { VariantsComponent } from "./3dComponents/VariantsComponent.js";
 import { CameraComponent } from "./3dComponents/CameraComponent.js";
 import { SliderComponent } from "./3dComponents/SliderComponent.js";
+import AccordionComponent from "./3dComponents/AccordionComponent.js";
+
+
 import { Shell } from "./3dComponents/Shared.js";
 
 
@@ -45,6 +48,11 @@ const Slider = () => (
     <SliderComponent />
   </Shell>
 );
+const Accordion = () => (
+  <Shell>
+    <AccordionComponent />
+  </Shell>
+);
 
 
 export default function App() {
@@ -58,6 +66,7 @@ export default function App() {
                 <Route path="/variants" element={<Variants />} />
                   <Route path="/camera" element={<Camera />} /> 
                         <Route path="/slider" element={<Slider />} />
+                        <Route path="/accordion" element={<Accordion />} />
         {/* 
      
      

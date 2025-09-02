@@ -1,17 +1,20 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
 
-
-export const HotspotsComponent = () => {
-  // Default hotspots
+export const HotspotsComponent = ({ 
+  hotspots, 
+  onUpdateHotspot, 
+  onAddHotspot, 
+  onRemoveHotspot 
+}) => {
+  // Default hotspots - now moved to parent component
   const defaultHotspots = [
     { id: "top", label: "Top", position: "0 0.2 0", normal: "0 1 0", visible: true },
     { id: "front", label: "Front", position: "0 0.05 0.15", normal: "0 0 1", visible: true },
     { id: "side", label: "Side", position: "0.15 0.05 0", normal: "1 0 0", visible: true },
   ];
 
-  const [hotspots, setHotspots] = useState(defaultHotspots);
   const [editingId, setEditingId] = useState(null);
   const [newHotspot, setNewHotspot] = useState({
     label: "",
@@ -21,40 +24,47 @@ export const HotspotsComponent = () => {
   const [showEditor, setShowEditor] = useState(true);
   const mvRef = useRef(null);
 
-  // Add new hotspot
+  // Add new hotspot - now calls parent function
   const addHotspot = () => {
     if (!newHotspot.label.trim()) return;
     
     const id = `hotspot_${Date.now()}`;
-    setHotspots(prev => [...prev, {
+    const newHotspotData = {
       id,
       label: newHotspot.label,
       position: newHotspot.position,
       normal: newHotspot.normal,
       visible: true
-    }]);
+    };
     
+    onAddHotspot(newHotspotData);
     setNewHotspot({ label: "", position: "0 0 0", normal: "0 1 0" });
   };
 
-  // Delete hotspot
+  // Delete hotspot - now calls parent function
   const deleteHotspot = (id) => {
-    setHotspots(prev => prev.filter(h => h.id !== id));
+    const index = hotspots.findIndex(h => h.id === id);
+    if (index !== -1) {
+      onRemoveHotspot(index);
+    }
     setEditingId(null);
   };
 
-  // Update hotspot
+  // Update hotspot - now calls parent function
   const updateHotspot = (id, updates) => {
-    setHotspots(prev => prev.map(h => 
-      h.id === id ? { ...h, ...updates } : h
-    ));
+    const index = hotspots.findIndex(h => h.id === id);
+    if (index !== -1) {
+      onUpdateHotspot(index, updates);
+    }
   };
 
-  // Toggle visibility
+  // Toggle visibility - now calls parent function
   const toggleVisibility = (id) => {
-    setHotspots(prev => prev.map(h => 
-      h.id === id ? { ...h, visible: !h.visible } : h
-    ));
+    const index = hotspots.findIndex(h => h.id === id);
+    if (index !== -1) {
+      const currentHotspot = hotspots[index];
+      onUpdateHotspot(index, { visible: !currentHotspot.visible });
+    }
   };
 
   // Click on model to add hotspot
@@ -78,22 +88,32 @@ export const HotspotsComponent = () => {
     }
   }, []);
 
+  // Reset to default - now calls parent function for each default hotspot
+  const resetToDefault = () => {
+    defaultHotspots.forEach((hotspot, index) => {
+      onUpdateHotspot(index, hotspot);
+    });
+    // Remove any extra hotspots beyond the default ones
+    if (hotspots.length > defaultHotspots.length) {
+      for (let i = hotspots.length - 1; i >= defaultHotspots.length; i--) {
+        onRemoveHotspot(i);
+      }
+    }
+    setEditingId(null);
+  };
+
   return (
     <div className="art-flex art-lg:art-grid-cols-4 art-gap-6">
       {/* Left Panel - Hotspot Editor */}
-      <div className=" art-lg:art-col-span-1">
-        <div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24"
-        >
+      <div className="art-lg:art-col-span-1">
+        <div className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24">
           <div className="art-flex art-items-center art-justify-between art-mb-4">
             <h3 className="art-font-semibold art-text-lg art-text-slate-800">Hotspot Editor</h3>
             <button
               onClick={() => setShowEditor(!showEditor)}
               className="art-p-1 art-hover:art-bg-slate-100 art-rounded"
             >
-            {showEditor ? 'icon' : 'iconof' }
+              {showEditor ? 'icon' : 'iconof'}
             </button>
           </div>
 
@@ -129,7 +149,7 @@ export const HotspotsComponent = () => {
                     disabled={!newHotspot.label.trim()}
                     className="art-w-full art-bg-blue-600 art-text-white art-px-3 art-py-1 art-rounded art-text-xs art-hover:art-bg-blue-700 art-disabled:art-bg-gray-300 art-flex art-items-center art-justify-center art-gap-1"
                   >
-                 + Add Hotspot
+                    + Add Hotspot
                   </button>
                 </div>
                 <p className="art-text-xs art-text-slate-500 art-mt-2">
@@ -143,7 +163,7 @@ export const HotspotsComponent = () => {
                   Existing Hotspots ({hotspots.length})
                 </h4>
                 <div className="art-space-y-2 art-max-h-96 art-overflow-y-auto">
-                  {hotspots.map((hotspot) => (
+                  {hotspots.map((hotspot, index) => (
                     <div
                       key={hotspot.id}
                       className="art-border art-rounded-lg art-p-2 art-bg-slate-50"
@@ -199,21 +219,21 @@ export const HotspotsComponent = () => {
                                 className="art-p-1 art-hover:art-bg-slate-200 art-rounded"
                                 title={hotspot.visible ? "Hide" : "Show"}
                               >
-                                {showEditor ? 'icon' : 'iconof' }
+                                {hotspot.visible ? '👁️' : '👁️‍🗨️'}
                               </button>
                               <button
                                 onClick={() => setEditingId(hotspot.id)}
                                 className="art-p-1 art-hover:art-bg-slate-200 art-rounded"
                                 title="Edit"
                               >
-                                Edit
+                                ✏️
                               </button>
                               <button
                                 onClick={() => deleteHotspot(hotspot.id)}
                                 className="art-p-1 art-hover:art-bg-red-100 art-text-red-600 art-rounded"
                                 title="Delete"
                               >
-                                delete
+                                🗑️
                               </button>
                             </div>
                           </div>
@@ -232,10 +252,7 @@ export const HotspotsComponent = () => {
 
               {/* Reset Button */}
               <button
-                onClick={() => {
-                  setHotspots(defaultHotspots);
-                  setEditingId(null);
-                }}
+                onClick={resetToDefault}
                 className="art-w-full art-border art-border-slate-300 art-text-slate-700 art-px-3 art-py-1 art-rounded art-text-xs art-hover:art-bg-slate-100"
               >
                 Reset to Default

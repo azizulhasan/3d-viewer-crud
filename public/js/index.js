@@ -43004,6 +43004,339 @@ if (false) // removed by dead control flow
 
 /***/ }),
 
+/***/ "./src/3dComponents/AccordionComponent.js":
+/*!************************************************!*\
+  !*** ./src/3dComponents/AccordionComponent.js ***!
+  \************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../icons/AccordionIcon.js */ "./src/icons/AccordionIcon.js");
+/* harmony import */ var _HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HotspotsComponent.js */ "./src/3dComponents/HotspotsComponent.js");
+/* harmony import */ var _DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DimensionsComponent.js */ "./src/3dComponents/DimensionsComponent.js");
+/* harmony import */ var _CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CameraComponent.js */ "./src/3dComponents/CameraComponent.js");
+/* harmony import */ var _VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./VariantsComponent.js */ "./src/3dComponents/VariantsComponent.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
+
+
+
+
+
+var AccordionComponent = function AccordionComponent() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState2 = _slicedToArray(_useState, 2),
+    activeAccordion = _useState2[0],
+    setActiveAccordion = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+      src: '',
+      alt: '',
+      hotspots: [{
+        id: "top",
+        label: "Top",
+        position: "0 0.2 0",
+        normal: "0 1 0",
+        visible: true
+      }, {
+        id: "front",
+        label: "Front",
+        position: "0 0.05 0.15",
+        normal: "0 0 1",
+        visible: true
+      }, {
+        id: "side",
+        label: "Side",
+        position: "0.15 0.05 0",
+        normal: "1 0 0",
+        visible: true
+      }],
+      dimensions: {
+        show: false,
+        length: {
+          value: 0,
+          unit: 'm'
+        },
+        width: {
+          value: 0,
+          unit: 'm'
+        },
+        height: {
+          value: 0,
+          unit: 'm'
+        },
+        color: '#ff0000',
+        labelBackground: '#ffffff'
+      },
+      camera: {
+        orbit: {
+          theta: '45deg',
+          phi: '55deg',
+          radius: '4m'
+        },
+        autoRotate: false,
+        autoRotateDelay: 0,
+        fieldOfView: '30deg',
+        maxZoom: '',
+        minZoom: ''
+      },
+      variants: [],
+      currentVariant: null
+    }),
+    _useState4 = _slicedToArray(_useState3, 2),
+    productModel = _useState4[0],
+    setProductModel = _useState4[1];
+  var toggleAccordion = function toggleAccordion(key) {
+    setActiveAccordion(function (prev) {
+      return prev === key ? null : key;
+    });
+  };
+
+  // --- Handler functions for updating the state ---
+
+  // FIXED: Handler for Hotspots - now accepts updates object
+  var updateHotspot = function updateHotspot(index, updates) {
+    setProductModel(function (prev) {
+      var newHotspots = _toConsumableArray(prev.hotspots);
+      newHotspots[index] = _objectSpread(_objectSpread({}, newHotspots[index]), updates);
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: newHotspots
+      });
+    });
+  };
+  var addHotspot = function addHotspot(newHotspotData) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: [].concat(_toConsumableArray(prev.hotspots), [newHotspotData])
+      });
+    });
+  };
+  var removeHotspot = function removeHotspot(index) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: prev.hotspots.filter(function (_, i) {
+          return i !== index;
+        })
+      });
+    });
+  };
+
+  // Handler for Dimensions
+  var updateDimension = function updateDimension(field, value) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        dimensions: _objectSpread(_objectSpread({}, prev.dimensions), {}, _defineProperty({}, field, value))
+      });
+    });
+  };
+
+  // Handler for Camera
+  var updateCameraSetting = function updateCameraSetting(field, value) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        camera: _objectSpread(_objectSpread({}, prev.camera), {}, _defineProperty({}, field, value))
+      });
+    });
+  };
+
+  // Handler for Variants
+  var addVariant = function addVariant() {
+    var newVariantId = "variant-".concat(Date.now());
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        variants: [].concat(_toConsumableArray(prev.variants), [{
+          id: newVariantId,
+          name: 'New Variant',
+          thumbnail: '',
+          properties: {}
+        }])
+      });
+    });
+  };
+  var updateVariant = function updateVariant(index, field, value) {
+    setProductModel(function (prev) {
+      var newVariants = _toConsumableArray(prev.variants);
+      if (field.includes('.')) {
+        var _field$split = field.split('.'),
+          _field$split2 = _slicedToArray(_field$split, 2),
+          parent = _field$split2[0],
+          child = _field$split2[1];
+        newVariants[index][parent][child] = value;
+      } else {
+        newVariants[index][field] = value;
+      }
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        variants: newVariants
+      });
+    });
+  };
+  var removeVariant = function removeVariant(index) {
+    setProductModel(function (prev) {
+      var _prev$variants$index;
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        variants: prev.variants.filter(function (_, i) {
+          return i !== index;
+        }),
+        currentVariant: prev.currentVariant === ((_prev$variants$index = prev.variants[index]) === null || _prev$variants$index === void 0 ? void 0 : _prev$variants$index.id) ? null : prev.currentVariant
+      });
+    });
+  };
+  var selectVariant = function selectVariant(variantId) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        currentVariant: variantId
+      });
+    });
+  };
+
+  // Save button handler with detailed logging
+  var handleSave = function handleSave() {
+    console.log("=== PRODUCT MODEL DATA ===");
+    console.log("Full productModel state:", JSON.parse(JSON.stringify(productModel)));
+    console.log("--- Hotspots Details ---");
+    console.log("Number of hotspots:", productModel.hotspots.length);
+    productModel.hotspots.forEach(function (hotspot, index) {
+      console.log("Hotspot ".concat(index + 1, ":"), hotspot);
+    });
+    console.log("--- Dimensions ---");
+    console.log("Dimensions:", productModel.dimensions);
+    console.log("--- Camera ---");
+    console.log("Camera:", productModel.camera);
+    console.log("--- Variants ---");
+    console.log("Number of variants:", productModel.variants.length);
+    productModel.variants.forEach(function (variant, index) {
+      console.log("Variant ".concat(index + 1, ":"), variant);
+    });
+    console.log("Currently selected variant:", productModel.currentVariant);
+    console.log("=== END OF DATA ===");
+    alert('Data has been logged to the console! Check your browser developer tools.');
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    className: "art-border art-border-gray-200 art-rounded",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "art-border-b",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        type: "button",
+        onClick: function onClick() {
+          return toggleAccordion("hotspot");
+        },
+        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          children: "Hotspot"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          status: activeAccordion === "hotspot"
+        })]
+      }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__.HotspotsComponent, {
+          hotspots: productModel.hotspots,
+          onUpdateHotspot: updateHotspot,
+          onAddHotspot: addHotspot,
+          onRemoveHotspot: removeHotspot
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "art-border-b",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        type: "button",
+        onClick: function onClick() {
+          return toggleAccordion("dimensions");
+        },
+        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          children: "Dimensions"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          status: activeAccordion === "dimensions"
+        })]
+      }), activeAccordion === "dimensions" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
+          dimensions: productModel.dimensions,
+          onUpdateDimension: updateDimension
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "art-border-b",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        type: "button",
+        onClick: function onClick() {
+          return toggleAccordion("camera");
+        },
+        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          children: "Camera"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          status: activeAccordion === "camera"
+        })]
+      }), activeAccordion === "camera" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__.CameraComponent, {
+          cameraSettings: productModel.camera,
+          onUpdateCameraSetting: updateCameraSetting
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "art-border-b",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        type: "button",
+        onClick: function onClick() {
+          return toggleAccordion("variants");
+        },
+        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          children: "Variants"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          status: activeAccordion === "variants"
+        })]
+      }), activeAccordion === "variants" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__.VariantsComponent, {
+          variants: productModel.variants,
+          currentVariant: productModel.currentVariant,
+          onUpdateVariant: updateVariant,
+          onAddVariant: addVariant,
+          onRemoveVariant: removeVariant,
+          onSelectVariant: selectVariant
+        })
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "art-bg-gray-100 art-border-t art-mt-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        type: "button",
+        onClick: handleSave,
+        className: "art-w-full art-px-4 art-py-3 art-bg-blue-500 art-text-white art-font-medium art-rounded hover:art-bg-blue-600 art-transition-colors",
+        children: "Save"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+        className: "art-mt-2 art-text-sm art-text-gray-500 art-text-center",
+        children: "Click to verify all data is being captured correctly. Check browser console."
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AccordionComponent);
+
+/***/ }),
+
 /***/ "./src/3dComponents/CameraComponent.js":
 /*!*********************************************!*\
   !*** ./src/3dComponents/CameraComponent.js ***!
@@ -43019,7 +43352,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var CameraComponent = function CameraComponent() {
+var CameraComponent = function CameraComponent(_ref) {
+  var cameraSettings = _ref.cameraSettings,
+    onUpdateCameraSetting = _ref.onUpdateCameraSetting;
   var mv = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var targets = [{
     name: "Isometric",
@@ -43045,15 +43380,94 @@ var CameraComponent = function CameraComponent() {
   var flyTo = function flyTo(t) {
     var el = mv.current;
     if (!el) return;
+
+    // Update the model viewer
     el.setAttribute("camera-target", t.target);
     el.setAttribute("camera-orbit", t.orbit);
     el.setAttribute("field-of-view", t.fov);
+
+    // Update the parent state with the new camera settings
+    onUpdateCameraSetting('orbit', t.orbit);
+    onUpdateCameraSetting('fieldOfView', t.fov);
+    // Note: You might want to add 'target' to your cameraSettings if needed
+  };
+
+  // Handler for manual camera setting changes
+  var handleCameraChange = function handleCameraChange(field, value) {
+    onUpdateCameraSetting(field, value);
+
+    // Also update the model viewer in real-time
+    var el = mv.current;
+    if (el) {
+      if (field === 'orbit') {
+        el.setAttribute("camera-orbit", value);
+      } else if (field === 'fieldOfView') {
+        el.setAttribute("field-of-view", value);
+      } else if (field === 'autoRotate') {
+        el.setAttribute("auto-rotate", value);
+      }
+    }
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
-    title: "Camera Fly-to",
-    description: "Jump the camera to preset targets/orbits."
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "art-flex art-flex-wrap art-gap-2 art-mb-3"
+    title: "Camera Controls",
+    description: "Adjust camera settings or jump to preset views."
+  },
+  /*#__PURE__*/
+  // Camera Settings Controls
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "art-grid art-grid-cols-2 art-gap-4 art-mb-4"
+  },
+  /*#__PURE__*/
+  // Auto Rotate
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "art-flex art-items-center art-gap-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+    type: "checkbox",
+    id: "autoRotate",
+    checked: cameraSettings.autoRotate,
+    onChange: function onChange(e) {
+      return handleCameraChange('autoRotate', e.target.checked);
+    },
+    className: "art-rounded"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
+    htmlFor: "autoRotate",
+    className: "art-text-sm"
+  }, "Auto Rotate")),
+  /*#__PURE__*/
+  // Field of View
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
+    className: "art-block art-text-sm art-font-medium art-mb-1"
+  }, "Field of View"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+    type: "range",
+    min: "10",
+    max: "100",
+    value: parseInt(cameraSettings.fieldOfView) || 30,
+    onChange: function onChange(e) {
+      return handleCameraChange('fieldOfView', "".concat(e.target.value, "deg"));
+    },
+    className: "art-w-full"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+    className: "art-text-xs"
+  }, cameraSettings.fieldOfView)),
+  /*#__PURE__*/
+  // Camera Orbit (Manual Input)
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "art-col-span-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
+    className: "art-block art-text-sm art-font-medium art-mb-1"
+  }, "Camera Position"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+    type: "text",
+    value: cameraSettings.orbit,
+    onChange: function onChange(e) {
+      return handleCameraChange('orbit', e.target.value);
+    },
+    className: "art-w-full art-border art-rounded art-px-2 art-py-1 art-text-sm",
+    placeholder: "45deg 55deg 4m"
+  }))),
+  /*#__PURE__*/
+  // Preset Buttons
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "art-flex art-flex-wrap art-gap-2 art-mb-4"
   }, targets.map(function (t) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
       key: t.name,
@@ -43062,11 +43476,16 @@ var CameraComponent = function CameraComponent() {
       },
       className: "art-px-4 art-py-2 art-rounded-xl art-border art-bg-white hover:art-bg-slate-100 art-text-sm art-shadow-sm art-transition"
     }, t.name);
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
+  })),
+  /*#__PURE__*/
+  // Model Viewer
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
     ref: mv,
     src: "3dModels/Astronaut.glb",
     "camera-controls": true,
-    "auto-rotate": true
+    "auto-rotate": cameraSettings.autoRotate,
+    "camera-orbit": cameraSettings.orbit,
+    "field-of-view": cameraSettings.fieldOfView
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     slot: "hotspot-front",
     "data-position": "0 0.05 0.2",
@@ -43111,27 +43530,25 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-var DimensionsComponent = function DimensionsComponent() {
+var DimensionsComponent = function DimensionsComponent(_ref) {
+  var dimensions = _ref.dimensions,
+    onUpdateDimension = _ref.onUpdateDimension;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
-    showDimensions = _useState2[0],
-    setShowDimensions = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    showEditor = _useState2[0],
+    setShowEditor = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("3dModels/Chair.glb"),
     _useState4 = _slicedToArray(_useState3, 2),
-    showEditor = _useState4[0],
-    setShowEditor = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("3dModels/Chair.glb"),
-    _useState6 = _slicedToArray(_useState5, 2),
-    selectedModel = _useState6[0],
-    setSelectedModel = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    selectedModel = _useState4[0],
+    setSelectedModel = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       x: 0,
       y: 0,
       z: 0
     }),
-    _useState8 = _slicedToArray(_useState7, 2),
-    dimensions = _useState8[0],
-    setDimensions = _useState8[1];
+    _useState6 = _slicedToArray(_useState5, 2),
+    currentDimensions = _useState6[0],
+    setCurrentDimensions = _useState6[1];
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var models = [{
     value: "3dModels/Chair.glb",
@@ -43144,6 +43561,14 @@ var DimensionsComponent = function DimensionsComponent() {
     label: "Car"
   }];
 
+  // Initialize dimensions to show by default
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Ensure dimensions.show is true by default if not already set
+    if (dimensions.show === undefined) {
+      onUpdateDimension('show', true);
+    }
+  }, []);
+
   // Set up model viewer after load
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var mv = mvRef.current;
@@ -43154,7 +43579,21 @@ var DimensionsComponent = function DimensionsComponent() {
       var x2 = size.x / 2;
       var y2 = size.y / 2;
       var z2 = size.z / 2;
-      setDimensions(size);
+      setCurrentDimensions(size);
+
+      // Update parent state with actual dimensions
+      onUpdateDimension('length', {
+        value: size.x,
+        unit: 'm'
+      });
+      onUpdateDimension('width', {
+        value: size.z,
+        unit: 'm'
+      });
+      onUpdateDimension('height', {
+        value: size.y,
+        unit: 'm'
+      });
 
       // Update all hotspot positions based on bounding box
       mv.updateHotspot({
@@ -43240,10 +43679,12 @@ var DimensionsComponent = function DimensionsComponent() {
       mv.removeEventListener('load', handleLoad);
       mv.removeEventListener('camera-change', renderSVG);
     };
-  }, [selectedModel]);
+  }, [selectedModel, onUpdateDimension]);
 
   // Toggle dimensions visibility
   var toggleDimensions = function toggleDimensions(visible) {
+    // Update parent state
+    onUpdateDimension('show', visible);
     var mv = mvRef.current;
     if (!mv) return;
     var dimElements = [].concat(_toConsumableArray(mv.querySelectorAll('button')), [mv.querySelector('#dimLines')]);
@@ -43257,34 +43698,23 @@ var DimensionsComponent = function DimensionsComponent() {
       }
     });
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    toggleDimensions(showDimensions);
-  }, [showDimensions]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "art-grid art-grid-cols-1 lg:art-grid-cols-4 art-gap-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "lg:art-col-span-1",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        initial: {
-          opacity: 0,
-          x: -20
-        },
-        animate: {
-          opacity: 1,
-          x: 0
-        },
         className: "art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "art-flex art-items-center art-justify-between art-mb-4",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-            className: "art-font-semibold art-text-lg art-text-slate-800 art-flex art-items-center art-gap-2",
+            className: "art-font-semibold art-text-lg art-text-slate-800",
             children: "Dimensions"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             onClick: function onClick() {
               return setShowEditor(!showEditor);
             },
             className: "art-p-1 art-hover:art-bg-slate-100 art-rounded",
-            children: showEditor ? 'icon' : 'iconof'
+            children: showEditor ? '▼' : '▲'
           })]
         }), showEditor && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "art-space-y-4",
@@ -43315,9 +43745,10 @@ var DimensionsComponent = function DimensionsComponent() {
               className: "art-flex art-items-center art-gap-2 art-text-xs",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                 type: "checkbox",
-                checked: showDimensions,
+                checked: dimensions.show !== false // Default to true if undefined
+                ,
                 onChange: function onChange(e) {
-                  return setShowDimensions(e.target.checked);
+                  return toggleDimensions(e.target.checked);
                 },
                 className: "art-rounded"
               }), "Show Dimensions"]
@@ -43336,7 +43767,7 @@ var DimensionsComponent = function DimensionsComponent() {
                   children: "Width (X):"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
                   className: "art-font-mono art-font-semibold",
-                  children: [(dimensions.x * 100).toFixed(1), " cm"]
+                  children: [(currentDimensions.x * 100).toFixed(1), " cm"]
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                 className: "art-flex art-justify-between",
@@ -43345,7 +43776,7 @@ var DimensionsComponent = function DimensionsComponent() {
                   children: "Height (Y):"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
                   className: "art-font-mono art-font-semibold",
-                  children: [(dimensions.y * 100).toFixed(1), " cm"]
+                  children: [(currentDimensions.y * 100).toFixed(1), " cm"]
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                 className: "art-flex art-justify-between",
@@ -43354,7 +43785,7 @@ var DimensionsComponent = function DimensionsComponent() {
                   children: "Depth (Z):"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
                   className: "art-font-mono art-font-semibold",
-                  children: [(dimensions.z * 100).toFixed(1), " cm"]
+                  children: [(currentDimensions.z * 100).toFixed(1), " cm"]
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("hr", {
                 className: "art-my-2"
@@ -43365,7 +43796,7 @@ var DimensionsComponent = function DimensionsComponent() {
                   children: "Volume:"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
                   className: "art-font-mono",
-                  children: [(dimensions.x * dimensions.y * dimensions.z * 1000000).toFixed(0), " cm\xB3"]
+                  children: [(currentDimensions.x * currentDimensions.y * currentDimensions.z * 1000000).toFixed(0), " cm\xB3"]
                 })]
               })]
             })]
@@ -43431,31 +43862,31 @@ var DimensionsComponent = function DimensionsComponent() {
             className: "dim",
             "data-position": "1 -1 0",
             "data-normal": "1 0 0",
-            children: [(dimensions.z * 100).toFixed(0), " cm"]
+            children: [(currentDimensions.z * 100).toFixed(0), " cm"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
             slot: "hotspot-dim+X-Z",
             className: "dim",
             "data-position": "1 0 -1",
             "data-normal": "1 0 0",
-            children: [(dimensions.y * 100).toFixed(0), " cm"]
+            children: [(currentDimensions.y * 100).toFixed(0), " cm"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
             slot: "hotspot-dim+Y-Z",
             className: "dim",
             "data-position": "0 1 -1",
             "data-normal": "0 1 0",
-            children: [(dimensions.x * 100).toFixed(0), " cm"]
+            children: [(currentDimensions.x * 100).toFixed(0), " cm"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
             slot: "hotspot-dim-X-Z",
             className: "dim",
             "data-position": "-1 0 -1",
             "data-normal": "-1 0 0",
-            children: [(dimensions.y * 100).toFixed(0), " cm"]
+            children: [(currentDimensions.y * 100).toFixed(0), " cm"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
             slot: "hotspot-dim-X-Y",
             className: "dim",
             "data-position": "-1 -1 0",
             "data-normal": "-1 0 0",
-            children: [(dimensions.z * 100).toFixed(0), " cm"]
+            children: [(currentDimensions.z * 100).toFixed(0), " cm"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("svg", {
             id: "dimLines",
             width: "100%",
@@ -43567,10 +43998,6 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -43581,8 +44008,12 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-var HotspotsComponent = function HotspotsComponent() {
-  // Default hotspots
+var HotspotsComponent = function HotspotsComponent(_ref) {
+  var hotspots = _ref.hotspots,
+    onUpdateHotspot = _ref.onUpdateHotspot,
+    onAddHotspot = _ref.onAddHotspot,
+    onRemoveHotspot = _ref.onRemoveHotspot;
+  // Default hotspots - now moved to parent component
   var defaultHotspots = [{
     id: "top",
     label: "Top",
@@ -43602,41 +44033,36 @@ var HotspotsComponent = function HotspotsComponent() {
     normal: "1 0 0",
     visible: true
   }];
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultHotspots),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
-    hotspots = _useState2[0],
-    setHotspots = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState4 = _slicedToArray(_useState3, 2),
-    editingId = _useState4[0],
-    setEditingId = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    editingId = _useState2[0],
+    setEditingId = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       label: "",
       position: "0 0 0",
       normal: "0 1 0"
     }),
+    _useState4 = _slicedToArray(_useState3, 2),
+    newHotspot = _useState4[0],
+    setNewHotspot = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState6 = _slicedToArray(_useState5, 2),
-    newHotspot = _useState6[0],
-    setNewHotspot = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
-    _useState8 = _slicedToArray(_useState7, 2),
-    showEditor = _useState8[0],
-    setShowEditor = _useState8[1];
+    showEditor = _useState6[0],
+    setShowEditor = _useState6[1];
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
-  // Add new hotspot
+  // Add new hotspot - now calls parent function
   var addHotspot = function addHotspot() {
     if (!newHotspot.label.trim()) return;
     var id = "hotspot_".concat(Date.now());
-    setHotspots(function (prev) {
-      return [].concat(_toConsumableArray(prev), [{
-        id: id,
-        label: newHotspot.label,
-        position: newHotspot.position,
-        normal: newHotspot.normal,
-        visible: true
-      }]);
-    });
+    var newHotspotData = {
+      id: id,
+      label: newHotspot.label,
+      position: newHotspot.position,
+      normal: newHotspot.normal,
+      visible: true
+    };
+    onAddHotspot(newHotspotData);
     setNewHotspot({
       label: "",
       position: "0 0 0",
@@ -43644,34 +44070,38 @@ var HotspotsComponent = function HotspotsComponent() {
     });
   };
 
-  // Delete hotspot
+  // Delete hotspot - now calls parent function
   var deleteHotspot = function deleteHotspot(id) {
-    setHotspots(function (prev) {
-      return prev.filter(function (h) {
-        return h.id !== id;
-      });
+    var index = hotspots.findIndex(function (h) {
+      return h.id === id;
     });
+    if (index !== -1) {
+      onRemoveHotspot(index);
+    }
     setEditingId(null);
   };
 
-  // Update hotspot
+  // Update hotspot - now calls parent function
   var updateHotspot = function updateHotspot(id, updates) {
-    setHotspots(function (prev) {
-      return prev.map(function (h) {
-        return h.id === id ? _objectSpread(_objectSpread({}, h), updates) : h;
-      });
+    var index = hotspots.findIndex(function (h) {
+      return h.id === id;
     });
+    if (index !== -1) {
+      onUpdateHotspot(index, updates);
+    }
   };
 
-  // Toggle visibility
+  // Toggle visibility - now calls parent function
   var toggleVisibility = function toggleVisibility(id) {
-    setHotspots(function (prev) {
-      return prev.map(function (h) {
-        return h.id === id ? _objectSpread(_objectSpread({}, h), {}, {
-          visible: !h.visible
-        }) : h;
-      });
+    var index = hotspots.findIndex(function (h) {
+      return h.id === id;
     });
+    if (index !== -1) {
+      var currentHotspot = hotspots[index];
+      onUpdateHotspot(index, {
+        visible: !currentHotspot.visible
+      });
+    }
   };
 
   // Click on model to add hotspot
@@ -43692,19 +44122,25 @@ var HotspotsComponent = function HotspotsComponent() {
       });
     }
   }, []);
+
+  // Reset to default - now calls parent function for each default hotspot
+  var resetToDefault = function resetToDefault() {
+    defaultHotspots.forEach(function (hotspot, index) {
+      onUpdateHotspot(index, hotspot);
+    });
+    // Remove any extra hotspots beyond the default ones
+    if (hotspots.length > defaultHotspots.length) {
+      for (var i = hotspots.length - 1; i >= defaultHotspots.length; i--) {
+        onRemoveHotspot(i);
+      }
+    }
+    setEditingId(null);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "art-flex art-lg:art-grid-cols-4 art-gap-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: " art-lg:art-col-span-1",
+      className: "art-lg:art-col-span-1",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        initial: {
-          opacity: 0,
-          x: -20
-        },
-        animate: {
-          opacity: 1,
-          x: 0
-        },
         className: "art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "art-flex art-items-center art-justify-between art-mb-4",
@@ -43779,7 +44215,7 @@ var HotspotsComponent = function HotspotsComponent() {
               children: ["Existing Hotspots (", hotspots.length, ")"]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
               className: "art-space-y-2 art-max-h-96 art-overflow-y-auto",
-              children: hotspots.map(function (hotspot) {
+              children: hotspots.map(function (hotspot, index) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                   className: "art-border art-rounded-lg art-p-2 art-bg-slate-50",
                   children: editingId === hotspot.id ?
@@ -43849,21 +44285,21 @@ var HotspotsComponent = function HotspotsComponent() {
                           },
                           className: "art-p-1 art-hover:art-bg-slate-200 art-rounded",
                           title: hotspot.visible ? "Hide" : "Show",
-                          children: showEditor ? 'icon' : 'iconof'
+                          children: hotspot.visible ? '👁️' : '👁️‍🗨️'
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                           onClick: function onClick() {
                             return setEditingId(hotspot.id);
                           },
                           className: "art-p-1 art-hover:art-bg-slate-200 art-rounded",
                           title: "Edit",
-                          children: "Edit"
+                          children: "\u270F\uFE0F"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                           onClick: function onClick() {
                             return deleteHotspot(hotspot.id);
                           },
                           className: "art-p-1 art-hover:art-bg-red-100 art-text-red-600 art-rounded",
                           title: "Delete",
-                          children: "delete"
+                          children: "\uD83D\uDDD1\uFE0F"
                         })]
                       })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -43878,10 +44314,7 @@ var HotspotsComponent = function HotspotsComponent() {
               })
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            onClick: function onClick() {
-              setHotspots(defaultHotspots);
-              setEditingId(null);
-            },
+            onClick: resetToDefault,
             className: "art-w-full art-border art-border-slate-300 art-text-slate-700 art-px-3 art-py-1 art-rounded art-text-xs art-hover:art-bg-slate-100",
             children: "Reset to Default"
           })]
@@ -43983,6 +44416,9 @@ var Shell = function Shell(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Tab, {
             to: "/slider",
             children: "Slider"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Tab, {
+            to: "/accordion",
+            children: "Accordion"
           })]
         })]
       })
@@ -44823,8 +45259,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _3dComponents_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./3dComponents/VariantsComponent.js */ "./src/3dComponents/VariantsComponent.js");
 /* harmony import */ var _3dComponents_CameraComponent_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./3dComponents/CameraComponent.js */ "./src/3dComponents/CameraComponent.js");
 /* harmony import */ var _3dComponents_SliderComponent_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./3dComponents/SliderComponent.js */ "./src/3dComponents/SliderComponent.js");
-/* harmony import */ var _3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./3dComponents/Shared.js */ "./src/3dComponents/Shared.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _3dComponents_AccordionComponent_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./3dComponents/AccordionComponent.js */ "./src/3dComponents/AccordionComponent.js");
+/* harmony import */ var _3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./3dComponents/Shared.js */ "./src/3dComponents/Shared.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 // import React, { useEffect, useMemo, useRef, useState } from "react";
 // import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 // import { motion } from "framer-motion";
@@ -44840,58 +45277,67 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var Home = function Home() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_HomeComponent_js__WEBPACK_IMPORTED_MODULE_3__.HomeComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_HomeComponent_js__WEBPACK_IMPORTED_MODULE_3__.HomeComponent, {})
   });
 };
 var Hotspots = function Hotspots() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_4__.HotspotsComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_4__.HotspotsComponent, {})
   });
 };
 var Dimensions = function Dimensions() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_5__.DimensionsComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_5__.DimensionsComponent, {})
   });
 };
 var Variants = function Variants() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_6__.VariantsComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_6__.VariantsComponent, {})
   });
 };
 var Camera = function Camera() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_CameraComponent_js__WEBPACK_IMPORTED_MODULE_7__.CameraComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_CameraComponent_js__WEBPACK_IMPORTED_MODULE_7__.CameraComponent, {})
   });
 };
 var Slider = function Slider() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_9__.Shell, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_3dComponents_SliderComponent_js__WEBPACK_IMPORTED_MODULE_8__.SliderComponent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_SliderComponent_js__WEBPACK_IMPORTED_MODULE_8__.SliderComponent, {})
+  });
+};
+var Accordion = function Accordion() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_Shared_js__WEBPACK_IMPORTED_MODULE_10__.Shell, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_3dComponents_AccordionComponent_js__WEBPACK_IMPORTED_MODULE_9__["default"], {})
   });
 };
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.HashRouter, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.HashRouter, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Home, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Home, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/hotspots",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Hotspots, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Hotspots, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/dimensions",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Dimensions, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Dimensions, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/variants",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Variants, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Variants, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/camera",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Camera, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Camera, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/slider",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Slider, {})
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Slider, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          path: "/accordion",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Accordion, {})
         })]
       })
     })
@@ -45453,6 +45899,51 @@ function App() {
 //   }
 // `;
 // document.head.appendChild(styleEl);
+
+/***/ }),
+
+/***/ "./src/icons/AccordionIcon.js":
+/*!************************************!*\
+  !*** ./src/icons/AccordionIcon.js ***!
+  \************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AccordionIcon)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+function AccordionIcon(_ref) {
+  var status = _ref.status;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: status ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
+      fill: "none",
+      viewBox: "0 0 24 24",
+      width: "20",
+      height: '20',
+      stroke: "currentColor",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        strokeWidth: 2,
+        d: "M19 9l-7 7-7-7"
+      })
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
+      fill: "none",
+      viewBox: "0 0 24 24",
+      width: "20",
+      height: "20",
+      stroke: "currentColor",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        strokeWidth: 2,
+        d: "M5 15l7-7 7 7" // This is now an up arrow
+      })
+    })
+  });
+}
 
 /***/ })
 

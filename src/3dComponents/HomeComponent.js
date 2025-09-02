@@ -33,7 +33,7 @@ export const HomeComponent = () => (
         </li>
       </ol>
     </Section>
-
+  
     
   </div>
   

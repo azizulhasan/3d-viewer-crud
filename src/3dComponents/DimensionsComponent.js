@@ -2,12 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { Section } from "./Shared.js";
 import { MV } from "./Shared.js";
 
-
-export const DimensionsComponent = () => {
-  const [showDimensions, setShowDimensions] = useState(true);
+export const DimensionsComponent = ({ dimensions, onUpdateDimension }) => {
   const [showEditor, setShowEditor] = useState(true);
   const [selectedModel, setSelectedModel] = useState("3dModels/Chair.glb");
-  const [dimensions, setDimensions] = useState({ x: 0, y: 0, z: 0 });
+  const [currentDimensions, setCurrentDimensions] = useState({ x: 0, y: 0, z: 0 });
   const mvRef = useRef(null);
 
   const models = [
@@ -15,6 +13,14 @@ export const DimensionsComponent = () => {
     { value: "3dModels/Astronaut.glb", label: "Astronaut" },
     { value: "3dModels/lambo.glb", label: "Car" },
   ];
+
+  // Initialize dimensions to show by default
+  useEffect(() => {
+    // Ensure dimensions.show is true by default if not already set
+    if (dimensions.show === undefined) {
+      onUpdateDimension('show', true);
+    }
+  }, []);
 
   // Set up model viewer after load
   useEffect(() => {
@@ -28,7 +34,12 @@ export const DimensionsComponent = () => {
       const y2 = size.y / 2;
       const z2 = size.z / 2;
 
-      setDimensions(size);
+      setCurrentDimensions(size);
+
+      // Update parent state with actual dimensions
+      onUpdateDimension('length', { value: size.x, unit: 'm' });
+      onUpdateDimension('width', { value: size.z, unit: 'm' });
+      onUpdateDimension('height', { value: size.y, unit: 'm' });
 
       // Update all hotspot positions based on bounding box
       mv.updateHotspot({
@@ -131,10 +142,13 @@ export const DimensionsComponent = () => {
       mv.removeEventListener('load', handleLoad);
       mv.removeEventListener('camera-change', renderSVG);
     };
-  }, [selectedModel]);
+  }, [selectedModel, onUpdateDimension]);
 
   // Toggle dimensions visibility
   const toggleDimensions = (visible) => {
+    // Update parent state
+    onUpdateDimension('show', visible);
+    
     const mv = mvRef.current;
     if (!mv) return;
 
@@ -154,29 +168,20 @@ export const DimensionsComponent = () => {
     });
   };
 
-  useEffect(() => {
-    toggleDimensions(showDimensions);
-  }, [showDimensions]);
-
   return (
     <div className="art-grid art-grid-cols-1 lg:art-grid-cols-4 art-gap-6">
       {/* Left Panel - Dimensions Editor */}
       <div className="lg:art-col-span-1">
-        <div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24"
-        >
+        <div className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24">
           <div className="art-flex art-items-center art-justify-between art-mb-4">
-            <h3 className="art-font-semibold art-text-lg art-text-slate-800 art-flex art-items-center art-gap-2">
-             
+            <h3 className="art-font-semibold art-text-lg art-text-slate-800">
               Dimensions
             </h3>
             <button
               onClick={() => setShowEditor(!showEditor)}
               className="art-p-1 art-hover:art-bg-slate-100 art-rounded"
             >
-           {showEditor ? 'icon' : 'iconof' }
+              {showEditor ? '▼' : '▲'}
             </button>
           </div>
 
@@ -204,8 +209,8 @@ export const DimensionsComponent = () => {
                 <label className="art-flex art-items-center art-gap-2 art-text-xs">
                   <input
                     type="checkbox"
-                    checked={showDimensions}
-                    onChange={(e) => setShowDimensions(e.target.checked)}
+                    checked={dimensions.show !== false} // Default to true if undefined
+                    onChange={(e) => toggleDimensions(e.target.checked)}
                     className="art-rounded"
                   />
                   Show Dimensions
@@ -218,20 +223,20 @@ export const DimensionsComponent = () => {
                 <div className="art-space-y-1 art-text-xs">
                   <div className="art-flex art-justify-between">
                     <span className="art-text-slate-600">Width (X):</span>
-                    <span className="art-font-mono art-font-semibold">{(dimensions.x * 100).toFixed(1)} cm</span>
+                    <span className="art-font-mono art-font-semibold">{(currentDimensions.x * 100).toFixed(1)} cm</span>
                   </div>
                   <div className="art-flex art-justify-between">
                     <span className="art-text-slate-600">Height (Y):</span>
-                    <span className="art-font-mono art-font-semibold">{(dimensions.y * 100).toFixed(1)} cm</span>
+                    <span className="art-font-mono art-font-semibold">{(currentDimensions.y * 100).toFixed(1)} cm</span>
                   </div>
                   <div className="art-flex art-justify-between">
                     <span className="art-text-slate-600">Depth (Z):</span>
-                    <span className="art-font-mono art-font-semibold">{(dimensions.z * 100).toFixed(1)} cm</span>
+                    <span className="art-font-mono art-font-semibold">{(currentDimensions.z * 100).toFixed(1)} cm</span>
                   </div>
                   <hr className="art-my-2" />
                   <div className="art-flex art-justify-between art-font-semibold">
                     <span className="art-text-slate-700">Volume:</span>
-                    <span className="art-font-mono">{(dimensions.x * dimensions.y * dimensions.z * 1000000).toFixed(0)} cm³</span>
+                    <span className="art-font-mono">{(currentDimensions.x * currentDimensions.y * currentDimensions.z * 1000000).toFixed(0)} cm³</span>
                   </div>
                 </div>
               </div>
@@ -272,19 +277,19 @@ export const DimensionsComponent = () => {
 
             {/* Dimension Labels */}
             <button slot="hotspot-dim+X-Y" className="dim" data-position="1 -1 0" data-normal="1 0 0">
-              {(dimensions.z * 100).toFixed(0)} cm
+              {(currentDimensions.z * 100).toFixed(0)} cm
             </button>
             <button slot="hotspot-dim+X-Z" className="dim" data-position="1 0 -1" data-normal="1 0 0">
-              {(dimensions.y * 100).toFixed(0)} cm
+              {(currentDimensions.y * 100).toFixed(0)} cm
             </button>
             <button slot="hotspot-dim+Y-Z" className="dim" data-position="0 1 -1" data-normal="0 1 0">
-              {(dimensions.x * 100).toFixed(0)} cm
+              {(currentDimensions.x * 100).toFixed(0)} cm
             </button>
             <button slot="hotspot-dim-X-Z" className="dim" data-position="-1 0 -1" data-normal="-1 0 0">
-              {(dimensions.y * 100).toFixed(0)} cm
+              {(currentDimensions.y * 100).toFixed(0)} cm
             </button>
             <button slot="hotspot-dim-X-Y" className="dim" data-position="-1 -1 0" data-normal="-1 0 0">
-              {(dimensions.z * 100).toFixed(0)} cm
+              {(currentDimensions.z * 100).toFixed(0)} cm
             </button>
 
             {/* SVG Lines */}
@@ -304,7 +309,6 @@ export const DimensionsComponent = () => {
             </svg>
           </MV>
         </Section>
-
       </div>
     </div>
   );
