@@ -43015,12 +43015,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../icons/AccordionIcon.js */ "./src/icons/AccordionIcon.js");
+/* harmony import */ var _activeAccordion_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../activeAccordion/AccordionIcon.js */ "./src/activeAccordion/AccordionIcon.js");
 /* harmony import */ var _HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HotspotsComponent.js */ "./src/3dComponents/HotspotsComponent.js");
 /* harmony import */ var _DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DimensionsComponent.js */ "./src/3dComponents/DimensionsComponent.js");
 /* harmony import */ var _CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CameraComponent.js */ "./src/3dComponents/CameraComponent.js");
 /* harmony import */ var _VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./VariantsComponent.js */ "./src/3dComponents/VariantsComponent.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _Shared_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Shared.js */ "./src/3dComponents/Shared.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -43044,12 +43044,17 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 var AccordionComponent = function AccordionComponent() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("modelSettings"),
     _useState2 = _slicedToArray(_useState, 2),
-    activeAccordion = _useState2[0],
-    setActiveAccordion = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    activeTab = _useState2[0],
+    setActiveTab = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState4 = _slicedToArray(_useState3, 2),
+    activeAccordion = _useState4[0],
+    setActiveAccordion = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       src: '3dModels/Shoe.glb',
       alt: '',
       hotspots: [{
@@ -43103,9 +43108,10 @@ var AccordionComponent = function AccordionComponent() {
       variants: [],
       currentVariant: null
     }),
-    _useState4 = _slicedToArray(_useState3, 2),
-    productModel = _useState4[0],
-    setProductModel = _useState4[1];
+    _useState6 = _slicedToArray(_useState5, 2),
+    productModel = _useState6[0],
+    setProductModel = _useState6[1];
+  var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var toggleAccordion = function toggleAccordion(key) {
     setActiveAccordion(function (prev) {
       return prev === key ? null : key;
@@ -43114,7 +43120,7 @@ var AccordionComponent = function AccordionComponent() {
 
   // --- Handler functions for updating the state ---
 
-  // FIXED: Handler for Hotspots - now accepts updates object
+  // Handler for Hotspots - now accepts updates object
   var updateHotspot = function updateHotspot(index, updates) {
     setProductModel(function (prev) {
       var newHotspots = _toConsumableArray(prev.hotspots);
@@ -43209,6 +43215,23 @@ var AccordionComponent = function AccordionComponent() {
     });
   };
 
+  // Handle model click for hotspot positioning
+  var handleModelClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (event) {
+    var mv = mvRef.current;
+    if (!mv || activeAccordion !== 'hotspot') return;
+    var intersectionPosition = mv.positionAndNormalFromPoint(event.clientX, event.clientY);
+    if (intersectionPosition) {
+      var position = intersectionPosition.position,
+        normal = intersectionPosition.normal;
+      // This would need to be communicated back to HotspotsComponent
+      // For now, we'll just log it - you might need to implement a callback system
+      console.log('Model clicked at:', {
+        position: "".concat(position.x.toFixed(3), " ").concat(position.y.toFixed(3), " ").concat(position.z.toFixed(3)),
+        normal: "".concat(normal.x.toFixed(3), " ").concat(normal.y.toFixed(3), " ").concat(normal.z.toFixed(3))
+      });
+    }
+  }, [activeAccordion]);
+
   // Save button handler with detailed logging
   var handleSave = function handleSave() {
     console.log("=== PRODUCT MODEL DATA ===");
@@ -43231,111 +43254,255 @@ var AccordionComponent = function AccordionComponent() {
     console.log("=== END OF DATA ===");
     alert('Data has been logged to the console! Check your browser developer tools.');
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-    className: "art-border art-border-gray-200 art-rounded",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "art-border-b",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
-        type: "button",
-        onClick: function onClick() {
-          return toggleAccordion("hotspot");
-        },
-        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: "Hotspot"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          status: activeAccordion === "hotspot"
-        })]
-      }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__.HotspotsComponent, {
+
+  // Slider component placeholder
+  var SliderComponent = function SliderComponent() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+      className: 'art-p-4'
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('h3', {
+      className: 'art-text-lg art-font-medium art-text-gray-700 art-mb-4'
+    }, 'Slider Controls'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('p', {
+      className: 'art-text-gray-500'
+    }, 'Slider functionality will be implemented here.'));
+  };
+
+  // Render the appropriate 3D model based on active accordion
+  var renderModelPreview = function renderModelPreview() {
+    if (activeTab !== 'modelSettings' || !activeAccordion) {
+      // Show default placeholder when no accordion is active
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+        className: 'art-text-center'
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+        className: 'art-w-96 art-h-96 art-bg-white art-rounded-lg art-shadow-lg art-border-2 art-border-dashed art-border-gray-300 art-flex art-items-center art-justify-center'
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+        className: 'art-text-gray-500'
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+        className: 'art-text-4xl art-mb-4'
+      }, '🎨'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('h3', {
+        className: 'art-text-lg art-font-medium art-mb-2'
+      }, '3D Model Preview'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('p', {
+        className: 'art-text-sm'
+      }, 'Your 3D model preview will appear here'))));
+    }
+
+    // Render 3D model with specific features based on active accordion
+    switch (activeAccordion) {
+      case 'hotspot':
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-h-full art-flex art-items-center art-justify-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-max-w-2xl art-h-96'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_6__.MV, {
+          ref: mvRef,
           src: productModel.src,
-          hotspots: productModel.hotspots,
-          onUpdateHotspot: updateHotspot,
-          onAddHotspot: addHotspot,
-          onRemoveHotspot: removeHotspot
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "art-border-b",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
-        type: "button",
-        onClick: function onClick() {
-          return toggleAccordion("dimensions");
+          poster: '',
+          onClick: handleModelClick,
+          className: 'art-w-full art-h-full'
         },
-        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: "Dimensions"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          status: activeAccordion === "dimensions"
-        })]
-      }), activeAccordion === "dimensions" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
+        // Render hotspots
+        productModel.hotspots.filter(function (h) {
+          return h.visible;
+        }).map(function (h) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+            key: h.id,
+            slot: "hotspot-".concat(h.id),
+            'data-position': h.position,
+            'data-normal': h.normal,
+            'data-visibility-attribute': 'visible',
+            className: 'art-bg-blue-500 art-text-white art-px-2 art-py-1 art-rounded art-text-sm art-shadow-lg'
+          }, h.label);
+        }))));
+      case 'dimensions':
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-h-full art-flex art-items-center art-justify-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-max-w-2xl art-h-96'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_6__.MV, {
           src: productModel.src,
-          dimensions: productModel.dimensions,
-          onUpdateDimension: updateDimension
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "art-border-b",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
-        type: "button",
-        onClick: function onClick() {
-          return toggleAccordion("camera");
+          poster: '',
+          className: 'art-w-full art-h-full'
         },
-        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: "Camera"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          status: activeAccordion === "camera"
-        })]
-      }), activeAccordion === "camera" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__.CameraComponent, {
+        // Add dimension annotations if needed
+        productModel.dimensions.show && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-absolute art-top-4 art-left-4 art-bg-white art-p-2 art-rounded art-shadow'
+        }, "Dimensions: ".concat(productModel.dimensions.length.value).concat(productModel.dimensions.length.unit, " \xD7 ").concat(productModel.dimensions.width.value).concat(productModel.dimensions.width.unit, " \xD7 ").concat(productModel.dimensions.height.value).concat(productModel.dimensions.height.unit)))));
+      case 'camera':
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-h-full art-flex art-items-center art-justify-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-max-w-2xl art-h-96'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_6__.MV, {
           src: productModel.src,
-          cameraSettings: productModel.camera,
-          onUpdateCameraSetting: updateCameraSetting
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "art-border-b",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
-        type: "button",
-        onClick: function onClick() {
-          return toggleAccordion("variants");
-        },
-        className: "art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: "Variants"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_icons_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          status: activeAccordion === "variants"
-        })]
-      }), activeAccordion === "variants" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "art-p-4 art-bg-gray-50 art-text-gray-700",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__.VariantsComponent, {
+          poster: '',
+          'camera-orbit': "".concat(productModel.camera.orbit.theta, " ").concat(productModel.camera.orbit.phi, " ").concat(productModel.camera.orbit.radius),
+          'auto-rotate': productModel.camera.autoRotate,
+          'auto-rotate-delay': productModel.camera.autoRotateDelay,
+          'field-of-view': productModel.camera.fieldOfView,
+          'max-camera-orbit': productModel.camera.maxZoom,
+          'min-camera-orbit': productModel.camera.minZoom,
+          className: 'art-w-full art-h-full'
+        })));
+      case 'variants':
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-h-full art-flex art-items-center art-justify-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-full art-max-w-2xl art-h-96'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_6__.MV, {
           src: productModel.src,
-          variants: productModel.variants,
-          currentVariant: productModel.currentVariant,
-          onUpdateVariant: updateVariant,
-          onAddVariant: addVariant,
-          onRemoveVariant: removeVariant,
-          onSelectVariant: selectVariant
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "art-bg-gray-100 art-border-t art-mt-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
-        type: "button",
-        onClick: handleSave,
-        className: "art-w-full art-px-4 art-py-3 art-bg-blue-500 art-text-white art-font-medium art-rounded hover:art-bg-blue-600 art-transition-colors",
-        children: "Save"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-        className: "art-mt-2 art-text-sm art-text-gray-500 art-text-center",
-        children: "Click to verify all data is being captured correctly. Check browser console."
-      })]
-    })]
-  });
+          poster: '',
+          'variant-name': productModel.currentVariant,
+          className: 'art-w-full art-h-full'
+        })));
+      default:
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-text-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-w-96 art-h-96 art-bg-white art-rounded-lg art-shadow-lg art-border-2 art-border-dashed art-border-gray-300 art-flex art-items-center art-justify-center'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-text-gray-500'
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+          className: 'art-text-4xl art-mb-4'
+        }, '🎨'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('h3', {
+          className: 'art-text-lg art-font-medium art-mb-2'
+        }, '3D Model Preview'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('p', {
+          className: 'art-text-sm'
+        }, 'Your 3D model preview will appear here'))));
+    }
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-flex art-h-screen art-bg-gray-50'
+  },
+  /*#__PURE__*/
+  // Left Panel
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-w-96 art-bg-white art-border-r art-border-gray-200 art-flex art-flex-col'
+  },
+  /*#__PURE__*/
+  // Tab Navigation
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-flex art-border-b art-border-gray-200'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return setActiveTab('modelSettings');
+    },
+    className: "art-flex-1 art-px-4 art-py-3 art-text-sm art-font-medium ".concat(activeTab === 'modelSettings' ? 'art-text-blue-600 art-border-b-2 art-border-blue-600 art-bg-blue-50' : 'art-text-gray-500 hover:art-text-gray-700 hover:art-bg-gray-50')
+  }, 'Model Settings'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return setActiveTab('slider');
+    },
+    className: "art-flex-1 art-px-4 art-py-3 art-text-sm art-font-medium ".concat(activeTab === 'slider' ? 'art-text-blue-600 art-border-b-2 art-border-blue-600 art-bg-blue-50' : 'art-text-gray-500 hover:art-text-gray-700 hover:art-bg-gray-50')
+  }, 'Slider')),
+  /*#__PURE__*/
+  // Tab Content
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-flex-1 art-overflow-y-auto'
+  }, activeTab === 'modelSettings' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-border art-border-gray-200'
+  },
+  /*#__PURE__*/
+  // Hotspot Accordion
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-border-b'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return toggleAccordion('hotspot');
+    },
+    className: 'art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('span', null, 'Hotspot'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_activeAccordion_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    status: activeAccordion === 'hotspot'
+  })), activeAccordion === 'hotspot' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-p-4 art-bg-gray-50 art-text-gray-700'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__.HotspotsComponent, {
+    src: productModel.src,
+    hotspots: productModel.hotspots,
+    onUpdateHotspot: updateHotspot,
+    onAddHotspot: addHotspot,
+    onRemoveHotspot: removeHotspot,
+    isStandalone: false // This will use the compact version
+  }))),
+  /*#__PURE__*/
+  // Dimensions Accordion
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-border-b'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return toggleAccordion('dimensions');
+    },
+    className: 'art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('span', null, 'Dimensions'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_activeAccordion_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    status: activeAccordion === 'dimensions'
+  })), activeAccordion === 'dimensions' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-p-4 art-bg-gray-50 art-text-gray-700'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
+    src: productModel.src,
+    dimensions: productModel.dimensions,
+    onUpdateDimension: updateDimension,
+    isStandalone: false
+  }))),
+  /*#__PURE__*/
+  // Camera Accordion
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-border-b'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return toggleAccordion('camera');
+    },
+    className: 'art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('span', null, 'Camera'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_activeAccordion_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    status: activeAccordion === 'camera'
+  })), activeAccordion === 'camera' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-p-4 art-bg-gray-50 art-text-gray-700'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_4__.CameraComponent, {
+    src: productModel.src,
+    cameraSettings: productModel.camera,
+    onUpdateCameraSetting: updateCameraSetting,
+    isStandalone: false
+  }))),
+  /*#__PURE__*/
+  // Variants Accordion
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-border-b'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: function onClick() {
+      return toggleAccordion('variants');
+    },
+    className: 'art-flex art-justify-between art-items-center art-w-full art-p-4 art-font-bold art-text-gray-600 hover:art-bg-gray-100'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('span', null, 'Variants'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_activeAccordion_AccordionIcon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    status: activeAccordion === 'variants'
+  })), activeAccordion === 'variants' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-p-4 art-bg-gray-50 art-text-gray-700'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_VariantsComponent_js__WEBPACK_IMPORTED_MODULE_5__.VariantsComponent, {
+    src: productModel.src,
+    variants: productModel.variants,
+    currentVariant: productModel.currentVariant,
+    onUpdateVariant: updateVariant,
+    onAddVariant: addVariant,
+    onRemoveVariant: removeVariant,
+    onSelectVariant: selectVariant,
+    isStandalone: false
+  })))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(SliderComponent)),
+  /*#__PURE__*/
+  // Save Button
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-p-4 art-border-t art-border-gray-200 art-bg-gray-50'
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('button', {
+    type: 'button',
+    onClick: handleSave,
+    className: 'art-w-full art-px-4 art-py-3 art-bg-blue-500 art-text-white art-font-medium art-rounded hover:art-bg-blue-600 art-transition-colors'
+  }, 'Save'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement('p', {
+    className: 'art-mt-2 art-text-sm art-text-gray-500 art-text-center'
+  }, 'Click to verify all data is being captured correctly. Check browser console.'))),
+  /*#__PURE__*/
+  // Right Panel - Dynamic Preview Area
+  react__WEBPACK_IMPORTED_MODULE_0__.createElement('div', {
+    className: 'art-flex-1 art-flex art-items-center art-justify-center art-bg-gray-100 art-p-6'
+  }, renderModelPreview()));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AccordionComponent);
 
@@ -43536,188 +43703,243 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _Shared_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Shared.js */ "./src/3dComponents/Shared.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-
+// DimensionsComponent.js
 
 
 
 var DimensionsComponent = function DimensionsComponent(_ref) {
   var dimensions = _ref.dimensions,
     onUpdateDimension = _ref.onUpdateDimension,
-    src = _ref.src;
+    src = _ref.src,
+    _ref$isStandalone = _ref.isStandalone,
+    isStandalone = _ref$isStandalone === void 0 ? true : _ref$isStandalone;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
     showEditor = _useState2[0],
     setShowEditor = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(src),
-    _useState4 = _slicedToArray(_useState3, 2),
-    selectedModel = _useState4[0],
-    setSelectedModel = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-      x: 0,
-      y: 0,
-      z: 0
-    }),
-    _useState6 = _slicedToArray(_useState5, 2),
-    currentDimensions = _useState6[0],
-    setCurrentDimensions = _useState6[1];
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var models = [
-    // { value: "3dModels/Chair.glb", label: "Chair" },
-    // { value: "3dModels/Astronaut.glb", label: "Astronaut" },
-    // { value: "3dModels/lambo.glb", label: "Car" },
-  ];
-
-  // Initialize dimensions to show by default
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    // Ensure dimensions.show is true by default if not already set
-    if (dimensions.show === false) {
-      onUpdateDimension('show', true);
+  var handleDimensionChange = function handleDimensionChange(field, value) {
+    if (field.includes('.')) {
+      var _field$split = field.split('.'),
+        _field$split2 = _slicedToArray(_field$split, 2),
+        parent = _field$split2[0],
+        child = _field$split2[1];
+      onUpdateDimension(parent, _objectSpread(_objectSpread({}, dimensions[parent]), {}, _defineProperty({}, child, value)));
+    } else {
+      onUpdateDimension(field, value);
     }
-  }, []);
-
-  // Set up model viewer after load
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var mv = mvRef.current;
-    if (!mv) return;
-    var handleLoad = function handleLoad() {
-      var center = mv.getBoundingBoxCenter();
-      var size = mv.getDimensions();
-      var x2 = size.x / 2;
-      var y2 = size.y / 2;
-      var z2 = size.z / 2;
-      setCurrentDimensions(size);
-
-      // Update parent state with actual dimensions
-      onUpdateDimension('length', {
-        value: size.x,
-        unit: 'm'
-      });
-      onUpdateDimension('width', {
-        value: size.z,
-        unit: 'm'
-      });
-      onUpdateDimension('height', {
-        value: size.y,
-        unit: 'm'
-      });
-
-      // Update all hotspot positions based on bounding box
-      mv.updateHotspot({
-        name: 'hotspot-dot+X-Y+Z',
-        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dim+X-Y',
-        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dot+X-Y-Z',
-        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dim+X-Z',
-        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dot+X+Y-Z',
-        position: "".concat(center.x + x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dim+Y-Z',
-        position: "".concat(center.x, " ").concat(center.y + y2 * 1.1, " ").concat(center.z - z2 * 1.1)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dot-X+Y-Z',
-        position: "".concat(center.x - x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dim-X-Z',
-        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dot-X-Y-Z',
-        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dim-X-Y',
-        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
-      });
-      mv.updateHotspot({
-        name: 'hotspot-dot-X-Y+Z',
-        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
-      });
-
-      // Update dimension labels
-      var dimButtons = mv.querySelectorAll('.dim');
-      if (dimButtons[0]) dimButtons[0].textContent = "".concat((size.z * 100).toFixed(0), " cm");
-      if (dimButtons[1]) dimButtons[1].textContent = "".concat((size.y * 100).toFixed(0), " cm");
-      if (dimButtons[2]) dimButtons[2].textContent = "".concat((size.x * 100).toFixed(0), " cm");
-      if (dimButtons[3]) dimButtons[3].textContent = "".concat((size.y * 100).toFixed(0), " cm");
-      if (dimButtons[4]) dimButtons[4].textContent = "".concat((size.z * 100).toFixed(0), " cm");
-      renderSVG();
-    };
-    var renderSVG = function renderSVG() {
-      var dimLines = mv.querySelectorAll('.dimensionLine');
-      var drawLine = function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
-        if (dotHotspot1 && dotHotspot2) {
-          svgLine.setAttribute('x1', dotHotspot1.canvasPosition.x);
-          svgLine.setAttribute('y1', dotHotspot1.canvasPosition.y);
-          svgLine.setAttribute('x2', dotHotspot2.canvasPosition.x);
-          svgLine.setAttribute('y2', dotHotspot2.canvasPosition.y);
-          if (dimensionHotspot && !dimensionHotspot.facingCamera) {
-            svgLine.classList.add('hide');
-          } else {
-            svgLine.classList.remove('hide');
-          }
-        }
-      };
-      if (dimLines.length >= 5) {
-        drawLine(dimLines[0], mv.queryHotspot('hotspot-dot+X-Y+Z'), mv.queryHotspot('hotspot-dot+X-Y-Z'), mv.queryHotspot('hotspot-dim+X-Y'));
-        drawLine(dimLines[1], mv.queryHotspot('hotspot-dot+X-Y-Z'), mv.queryHotspot('hotspot-dot+X+Y-Z'), mv.queryHotspot('hotspot-dim+X-Z'));
-        drawLine(dimLines[2], mv.queryHotspot('hotspot-dot+X+Y-Z'), mv.queryHotspot('hotspot-dot-X+Y-Z'));
-        drawLine(dimLines[3], mv.queryHotspot('hotspot-dot-X+Y-Z'), mv.queryHotspot('hotspot-dot-X-Y-Z'), mv.queryHotspot('hotspot-dim-X-Z'));
-        drawLine(dimLines[4], mv.queryHotspot('hotspot-dot-X-Y-Z'), mv.queryHotspot('hotspot-dot-X-Y+Z'), mv.queryHotspot('hotspot-dim-X-Y'));
-      }
-    };
-    mv.addEventListener('load', handleLoad);
-    mv.addEventListener('camera-change', renderSVG);
-    return function () {
-      mv.removeEventListener('load', handleLoad);
-      mv.removeEventListener('camera-change', renderSVG);
-    };
-  }, [selectedModel, onUpdateDimension]);
-
-  // Toggle dimensions visibility
-  var toggleDimensions = function toggleDimensions(visible) {
-    // Update parent state
-    onUpdateDimension('show', visible);
-    var mv = mvRef.current;
-    if (!mv) return;
-    var dimElements = [].concat(_toConsumableArray(mv.querySelectorAll('button')), [mv.querySelector('#dimLines')]);
-    dimElements.forEach(function (element) {
-      if (element) {
-        if (visible) {
-          element.classList.remove('hide');
-        } else {
-          element.classList.add('hide');
-        }
-      }
-    });
   };
+  var resetToDefault = function resetToDefault() {
+    onUpdateDimension('show', false);
+    onUpdateDimension('length', {
+      value: 0,
+      unit: 'm'
+    });
+    onUpdateDimension('width', {
+      value: 0,
+      unit: 'm'
+    });
+    onUpdateDimension('height', {
+      value: 0,
+      unit: 'm'
+    });
+    onUpdateDimension('color', '#ff0000');
+    onUpdateDimension('labelBackground', '#ffffff');
+  };
+  if (!isStandalone) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "art-space-y-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: "art-border-b art-pb-4",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "art-flex art-items-center art-justify-between art-mb-2",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
+            className: "art-text-sm art-font-medium art-text-slate-700",
+            children: "Show Dimensions"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+            className: "art-relative art-inline-flex art-items-center art-cursor-pointer",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+              type: "checkbox",
+              checked: dimensions.show,
+              onChange: function onChange(e) {
+                return handleDimensionChange('show', e.target.checked);
+              },
+              className: "art-sr-only"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "art-w-8 art-h-4 art-rounded-full art-transition-colors ".concat(dimensions.show ? 'art-bg-blue-600' : 'art-bg-gray-300'),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                className: "art-w-3 art-h-3 art-bg-white art-rounded-full art-shadow art-transition-transform art-mt-0.5 ".concat(dimensions.show ? 'art-translate-x-4 art-ml-0.5' : 'art-translate-x-0.5')
+              })
+            })]
+          })]
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "art-space-y-3",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+            children: "Length"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "art-flex art-gap-2",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+              type: "number",
+              value: dimensions.length.value,
+              onChange: function onChange(e) {
+                return handleDimensionChange('length.value', parseFloat(e.target.value) || 0);
+              },
+              className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              step: "0.1",
+              min: "0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+              value: dimensions.length.unit,
+              onChange: function onChange(e) {
+                return handleDimensionChange('length.unit', e.target.value);
+              },
+              className: "art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "m",
+                children: "m"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "cm",
+                children: "cm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "mm",
+                children: "mm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "in",
+                children: "in"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "ft",
+                children: "ft"
+              })]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+            children: "Width"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "art-flex art-gap-2",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+              type: "number",
+              value: dimensions.width.value,
+              onChange: function onChange(e) {
+                return handleDimensionChange('width.value', parseFloat(e.target.value) || 0);
+              },
+              className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              step: "0.1",
+              min: "0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+              value: dimensions.width.unit,
+              onChange: function onChange(e) {
+                return handleDimensionChange('width.unit', e.target.value);
+              },
+              className: "art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "m",
+                children: "m"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "cm",
+                children: "cm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "mm",
+                children: "mm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "in",
+                children: "in"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "ft",
+                children: "ft"
+              })]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+            children: "Height"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "art-flex art-gap-2",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+              type: "number",
+              value: dimensions.height.value,
+              onChange: function onChange(e) {
+                return handleDimensionChange('height.value', parseFloat(e.target.value) || 0);
+              },
+              className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              step: "0.1",
+              min: "0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+              value: dimensions.height.unit,
+              onChange: function onChange(e) {
+                return handleDimensionChange('height.unit', e.target.value);
+              },
+              className: "art-text-xs art-rounded art-border art-px-2 art-py-1 focus:art-border-blue-500 focus:art-outline-none",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "m",
+                children: "m"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "cm",
+                children: "cm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "mm",
+                children: "mm"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "in",
+                children: "in"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: "ft",
+                children: "ft"
+              })]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+            children: "Dimension Line Color"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "color",
+            value: dimensions.color,
+            onChange: function onChange(e) {
+              return handleDimensionChange('color', e.target.value);
+            },
+            className: "art-w-full art-h-8 art-rounded art-border art-cursor-pointer"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+            children: "Label Background Color"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "color",
+            value: dimensions.labelBackground,
+            onChange: function onChange(e) {
+              return handleDimensionChange('labelBackground', e.target.value);
+            },
+            className: "art-w-full art-h-8 art-rounded art-border art-cursor-pointer"
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        onClick: resetToDefault,
+        className: "art-w-full art-border art-border-slate-300 art-text-slate-700 art-px-3 art-py-1 art-rounded art-text-xs hover:art-bg-slate-100 art-transition-colors",
+        children: "Reset to Default"
+      })]
+    });
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "art-grid art-grid-cols-1 lg:art-grid-cols-4 art-gap-6",
+    className: "art-flex art-lg:art-grid-cols-4 art-gap-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: "lg:art-col-span-1",
+      className: "art-lg:art-col-span-1",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4 art-sticky art-top-24",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -43729,204 +43951,206 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
             onClick: function onClick() {
               return setShowEditor(!showEditor);
             },
-            className: "art-p-1 art-hover:art-bg-slate-100 art-rounded",
-            children: showEditor ? '▼' : '▲'
+            className: "art-p-1 hover:art-bg-slate-100 art-rounded",
+            children: showEditor ? '🔽' : '▶️'
           })]
         }), showEditor && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "art-space-y-4",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "art-border-b art-pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
-              className: "art-text-sm art-font-medium art-mb-2 art-text-slate-700",
-              children: "Product:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
-              value: selectedModel,
-              onChange: function onChange(e) {
-                return setSelectedModel(e.target.value);
-              },
-              className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1",
-              children: models.map(function (model) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
-                  value: model.value,
-                  children: model.label
-                }, model.value);
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "art-border-b art-pb-4",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
-              className: "art-text-sm art-font-medium art-mb-2 art-text-slate-700",
-              children: "Display Options"
+            className: "art-flex art-items-center art-justify-between",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+              className: "art-text-sm art-font-medium art-text-slate-700",
+              children: "Show Dimensions"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
-              className: "art-flex art-items-center art-gap-2 art-text-xs",
+              className: "art-relative art-inline-flex art-items-center art-cursor-pointer",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                 type: "checkbox",
-                checked: dimensions.show !== false // Default to true if undefined
-                ,
+                checked: dimensions.show,
                 onChange: function onChange(e) {
-                  return toggleDimensions(e.target.checked);
+                  return handleDimensionChange('show', e.target.checked);
                 },
-                className: "art-rounded"
-              }), "Show Dimensions"]
+                className: "art-sr-only"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                className: "art-w-8 art-h-4 art-rounded-full art-transition-colors ".concat(dimensions.show ? 'art-bg-blue-600' : 'art-bg-gray-300'),
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                  className: "art-w-3 art-h-3 art-bg-white art-rounded-full art-shadow art-transition-transform art-mt-0.5 ".concat(dimensions.show ? 'art-translate-x-4 art-ml-0.5' : 'art-translate-x-0.5')
+                })
+              })]
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "art-bg-slate-50 art-rounded-lg art-p-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
-              className: "art-text-sm art-font-medium art-mb-2 art-text-slate-700",
-              children: "Measurements"
+            className: "art-space-y-3",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+                children: "Length"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "art-flex art-gap-2",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "number",
+                  value: dimensions.length.value,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('length.value', parseFloat(e.target.value) || 0);
+                  },
+                  className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  step: "0.1",
+                  min: "0"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+                  value: dimensions.length.unit,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('length.unit', e.target.value);
+                  },
+                  className: "art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "m",
+                    children: "m"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "cm",
+                    children: "cm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "mm",
+                    children: "mm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "in",
+                    children: "in"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "ft",
+                    children: "ft"
+                  })]
+                })]
+              })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              className: "art-space-y-1 art-text-xs",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                className: "art-flex art-justify-between",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  className: "art-text-slate-600",
-                  children: "Width (X):"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-                  className: "art-font-mono art-font-semibold",
-                  children: [(currentDimensions.x * 100).toFixed(1), " cm"]
-                })]
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+                children: "Width"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                className: "art-flex art-justify-between",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  className: "art-text-slate-600",
-                  children: "Height (Y):"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-                  className: "art-font-mono art-font-semibold",
-                  children: [(currentDimensions.y * 100).toFixed(1), " cm"]
+                className: "art-flex art-gap-2",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "number",
+                  value: dimensions.width.value,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('width.value', parseFloat(e.target.value) || 0);
+                  },
+                  className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  step: "0.1",
+                  min: "0"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+                  value: dimensions.width.unit,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('width.unit', e.target.value);
+                  },
+                  className: "art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "m",
+                    children: "m"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "cm",
+                    children: "cm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "mm",
+                    children: "mm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "in",
+                    children: "in"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "ft",
+                    children: "ft"
+                  })]
                 })]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+                children: "Height"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                className: "art-flex art-justify-between",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  className: "art-text-slate-600",
-                  children: "Depth (Z):"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-                  className: "art-font-mono art-font-semibold",
-                  children: [(currentDimensions.z * 100).toFixed(1), " cm"]
+                className: "art-flex art-gap-2",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "number",
+                  value: dimensions.height.value,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('height.value', parseFloat(e.target.value) || 0);
+                  },
+                  className: "art-flex-1 art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  step: "0.1",
+                  min: "0"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+                  value: dimensions.height.unit,
+                  onChange: function onChange(e) {
+                    return handleDimensionChange('height.unit', e.target.value);
+                  },
+                  className: "art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "m",
+                    children: "m"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "cm",
+                    children: "cm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "mm",
+                    children: "mm"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "in",
+                    children: "in"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: "ft",
+                    children: "ft"
+                  })]
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("hr", {
-                className: "art-my-2"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                className: "art-block art-text-xs art-font-medium art-text-slate-700 art-mb-1",
+                children: "Colors"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                className: "art-flex art-justify-between art-font-semibold",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  className: "art-text-slate-700",
-                  children: "Volume:"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
-                  className: "art-font-mono",
-                  children: [(currentDimensions.x * currentDimensions.y * currentDimensions.z * 1000000).toFixed(0), " cm\xB3"]
+                className: "art-space-y-2",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                    className: "art-block art-text-xs art-text-slate-600 art-mb-1",
+                    children: "Line Color"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                    type: "color",
+                    value: dimensions.color,
+                    onChange: function onChange(e) {
+                      return handleDimensionChange('color', e.target.value);
+                    },
+                    className: "art-w-full art-h-6 art-rounded art-border art-cursor-pointer"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                    className: "art-block art-text-xs art-text-slate-600 art-mb-1",
+                    children: "Label Background"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                    type: "color",
+                    value: dimensions.labelBackground,
+                    onChange: function onChange(e) {
+                      return handleDimensionChange('labelBackground', e.target.value);
+                    },
+                    className: "art-w-full art-h-6 art-rounded art-border art-cursor-pointer"
+                  })]
                 })]
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "art-text-xs art-text-slate-500 art-bg-blue-50 art-border art-border-blue-200 art-rounded-lg art-p-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
-              className: "art-mb-1",
-              children: ["\uD83D\uDCCF ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
-                children: "Bounding Box Dimensions"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-              children: "Automatically calculated from the 3D model's actual size. Dimensions show the object's width, height, and depth with connecting lines."
-            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            onClick: resetToDefault,
+            className: "art-w-full art-border art-border-slate-300 art-text-slate-700 art-px-3 art-py-1 art-rounded art-text-xs hover:art-bg-slate-100",
+            children: "Reset to Default"
           })]
         })]
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: "lg:art-col-span-3",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
-        title: "3D Bounding Box Dimensions",
-        description: "Automatic dimension calculation with visual bounding box display and connecting lines.",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
-          ref: mvRef,
-          src: selectedModel,
-          "camera-orbit": "-30deg auto auto",
-          "max-camera-orbit": "auto 100deg auto",
-          "shadow-intensity": "1",
-          ar: true,
-          "ar-modes": "webxr",
-          "ar-scale": "fixed",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot+X-Y+Z",
-            className: "dot",
-            "data-position": "1 -1 1",
-            "data-normal": "1 0 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot+X-Y-Z",
-            className: "dot",
-            "data-position": "1 -1 -1",
-            "data-normal": "1 0 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot+X+Y-Z",
-            className: "dot",
-            "data-position": "1 1 -1",
-            "data-normal": "0 1 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot-X+Y-Z",
-            className: "dot",
-            "data-position": "-1 1 -1",
-            "data-normal": "0 1 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot-X-Y-Z",
-            className: "dot",
-            "data-position": "-1 -1 -1",
-            "data-normal": "-1 0 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            slot: "hotspot-dot-X-Y+Z",
-            className: "dot",
-            "data-position": "-1 -1 1",
-            "data-normal": "-1 0 0"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-            slot: "hotspot-dim+X-Y",
-            className: "dim",
-            "data-position": "1 -1 0",
-            "data-normal": "1 0 0",
-            children: [(currentDimensions.z * 100).toFixed(0), " cm"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-            slot: "hotspot-dim+X-Z",
-            className: "dim",
-            "data-position": "1 0 -1",
-            "data-normal": "1 0 0",
-            children: [(currentDimensions.y * 100).toFixed(0), " cm"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-            slot: "hotspot-dim+Y-Z",
-            className: "dim",
-            "data-position": "0 1 -1",
-            "data-normal": "0 1 0",
-            children: [(currentDimensions.x * 100).toFixed(0), " cm"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-            slot: "hotspot-dim-X-Z",
-            className: "dim",
-            "data-position": "-1 0 -1",
-            "data-normal": "-1 0 0",
-            children: [(currentDimensions.y * 100).toFixed(0), " cm"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-            slot: "hotspot-dim-X-Y",
-            className: "dim",
-            "data-position": "-1 -1 0",
-            "data-normal": "-1 0 0",
-            children: [(currentDimensions.z * 100).toFixed(0), " cm"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("svg", {
-            id: "dimLines",
-            width: "100%",
-            height: "100%",
-            xmlns: "http://www.w3.org/2000/svg",
-            className: "dimensionLineContainer",
+      className: "art-w-full art-lg:art-col-span-3",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
+        ref: mvRef,
+        src: src,
+        poster: "",
+        children: dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            slot: "dimension-length",
             style: {
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              pointerEvents: 'none'
+              color: dimensions.color,
+              backgroundColor: dimensions.labelBackground
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("line", {
-              className: "dimensionLine"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("line", {
-              className: "dimensionLine"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("line", {
-              className: "dimensionLine"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("line", {
-              className: "dimensionLine"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("line", {
-              className: "dimensionLine"
-            })]
-          })]
+            children: [dimensions.length.value, dimensions.length.unit]
+          })
         })
       })
     })]
@@ -44020,7 +44244,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-
+// HotspotsComponent.js
 
 
 
@@ -44029,8 +44253,9 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     onUpdateHotspot = _ref.onUpdateHotspot,
     onAddHotspot = _ref.onAddHotspot,
     onRemoveHotspot = _ref.onRemoveHotspot,
-    src = _ref.src;
-  // Default hotspots - now moved to parent component
+    src = _ref.src,
+    _ref$isStandalone = _ref.isStandalone,
+    isStandalone = _ref$isStandalone === void 0 ? true : _ref$isStandalone;
   var defaultHotspots = [{
     id: "top",
     label: "Top",
@@ -44067,8 +44292,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     showEditor = _useState6[0],
     setShowEditor = _useState6[1];
   var mvRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-
-  // Add new hotspot - now calls parent function
   var addHotspot = function addHotspot() {
     if (!newHotspot.label.trim()) return;
     var id = "hotspot_".concat(Date.now());
@@ -44086,8 +44309,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       normal: "0 1 0"
     });
   };
-
-  // Delete hotspot - now calls parent function
   var deleteHotspot = function deleteHotspot(id) {
     var index = hotspots.findIndex(function (h) {
       return h.id === id;
@@ -44097,8 +44318,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     }
     setEditingId(null);
   };
-
-  // Update hotspot - now calls parent function
   var updateHotspot = function updateHotspot(id, updates) {
     var index = hotspots.findIndex(function (h) {
       return h.id === id;
@@ -44107,8 +44326,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       onUpdateHotspot(index, updates);
     }
   };
-
-  // Toggle visibility - now calls parent function
   var toggleVisibility = function toggleVisibility(id) {
     var index = hotspots.findIndex(function (h) {
       return h.id === id;
@@ -44120,13 +44337,9 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       });
     }
   };
-
-  // Click on model to add hotspot
   var handleModelClick = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (event) {
     var mv = mvRef.current;
     if (!mv) return;
-
-    // Get intersection point from model-viewer
     var intersectionPosition = mv.positionAndNormalFromPoint(event.clientX, event.clientY);
     if (intersectionPosition) {
       var position = intersectionPosition.position,
@@ -44139,13 +44352,10 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       });
     }
   }, []);
-
-  // Reset to default - now calls parent function for each default hotspot
   var resetToDefault = function resetToDefault() {
     defaultHotspots.forEach(function (hotspot, index) {
       onUpdateHotspot(index, hotspot);
     });
-    // Remove any extra hotspots beyond the default ones
     if (hotspots.length > defaultHotspots.length) {
       for (var i = hotspots.length - 1; i >= defaultHotspots.length; i--) {
         onRemoveHotspot(i);
@@ -44153,6 +44363,167 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     }
     setEditingId(null);
   };
+  if (!isStandalone) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "art-space-y-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "art-border-b art-pb-4",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
+          className: "art-text-sm art-font-medium art-mb-2 art-text-slate-700",
+          children: "Add New Hotspot"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "art-space-y-2",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "text",
+            placeholder: "Hotspot label",
+            value: newHotspot.label,
+            onChange: function onChange(e) {
+              return setNewHotspot(function (prev) {
+                return _objectSpread(_objectSpread({}, prev), {}, {
+                  label: e.target.value
+                });
+              });
+            },
+            className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "text",
+            placeholder: "Position (x y z)",
+            value: newHotspot.position,
+            onChange: function onChange(e) {
+              return setNewHotspot(function (prev) {
+                return _objectSpread(_objectSpread({}, prev), {}, {
+                  position: e.target.value
+                });
+              });
+            },
+            className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "text",
+            placeholder: "Normal (x y z)",
+            value: newHotspot.normal,
+            onChange: function onChange(e) {
+              return setNewHotspot(function (prev) {
+                return _objectSpread(_objectSpread({}, prev), {}, {
+                  normal: e.target.value
+                });
+              });
+            },
+            className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            onClick: addHotspot,
+            disabled: !newHotspot.label.trim(),
+            className: "art-w-full art-bg-blue-600 art-text-white art-px-3 art-py-1 art-rounded art-text-xs art-hover:art-bg-blue-700 art-disabled:art-bg-gray-300 art-flex art-items-center art-justify-center art-gap-1",
+            children: "+ Add Hotspot"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: "art-text-xs art-text-slate-500 art-mt-2",
+          children: "\uD83D\uDCA1 Tip: Click on the 3D model to auto-fill position & normal"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("h4", {
+          className: "art-text-sm art-font-medium art-mb-2 art-text-slate-700",
+          children: ["Existing Hotspots (", hotspots.length, ")"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "art-space-y-2 art-max-h-96 art-overflow-y-auto",
+          children: hotspots.map(function (hotspot, index) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "art-border art-rounded-lg art-p-2 art-bg-slate-50",
+              children: editingId === hotspot.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "art-space-y-2",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "text",
+                  value: hotspot.label,
+                  onChange: function onChange(e) {
+                    return updateHotspot(hotspot.id, {
+                      label: e.target.value
+                    });
+                  },
+                  className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "text",
+                  value: hotspot.position,
+                  onChange: function onChange(e) {
+                    return updateHotspot(hotspot.id, {
+                      position: e.target.value
+                    });
+                  },
+                  className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  placeholder: "Position (x y z)"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "text",
+                  value: hotspot.normal,
+                  onChange: function onChange(e) {
+                    return updateHotspot(hotspot.id, {
+                      normal: e.target.value
+                    });
+                  },
+                  className: "art-w-full art-text-xs art-rounded art-border art-px-2 art-py-1",
+                  placeholder: "Normal (x y z)"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "art-flex art-gap-1",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                    onClick: function onClick() {
+                      return setEditingId(null);
+                    },
+                    className: "art-flex-1 art-bg-green-600 art-text-white art-px-2 art-py-1 art-rounded art-text-xs art-hover:art-bg-green-700",
+                    children: "Save"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                    onClick: function onClick() {
+                      return setEditingId(null);
+                    },
+                    className: "art-px-2 art-py-1 art-border art-rounded art-text-xs art-hover:art-bg-slate-100",
+                    children: "Cancel"
+                  })]
+                })]
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "art-flex art-items-center art-justify-between art-mb-1",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                    className: "art-font-medium art-text-xs art-text-slate-800",
+                    children: hotspot.label
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                    className: "art-flex art-gap-1",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                      onClick: function onClick() {
+                        return toggleVisibility(hotspot.id);
+                      },
+                      className: "art-p-1 art-hover:art-bg-slate-200 art-rounded",
+                      title: hotspot.visible ? "Hide" : "Show",
+                      children: hotspot.visible ? '👁️' : '👁️‍🗨️'
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                      onClick: function onClick() {
+                        return setEditingId(hotspot.id);
+                      },
+                      className: "art-p-1 art-hover:art-bg-slate-200 art-rounded",
+                      title: "Edit",
+                      children: "\u270F\uFE0F"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                      onClick: function onClick() {
+                        return deleteHotspot(hotspot.id);
+                      },
+                      className: "art-p-1 art-hover:art-bg-red-100 art-text-red-600 art-rounded",
+                      title: "Delete",
+                      children: "\uD83D\uDDD1\uFE0F"
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "art-text-xs art-text-slate-500",
+                  children: ["Pos: ", hotspot.position]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "art-text-xs art-text-slate-500",
+                  children: ["Normal: ", hotspot.normal]
+                })]
+              })
+            }, hotspot.id);
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        onClick: resetToDefault,
+        className: "art-w-full art-border art-border-slate-300 art-text-slate-700 art-px-3 art-py-1 art-rounded art-text-xs art-hover:art-bg-slate-100",
+        children: "Reset to Default"
+      })]
+    });
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "art-flex art-lg:art-grid-cols-4 art-gap-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -44235,10 +44606,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
               children: hotspots.map(function (hotspot, index) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                   className: "art-border art-rounded-lg art-p-2 art-bg-slate-50",
-                  children: editingId === hotspot.id ?
-                  /*#__PURE__*/
-                  // Edit Mode
-                  (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  children: editingId === hotspot.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                     className: "art-space-y-2",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                       type: "text",
@@ -44285,10 +44653,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
                         children: "Cancel"
                       })]
                     })]
-                  }) :
-                  /*#__PURE__*/
-                  // View Mode
-                  (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                       className: "art-flex art-items-center art-justify-between art-mb-1",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
@@ -44339,28 +44704,24 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "art-w-full art-lg:art-col-span-3",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
-        title: "Interactive Hotspots",
-        description: "Click on the model to add hotspots, or use the editor panel to customize them.",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
-          ref: mvRef,
-          src: src,
-          poster: "",
-          onClick: handleModelClick,
-          children: hotspots.filter(function (h) {
-            return h.visible;
-          }).map(function (h) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              slot: "hotspot-".concat(h.id),
-              "data-position": h.position,
-              "data-normal": h.normal,
-              "data-visibility-attribute": "visible",
-              className: "art-Hotspot",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                children: h.label
-              })
-            }, h.id);
-          })
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, {
+        ref: mvRef,
+        src: src,
+        poster: "",
+        onClick: handleModelClick,
+        children: hotspots.filter(function (h) {
+          return h.visible;
+        }).map(function (h) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            slot: "hotspot-".concat(h.id),
+            "data-position": h.position,
+            "data-normal": h.normal,
+            "data-visibility-attribute": "visible",
+            className: "art-Hotspot",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              children: h.label
+            })
+          }, h.id);
         })
       })
     })]
@@ -45864,10 +46225,10 @@ function App() {
 
 /***/ }),
 
-/***/ "./src/icons/AccordionIcon.js":
-/*!************************************!*\
-  !*** ./src/icons/AccordionIcon.js ***!
-  \************************************/
+/***/ "./src/activeAccordion/AccordionIcon.js":
+/*!**********************************************!*\
+  !*** ./src/activeAccordion/AccordionIcon.js ***!
+  \**********************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
