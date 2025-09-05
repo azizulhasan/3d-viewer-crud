@@ -6,7 +6,7 @@
 import React from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { HomeComponent } from "./3dComponents/HomeComponent.js";
-import { HotspotsComponent } from "./3dComponents/HotspotsComponent.js";
+import HotspotsComponent from "./3dComponents/HotspotsComponent.js";
 import { DimensionsComponent } from "./3dComponents/DimensionsComponent.js";
 import { VariantsComponent } from "./3dComponents/VariantsComponent.js";
 import { CameraComponent } from "./3dComponents/CameraComponent.js";
