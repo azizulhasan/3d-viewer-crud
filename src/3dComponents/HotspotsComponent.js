@@ -16,7 +16,7 @@ const HotspotsComponent = ({
     // Handle position and normal updates for individual hotspots
     if (name.startsWith("position-") || name.startsWith("normal-")) {
       const [typeStr, axis] = name.split("-");
-      const currentVector = hotspots[index][typeStr].split(" ").map(Number);
+      const currentVector = (hotspots[index][typeStr] || "0 0 0").split(" ").map(Number);
       const newVector = [...currentVector];
       if (axis === "x") newVector[0] = parseFloat(value) || 0;
       if (axis === "y") newVector[1] = parseFloat(value) || 0;
@@ -63,7 +63,7 @@ const HotspotsComponent = ({
               <input
                 type="text"
                 name="label"
-                value={hotspot.label}
+                value={hotspot.label || ""}
                 onChange={(e) => handleInputChange(index, e)}
                 className="art-border art-rounded art-p-1 art-w-full"
               />
@@ -74,7 +74,7 @@ const HotspotsComponent = ({
               <input
                 type="text"
                 name="position"
-                value={hotspot.position}
+                value={hotspot.position || "0 0 0"}
                 onChange={(e) => handleInputChange(index, e)}
                 className="art-border art-rounded art-p-1 art-w-full"
               />
@@ -85,7 +85,7 @@ const HotspotsComponent = ({
               <input
                 type="text"
                 name="normal"
-                value={hotspot.normal}
+                value={hotspot.normal || "0 0 1"}
                 onChange={(e) => handleInputChange(index, e)}
                 className="art-border art-rounded art-p-1 art-w-full"
               />
@@ -96,7 +96,7 @@ const HotspotsComponent = ({
               <input
                 type="checkbox"
                 name="visible"
-                checked={hotspot.visible}
+                checked={hotspot.visible ?? true}
                 onChange={(e) => handleInputChange(index, e)}
                 className="art-w-4 art-h-4"
               />
@@ -121,7 +121,7 @@ const HotspotsComponent = ({
           <input
             type="text"
             name="id"
-            value={newHotspot.id}
+            value={newHotspot.id || ""}
             onChange={handleNewInputChange}
             className="art-border art-rounded art-p-1 art-w-full"
           />
@@ -132,7 +132,7 @@ const HotspotsComponent = ({
           <input
             type="text"
             name="label"
-            value={newHotspot.label}
+            value={newHotspot.label || ""}
             onChange={handleNewInputChange}
             className="art-border art-rounded art-p-1 art-w-full"
           />
@@ -143,7 +143,7 @@ const HotspotsComponent = ({
           <input
             type="text"
             name="position"
-            value={newHotspot.position}
+            value={newHotspot.position || "0 0 0"}
             readOnly
             className="art-border art-rounded art-p-1 art-w-full bg-gray-200"
           />
@@ -154,7 +154,7 @@ const HotspotsComponent = ({
           <input
             type="text"
             name="normal"
-            value={newHotspot.normal}
+            value={newHotspot.normal || "0 0 1"}
             readOnly
             className="art-border art-rounded art-p-1 art-w-full bg-gray-200"
           />
@@ -165,7 +165,7 @@ const HotspotsComponent = ({
           <input
             type="checkbox"
             name="visible"
-            checked={newHotspot.visible}
+            checked={newHotspot.visible ?? true}
             onChange={handleNewInputChange}
             className="art-w-4 art-h-4"
           />

@@ -165,6 +165,10 @@
   width: 1.5rem
 }
 
+.art-w-80 {
+  width: 20rem
+}
+
 .art-max-w-6xl {
   max-width: 72rem
 }

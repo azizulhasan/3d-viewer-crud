@@ -43068,6 +43068,7 @@ var AccordionComponent = function AccordionComponent() {
   var modelViewerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       src: "3dModels/Shoe.glb",
+      // src: "3dModels/Astronaut.glb",
       hotspots: [],
       dimensions: {
         show: false,
@@ -43120,16 +43121,33 @@ var AccordionComponent = function AccordionComponent() {
   var updateHotspot = function updateHotspot(index, updates) {
     setProductModel(function (prev) {
       var newHotspots = _toConsumableArray(prev.hotspots);
-      newHotspots[index] = _objectSpread(_objectSpread({}, newHotspots[index]), updates);
+      // Ensure the hotspot exists and has all required properties
+      if (newHotspots[index]) {
+        newHotspots[index] = _objectSpread(_objectSpread({
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true
+        }, newHotspots[index]), updates);
+      }
       return _objectSpread(_objectSpread({}, prev), {}, {
         hotspots: newHotspots
       });
     });
   };
   var addHotspot = function addHotspot(hotspotData) {
+    // Ensure all required properties are present
+    var completeHotspot = _objectSpread({
+      id: "",
+      label: "",
+      position: "0 0 0",
+      normal: "0 0 1",
+      visible: true
+    }, hotspotData);
     setProductModel(function (prev) {
       return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: [].concat(_toConsumableArray(prev.hotspots), [hotspotData]),
+        hotspots: [].concat(_toConsumableArray(prev.hotspots), [completeHotspot]),
         newHotspot: {
           id: "",
           label: "",
@@ -43166,6 +43184,29 @@ var AccordionComponent = function AccordionComponent() {
           position: "".concat(position.x.toFixed(3), " ").concat(position.y.toFixed(3), " ").concat(position.z.toFixed(3)),
           normal: "".concat(normal.x.toFixed(3), " ").concat(normal.y.toFixed(3), " ").concat(normal.z.toFixed(3))
         })
+      });
+    });
+  };
+
+  // Safe setter for newHotspot that ensures all properties are defined
+  var setNewHotspot = function setNewHotspot(updater) {
+    setProductModel(function (prev) {
+      var currentNewHotspot = _objectSpread({
+        id: "",
+        label: "",
+        position: "0 0 0",
+        normal: "0 0 1",
+        visible: true
+      }, prev.newHotspot);
+      var newHotspot = typeof updater === 'function' ? updater(currentNewHotspot) : updater;
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        newHotspot: _objectSpread({
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true
+        }, newHotspot)
       });
     });
   };
@@ -43285,13 +43326,7 @@ var AccordionComponent = function AccordionComponent() {
                 onAddHotspot: addHotspot,
                 onRemoveHotspot: removeHotspot,
                 newHotspot: productModel.newHotspot,
-                setNewHotspot: function setNewHotspot(nh) {
-                  return setProductModel(function (prev) {
-                    return _objectSpread(_objectSpread({}, prev), {}, {
-                      newHotspot: nh
-                    });
-                  });
-                }
+                setNewHotspot: setNewHotspot
               })
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -43323,18 +43358,18 @@ var AccordionComponent = function AccordionComponent() {
           poster: "",
           ref: modelViewerRef,
           children: [productModel.hotspots.filter(function (h) {
-            return h.visible;
-          }).map(function (h) {
+            return h && h.visible !== false;
+          }).map(function (h, index) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-              slot: "hotspot-".concat(h.id),
-              "data-position": h.position,
-              "data-normal": h.normal,
+              slot: "hotspot-".concat(h.id || index),
+              "data-position": h.position || "0 0 0",
+              "data-normal": h.normal || "0 0 1",
               "data-visibility-attribute": "visible",
               className: "art-Hotspot",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                children: h.label
+                children: h.label || "Hotspot ".concat(index + 1)
               })
-            }, h.id);
+            }, h.id || "hotspot-".concat(index));
           }), productModel.dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
               slot: "hotspot-dim-width",
@@ -43716,6 +43751,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 var HotspotsComponent = function HotspotsComponent(_ref) {
+  var _newHotspot$visible;
   var hotspots = _ref.hotspots,
     onUpdateHotspot = _ref.onUpdateHotspot,
     onAddHotspot = _ref.onAddHotspot,
@@ -43737,7 +43773,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         _name$split2 = _slicedToArray(_name$split, 2),
         typeStr = _name$split2[0],
         axis = _name$split2[1];
-      var currentVector = hotspots[index][typeStr].split(" ").map(Number);
+      var currentVector = (hotspots[index][typeStr] || "0 0 0").split(" ").map(Number);
       var newVector = _toConsumableArray(currentVector);
       if (axis === "x") newVector[0] = parseFloat(value) || 0;
       if (axis === "y") newVector[1] = parseFloat(value) || 0;
@@ -43775,6 +43811,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       className: "art-space-y-4",
       children: hotspots.map(function (hotspot, index) {
+        var _hotspot$visible;
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           className: "art-border art-rounded art-p-3 art-bg-white art-relative",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h4", {
@@ -43788,7 +43825,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "text",
               name: "label",
-              value: hotspot.label,
+              value: hotspot.label || "",
               onChange: function onChange(e) {
                 return handleInputChange(index, e);
               },
@@ -43802,7 +43839,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "text",
               name: "position",
-              value: hotspot.position,
+              value: hotspot.position || "0 0 0",
               onChange: function onChange(e) {
                 return handleInputChange(index, e);
               },
@@ -43816,7 +43853,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "text",
               name: "normal",
-              value: hotspot.normal,
+              value: hotspot.normal || "0 0 1",
               onChange: function onChange(e) {
                 return handleInputChange(index, e);
               },
@@ -43830,7 +43867,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "checkbox",
               name: "visible",
-              checked: hotspot.visible,
+              checked: (_hotspot$visible = hotspot.visible) !== null && _hotspot$visible !== void 0 ? _hotspot$visible : true,
               onChange: function onChange(e) {
                 return handleInputChange(index, e);
               },
@@ -43858,7 +43895,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "id",
-          value: newHotspot.id,
+          value: newHotspot.id || "",
           onChange: handleNewInputChange,
           className: "art-border art-rounded art-p-1 art-w-full"
         })]
@@ -43870,7 +43907,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "label",
-          value: newHotspot.label,
+          value: newHotspot.label || "",
           onChange: handleNewInputChange,
           className: "art-border art-rounded art-p-1 art-w-full"
         })]
@@ -43882,7 +43919,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "position",
-          value: newHotspot.position,
+          value: newHotspot.position || "0 0 0",
           readOnly: true,
           className: "art-border art-rounded art-p-1 art-w-full bg-gray-200"
         })]
@@ -43894,7 +43931,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "normal",
-          value: newHotspot.normal,
+          value: newHotspot.normal || "0 0 1",
           readOnly: true,
           className: "art-border art-rounded art-p-1 art-w-full bg-gray-200"
         })]
@@ -43906,7 +43943,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "checkbox",
           name: "visible",
-          checked: newHotspot.visible,
+          checked: (_newHotspot$visible = newHotspot.visible) !== null && _newHotspot$visible !== void 0 ? _newHotspot$visible : true,
           onChange: handleNewInputChange,
           className: "art-w-4 art-h-4"
         })]

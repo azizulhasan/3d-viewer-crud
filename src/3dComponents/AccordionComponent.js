@@ -25,6 +25,7 @@ const AccordionComponent = () => {
 
   const [productModel, setProductModel] = useState({
     src: "3dModels/Shoe.glb",
+    // src: "3dModels/Astronaut.glb",
     hotspots: [],
     dimensions: {
       show: false,
@@ -58,15 +59,36 @@ const AccordionComponent = () => {
   const updateHotspot = (index, updates) => {
     setProductModel((prev) => {
       const newHotspots = [...prev.hotspots];
-      newHotspots[index] = { ...newHotspots[index], ...updates };
+      // Ensure the hotspot exists and has all required properties
+      if (newHotspots[index]) {
+        newHotspots[index] = { 
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true,
+          ...newHotspots[index], 
+          ...updates 
+        };
+      }
       return { ...prev, hotspots: newHotspots };
     });
   };
 
   const addHotspot = (hotspotData) => {
+    // Ensure all required properties are present
+    const completeHotspot = {
+      id: "",
+      label: "",
+      position: "0 0 0",
+      normal: "0 0 1",
+      visible: true,
+      ...hotspotData
+    };
+
     setProductModel((prev) => ({
       ...prev,
-      hotspots: [...prev.hotspots, hotspotData],
+      hotspots: [...prev.hotspots, completeHotspot],
       newHotspot: {
         id: "",
         label: "",
@@ -103,6 +125,36 @@ const AccordionComponent = () => {
         normal: `${normal.x.toFixed(3)} ${normal.y.toFixed(3)} ${normal.z.toFixed(3)}`,
       },
     }));
+  };
+
+  // Safe setter for newHotspot that ensures all properties are defined
+  const setNewHotspot = (updater) => {
+    setProductModel((prev) => {
+      const currentNewHotspot = {
+        id: "",
+        label: "",
+        position: "0 0 0",
+        normal: "0 0 1",
+        visible: true,
+        ...prev.newHotspot
+      };
+      
+      const newHotspot = typeof updater === 'function' 
+        ? updater(currentNewHotspot)
+        : updater;
+      
+      return {
+        ...prev,
+        newHotspot: {
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true,
+          ...newHotspot
+        }
+      };
+    });
   };
 
   // Attach click listener to model
@@ -207,9 +259,7 @@ const AccordionComponent = () => {
                       onAddHotspot={addHotspot}
                       onRemoveHotspot={removeHotspot}
                       newHotspot={productModel.newHotspot}
-                      setNewHotspot={(nh) =>
-                        setProductModel((prev) => ({ ...prev, newHotspot: nh }))
-                      }
+                      setNewHotspot={setNewHotspot}
                     />
                   </div>
                 )}
@@ -242,17 +292,17 @@ const AccordionComponent = () => {
         <div className="art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative">
           <MV src={productModel.src} poster="" ref={modelViewerRef}>
             {productModel.hotspots
-              .filter((h) => h.visible)
-              .map((h) => (
+              .filter((h) => h && h.visible !== false)
+              .map((h, index) => (
                 <button
-                  key={h.id}
-                  slot={`hotspot-${h.id}`}
-                  data-position={h.position}
-                  data-normal={h.normal}
+                  key={h.id || `hotspot-${index}`}
+                  slot={`hotspot-${h.id || index}`}
+                  data-position={h.position || "0 0 0"}
+                  data-normal={h.normal || "0 0 1"}
                   data-visibility-attribute="visible"
                   className="art-Hotspot"
                 >
-                  <div>{h.label}</div>
+                  <div>{h.label || `Hotspot ${index + 1}`}</div>
                 </button>
               ))}
 
