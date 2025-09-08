@@ -72,6 +72,7 @@ export const MV = React.forwardRef(function MV({ src, children, style, ...rest }
   return (
     <div className="art-w-full">
       <model-viewer
+        id={'atlas_ar_model_viewer'}
         ref={innerRef}
         src={src}
         ar

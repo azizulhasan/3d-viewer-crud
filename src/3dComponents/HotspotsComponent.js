@@ -1,61 +1,63 @@
-import React, { useState } from 'react';
+import React from "react";
 
-const HotspotsComponent = ({ hotspots, onUpdateHotspot, onAddHotspot, onRemoveHotspot }) => {
-  const [newHotspot, setNewHotspot] = useState({
-    id: '',
-    label: '',
-    position: '0 0 0',
-    normal: '0 0 1',
-    visible: true,
-  });
-
+const HotspotsComponent = ({
+  hotspots,
+  onUpdateHotspot,
+  onAddHotspot,
+  onRemoveHotspot,
+  newHotspot,
+  setNewHotspot,
+}) => {
+  // Update existing hotspots
   const handleInputChange = (index, event) => {
     const { name, value, type, checked } = event.target;
-    const updates = { [name]: type === 'checkbox' ? checked : value };
+    const updates = { [name]: type === "checkbox" ? checked : value };
 
-    // Special handling for position and normal inputs
-    if (name.startsWith('position-') || name.startsWith('normal-')) {
-      const [type, axis] = name.split('-');
-      const currentVector = hotspots[index][type].split(' ').map(Number);
-      let newVector = [...currentVector];
-      if (axis === 'x') newVector[0] = parseFloat(value) || 0;
-      if (axis === 'y') newVector[1] = parseFloat(value) || 0;
-      if (axis === 'z') newVector[2] = parseFloat(value) || 0;
-      updates[type] = newVector.join(' ');
+    // Handle position and normal updates for individual hotspots
+    if (name.startsWith("position-") || name.startsWith("normal-")) {
+      const [typeStr, axis] = name.split("-");
+      const currentVector = hotspots[index][typeStr].split(" ").map(Number);
+      const newVector = [...currentVector];
+      if (axis === "x") newVector[0] = parseFloat(value) || 0;
+      if (axis === "y") newVector[1] = parseFloat(value) || 0;
+      if (axis === "z") newVector[2] = parseFloat(value) || 0;
+      updates[typeStr] = newVector.join(" ");
     }
-    
+
     onUpdateHotspot(index, updates);
   };
 
+  // Update new hotspot inputs manually (ID, Label, Visibility)
   const handleNewInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setNewHotspot(prev => ({
+    setNewHotspot((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
+  // Add hotspot manually
   const handleAddNewHotspot = (event) => {
     event.preventDefault();
     if (newHotspot.id && newHotspot.label) {
       onAddHotspot(newHotspot);
-      setNewHotspot({
-        id: '',
-        label: '',
-        position: '0 0 0',
-        normal: '0 0 1',
-        visible: true,
-      });
+      // Reset handled by AccordionComponent
     }
   };
 
   return (
     <div className="art-space-y-4">
-      <h3 className="art-text-lg art-font-semibold art-mb-2">Existing Hotspots</h3>
+      <h3 className="art-text-lg art-font-semibold art-mb-2">
+        Existing Hotspots
+      </h3>
       <div className="art-space-y-4">
         {hotspots.map((hotspot, index) => (
-          <div key={index} className="art-border art-rounded art-p-3 art-bg-white art-relative">
+          <div
+            key={index}
+            className="art-border art-rounded art-p-3 art-bg-white art-relative"
+          >
             <h4 className="art-font-bold">{hotspot.label || `Hotspot ${index + 1}`}</h4>
+
             <div className="art-flex art-items-center art-gap-2 art-my-2">
               <label className="art-text-sm art-w-24">Label</label>
               <input
@@ -66,7 +68,7 @@ const HotspotsComponent = ({ hotspots, onUpdateHotspot, onAddHotspot, onRemoveHo
                 className="art-border art-rounded art-p-1 art-w-full"
               />
             </div>
-            
+
             <div className="art-flex art-items-center art-gap-2 art-my-2">
               <label className="art-text-sm art-w-24">Position (x y z)</label>
               <input
@@ -77,7 +79,7 @@ const HotspotsComponent = ({ hotspots, onUpdateHotspot, onAddHotspot, onRemoveHo
                 className="art-border art-rounded art-p-1 art-w-full"
               />
             </div>
-            
+
             <div className="art-flex art-items-center art-gap-2 art-my-2">
               <label className="art-text-sm art-w-24">Normal (x y z)</label>
               <input
@@ -99,7 +101,7 @@ const HotspotsComponent = ({ hotspots, onUpdateHotspot, onAddHotspot, onRemoveHo
                 className="art-w-4 art-h-4"
               />
             </div>
-            
+
             <button
               onClick={() => onRemoveHotspot(index)}
               className="art-absolute art-top-2 art-right-2 art-text-red-500 hover:art-text-red-700"
@@ -110,7 +112,74 @@ const HotspotsComponent = ({ hotspots, onUpdateHotspot, onAddHotspot, onRemoveHo
         ))}
       </div>
 
+      {/* Add new hotspot section */}
+      <div className="art-border art-rounded art-p-3 art-bg-gray-50">
+        <h3 className="art-font-semibold art-mb-2">Add New Hotspot</h3>
+
+        <div className="art-flex art-items-center art-gap-2 art-my-2">
+          <label className="art-text-sm art-w-24">ID</label>
+          <input
+            type="text"
+            name="id"
+            value={newHotspot.id}
+            onChange={handleNewInputChange}
+            className="art-border art-rounded art-p-1 art-w-full"
+          />
+        </div>
+
+        <div className="art-flex art-items-center art-gap-2 art-my-2">
+          <label className="art-text-sm art-w-24">Label</label>
+          <input
+            type="text"
+            name="label"
+            value={newHotspot.label}
+            onChange={handleNewInputChange}
+            className="art-border art-rounded art-p-1 art-w-full"
+          />
+        </div>
+
+        <div className="art-flex art-items-center art-gap-2 art-my-2">
+          <label className="art-text-sm art-w-24">Position (x y z)</label>
+          <input
+            type="text"
+            name="position"
+            value={newHotspot.position}
+            readOnly
+            className="art-border art-rounded art-p-1 art-w-full bg-gray-200"
+          />
+        </div>
+
+        <div className="art-flex art-items-center art-gap-2 art-my-2">
+          <label className="art-text-sm art-w-24">Normal (x y z)</label>
+          <input
+            type="text"
+            name="normal"
+            value={newHotspot.normal}
+            readOnly
+            className="art-border art-rounded art-p-1 art-w-full bg-gray-200"
+          />
+        </div>
+
+        <div className="art-flex art-items-center art-gap-2 art-my-2">
+          <label className="art-text-sm art-w-24">Visible</label>
+          <input
+            type="checkbox"
+            name="visible"
+            checked={newHotspot.visible}
+            onChange={handleNewInputChange}
+            className="art-w-4 art-h-4"
+          />
+        </div>
+
+        <button
+          onClick={handleAddNewHotspot}
+          className="art-bg-blue-500 art-text-white art-px-4 art-py-2 art-rounded hover:art-bg-blue-600"
+        >
+          + Add Hotspot
+        </button>
+      </div>
     </div>
   );
 };
+
 export default HotspotsComponent;
