@@ -1,7 +1,6 @@
 // components/Shared.js
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-
 
 // =====================
 // Shared UI Components
@@ -21,7 +20,6 @@ export const Shell = ({ children }) => (
           <Tab to="/camera">Camera</Tab>
           <Tab to="/slider">Slider</Tab>
           <Tab to="/accordion">Accordion</Tab>
-          
         </div>
       </nav>
     </header>
@@ -60,20 +58,13 @@ export const Section = ({ title, children, description }) => (
 );
 
 // =====================
-// Reusable ModelViewer wrapper
+// Reusable ModelViewer wrapper (no refs, only ID)
 // =====================
-export const MV = React.forwardRef(function MV({ src, children, style, ...rest }, refFromProps) {
-  const innerRef = useRef(null);
-  useEffect(() => {
-    if (!refFromProps) return;
-    if (typeof refFromProps === "function") refFromProps(innerRef.current);
-    else refFromProps.current = innerRef.current;
-  }, [refFromProps]);
+export const MV = ({ src, children, style, ...rest }) => {
   return (
     <div className="art-w-full">
       <model-viewer
-        id={'atlas_ar_model_viewer'}
-        ref={innerRef}
+        id="atlas_ar_model_viewer"
         src={src}
         ar
         camera-controls
@@ -94,4 +85,4 @@ export const MV = React.forwardRef(function MV({ src, children, style, ...rest }
       </model-viewer>
     </div>
   );
-});
+};

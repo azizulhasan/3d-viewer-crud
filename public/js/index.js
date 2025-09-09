@@ -43019,23 +43019,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HotspotsComponent.js */ "./src/3dComponents/HotspotsComponent.js");
 /* harmony import */ var _DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DimensionsComponent.js */ "./src/3dComponents/DimensionsComponent.js");
 /* harmony import */ var _Shared_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Shared.js */ "./src/3dComponents/Shared.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _CameraComponent_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CameraComponent.js */ "./src/3dComponents/CameraComponent.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 
@@ -43065,16 +43063,6 @@ var AccordionComponent = function AccordionComponent() {
     _useState4 = _slicedToArray(_useState3, 2),
     activeAccordion = _useState4[0],
     setActiveAccordion = _useState4[1];
-
-  // Ref for wrapper, svg and model-viewer
-  var viewerWrapRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var modelViewerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var svgRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-
-  // SVG line refs
-  var lineXRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var lineYRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var lineZRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       src: "3dModels/Shoe.glb",
       hotspots: [],
@@ -43097,16 +43085,12 @@ var AccordionComponent = function AccordionComponent() {
         unit: "m"
       },
       camera: {
-        orbit: {
-          theta: "45deg",
-          phi: "60deg",
-          radius: "1.2m"
-        },
+        orbit: "45deg 90deg 2m",
         autoRotate: true,
         autoRotateDelay: 0,
         fieldOfView: "30deg"
       },
-      newHotspot: {
+      new_hotspot: {
         id: "",
         label: "",
         position: "0 0 0",
@@ -43125,61 +43109,9 @@ var AccordionComponent = function AccordionComponent() {
     });
   };
 
-  // ---------- Hotspot CRUD ----------
-  var updateHotspot = function updateHotspot(index, updates) {
-    setProductModel(function (prev) {
-      var newHotspots = _toConsumableArray(prev.hotspots);
-      if (newHotspots[index]) {
-        newHotspots[index] = _objectSpread(_objectSpread({
-          id: "",
-          label: "",
-          position: "0 0 0",
-          normal: "0 0 1",
-          visible: true
-        }, newHotspots[index]), updates);
-      }
-      return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: newHotspots
-      });
-    });
-  };
-  var addHotspot = function addHotspot(hotspotData) {
-    var completeHotspot = _objectSpread({
-      id: "",
-      label: "",
-      position: "0 0 0",
-      normal: "0 0 1",
-      visible: true
-    }, hotspotData);
-    setProductModel(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: [].concat(_toConsumableArray(prev.hotspots), [completeHotspot]),
-        newHotspot: {
-          id: "",
-          label: "",
-          position: "0 0 0",
-          normal: "0 0 1",
-          visible: true
-        }
-      });
-    });
-  };
-  var removeHotspot = function removeHotspot(index) {
-    setProductModel(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: prev.hotspots.filter(function (_, i) {
-          return i !== index;
-        })
-      });
-    });
-  };
-
   // Attach click listener to model
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var modelviewer = document.getElementById('atlas_ar_model_viewer');
-    console.log({
-      modelviewer: modelviewer
-    });
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
     var handle3DClick = function handle3DClick(event) {
       if (!modelviewer.positionAndNormalFromPoint) return;
@@ -43189,7 +43121,7 @@ var AccordionComponent = function AccordionComponent() {
         normal = hit.normal;
       setProductModel(function (prev) {
         return _objectSpread(_objectSpread({}, prev), {}, {
-          newHotspot: _objectSpread(_objectSpread({}, prev.newHotspot), {}, {
+          new_hotspot: _objectSpread(_objectSpread({}, prev.new_hotspot), {}, {
             position: "".concat(position.x.toFixed(3), " ").concat(position.y.toFixed(3), " ").concat(position.z.toFixed(3)),
             normal: "".concat(normal.x.toFixed(3), " ").concat(normal.y.toFixed(3), " ").concat(normal.z.toFixed(3))
           })
@@ -43204,16 +43136,13 @@ var AccordionComponent = function AccordionComponent() {
 
   // ---------- Dimensions ----------
   var updateDimensionState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
-    var modelviewer = document.getElementById('atlas_ar_model_viewer');
-    console.log({
-      modelviewer: modelviewer
-    });
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
     var size = modelviewer.getDimensions ? modelviewer.getDimensions() : {
       x: 0,
       y: 0,
       z: 0
-    }; // meters
+    };
     var center = modelviewer.getBoundingBoxCenter ? modelviewer.getBoundingBoxCenter() : {
       x: 0,
       y: 0,
@@ -43301,26 +43230,30 @@ var AccordionComponent = function AccordionComponent() {
     requestAnimationFrame(drawLines);
   }, [productModel.dimensions.unit]);
 
-  // drawLines: compute coords relative to the SVG/wrapper, not relative to the model-viewer element
+  // drawLines with clipping
   var drawLines = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
-    var modelviewer = document.getElementById('atlas_ar_model_viewer');
-    var svgEl = svgRef.current;
-    var wrapperEl = viewerWrapRef.current;
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
+    var svgEl = document.getElementById("dimension-svg");
+    var wrapperEl = document.getElementById("viewer-wrap");
     if (!modelviewer || !svgEl || !wrapperEl) return;
-
-    // bounding rect of the container that the SVG is absolutely positioned within
     var baseRect = svgEl.getBoundingClientRect();
+    var modelRect = modelviewer.getBoundingClientRect();
 
-    // helper to find a slotted element inside model-viewer by slot name
+    // Calculate the circular clipping area
+    var centerX = modelRect.left + modelRect.width / 2 - baseRect.left;
+    var centerY = modelRect.top + modelRect.height / 2 - baseRect.top;
+    var radius = Math.min(modelRect.width, modelRect.height) / 2;
+
+    // Update the clipping circle
+    var clipCircle = document.getElementById("viewer-clip-circle");
+    if (clipCircle) {
+      clipCircle.setAttribute("cx", centerX);
+      clipCircle.setAttribute("cy", centerY);
+      clipCircle.setAttribute("r", radius);
+    }
     var q = function q(slot) {
-      // First try to find the slotted node inside the model-viewer light DOM
-      var el = modelviewer.querySelector("[slot=\"".concat(slot, "\"]"));
-      // fallback to searching globally (rare cases)
-      if (!el) el = document.querySelector("[slot=\"".concat(slot, "\"]"));
-      return el;
+      return modelviewer.querySelector("[slot=\"".concat(slot, "\"]")) || document.querySelector("[slot=\"".concat(slot, "\"]"));
     };
-
-    // center of an element relative to the SVG container (baseRect)
     var centerOf = function centerOf(el) {
       if (!el) return null;
       var r = el.getBoundingClientRect();
@@ -43336,34 +43269,29 @@ var AccordionComponent = function AccordionComponent() {
     var Y0 = centerOf(q("hotspot-dim-y-start"));
     var Y1 = centerOf(q("hotspot-dim-y-end"));
     var stroke = productModel.dimensions.color || "#16a5e6";
-    var setLine = function setLine(ref, A, B) {
-      var el = ref.current;
+    var setLine = function setLine(id, A, B) {
+      var el = document.getElementById(id);
       if (!el) return;
       if (!(A && B)) {
         el.setAttribute("visibility", "hidden");
         return;
       }
       el.setAttribute("visibility", "visible");
-      // prevent NaN values
-      var x1 = Number.isFinite(A.x) ? A.x : 0;
-      var y1 = Number.isFinite(A.y) ? A.y : 0;
-      var x2 = Number.isFinite(B.x) ? B.x : 0;
-      var y2 = Number.isFinite(B.y) ? B.y : 0;
-      el.setAttribute("x1", String(x1));
-      el.setAttribute("y1", String(y1));
-      el.setAttribute("x2", String(x2));
-      el.setAttribute("y2", String(y2));
+      el.setAttribute("x1", String(A.x || 0));
+      el.setAttribute("y1", String(A.y || 0));
+      el.setAttribute("x2", String(B.x || 0));
+      el.setAttribute("y2", String(B.y || 0));
       el.setAttribute("stroke", stroke);
       el.setAttribute("stroke-width", "2");
       el.setAttribute("stroke-dasharray", "6 6");
       el.setAttribute("stroke-linecap", "round");
     };
-    setLine(lineXRef, X0, X1);
-    setLine(lineZRef, Z0, Z1);
-    setLine(lineYRef, Y0, Y1);
+    setLine("dimension_line_x", X0, X1);
+    setLine("dimension_line_z", Z0, Z1);
+    setLine("dimension_line_y", Y0, Y1);
   }, [productModel.dimensions.color]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var modelviewer = document.getElementById('atlas_ar_model_viewer');
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
     var onUpdate = function onUpdate() {
       if (productModel.dimensions.show) updateDimensionState();
@@ -43390,156 +43318,191 @@ var AccordionComponent = function AccordionComponent() {
       updateDimensionState();
     }
   }, [productModel.dimensions.unit, productModel.dimensions.show, updateDimensionState]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "art-w-full",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "art-flex art-gap-2 art-border-b art-mb-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         className: "art-px-4 art-py-2 ".concat(activeTab === "settings" ? "art-border-b-2 art-border-blue-500 art-font-bold" : ""),
         onClick: function onClick() {
           return setActiveTab("settings");
         },
         children: "Settings"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         className: "art-px-4 art-py-2 ".concat(activeTab === "slider" ? "art-border-b-2 art-border-blue-500 art-font-bold" : ""),
         onClick: function onClick() {
           return setActiveTab("slider");
         },
         children: "Slider"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "art-grid art-grid-cols-12 art-gap-6",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "art-col-span-4 art-space-y-2",
-        children: activeTab === "settings" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        children: activeTab === "settings" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "art-border art-rounded",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               type: "button",
               onClick: function onClick() {
                 return toggleAccordion("hotspot");
               },
               className: "art-flex art-justify-between art-items-center art-w-full art-p-3 art-font-semibold",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                 children: "Hotspot"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_activeAccordion_Accordion_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_activeAccordion_Accordion_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
                 status: activeAccordion === "hotspot"
               })]
-            }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "art-p-4 art-bg-gray-50",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 hotspots: productModel.hotspots,
-                onUpdateHotspot: updateHotspot,
-                onAddHotspot: addHotspot,
-                onRemoveHotspot: removeHotspot,
-                newHotspot: productModel.newHotspot,
+                setProductModel: setProductModel,
+                new_hotspot: productModel.new_hotspot,
                 setNewHotspot: function setNewHotspot(updater) {
                   return setProductModel(function (prev) {
                     return _objectSpread(_objectSpread({}, prev), {}, {
-                      newHotspot: _objectSpread(_objectSpread({}, prev.newHotspot), updater)
+                      new_hotspot: _objectSpread(_objectSpread({}, prev.new_hotspot), updater)
                     });
                   });
                 }
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "art-border art-rounded",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               type: "button",
               onClick: function onClick() {
                 return toggleAccordion("dimensions");
               },
               className: "art-flex art-justify-between art-items-center art-w-full art-p-3 art-font-semibold",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                 children: "Dimensions"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_activeAccordion_Accordion_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_activeAccordion_Accordion_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
                 status: activeAccordion === "dimensions"
               })]
-            }), activeAccordion === "dimensions" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), activeAccordion === "dimensions" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "art-p-4 art-bg-gray-50",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DimensionsComponent_js__WEBPACK_IMPORTED_MODULE_3__.DimensionsComponent, {
                 dimensions: productModel.dimensions,
                 onUpdateDimension: updateDimension
               })
             })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "art-border art-rounded",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+              type: "button",
+              onClick: function onClick() {
+                return toggleAccordion("camera");
+              },
+              className: "art-flex art-justify-between art-items-center art-w-full art-p-3 art-font-semibold",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                children: "Camera"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_activeAccordion_Accordion_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                status: activeAccordion === "camera"
+              })]
+            }), activeAccordion === "camera" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              className: "art-p-4 art-bg-gray-50",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_5__.CameraComponent, {
+                cameraSettings: productModel.camera,
+                onUpdateCameraSetting: function onUpdateCameraSetting(field, value) {
+                  return setProductModel(function (prev) {
+                    return _objectSpread(_objectSpread({}, prev), {}, {
+                      camera: _objectSpread(_objectSpread({}, prev.camera), {}, _defineProperty({}, field, value))
+                    });
+                  });
+                }
+              })
+            })]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        ref: viewerWrapRef,
-        className: "art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_4__.MV, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        id: "viewer-wrap",
+        className: "art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative art-overflow-hidden",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_4__.MV, {
           src: productModel.src,
-          children: [productModel.hotspots.filter(function (h) {
-            return h && h.visible !== false;
-          }).map(function (h, index) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-              slot: "hotspot-".concat(h.id || index),
-              "data-position": h.position || "0 0 0",
-              "data-normal": h.normal || "0 0 1",
+          children: [productModel.hotspots.filter(function (hotspot) {
+            return hotspot && hotspot.visible !== false;
+          }).map(function (hotspot, index) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+              slot: "hotspot-".concat(hotspot.id || index),
+              "data-position": hotspot.position || "0 0 0",
+              "data-normal": hotspot.normal || "0 0 1",
               "data-visibility-attribute": "visible",
               className: "art-Hotspot",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                children: h.label || "Hotspot ".concat(index + 1)
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                children: hotspot.label || "Hotspot ".concat(index + 1)
               })
-            }, h.id || "hotspot-".concat(index));
-          }), productModel.dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            }, hotspot.id || "hotspot-".concat(index));
+          }), productModel.dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               slot: "hotspot-dim-width",
               className: "dim",
               children: [productModel.dimensions.width.value.toFixed(2), " ", productModel.dimensions.width.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               slot: "hotspot-dim-height",
               className: "dim",
               children: [productModel.dimensions.height.value.toFixed(2), " ", productModel.dimensions.height.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               slot: "hotspot-dim-length",
               className: "dim",
               children: [productModel.dimensions.length.value.toFixed(2), " ", productModel.dimensions.length.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-x-start",
               className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-x-end",
               className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-z-start",
               className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-z-end",
               className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-y-start",
               className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               slot: "hotspot-dim-y-end",
               className: "dot"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
-          ref: svgRef,
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("svg", {
+          id: "dimension-svg",
           className: "dimensionLineContainer ".concat(productModel.dimensions.show ? "" : "hide"),
           width: "100%",
           height: "100%",
           style: {
             position: "absolute",
-            inset: 0
+            inset: 0,
+            pointerEvents: "none"
           },
           "aria-hidden": "true",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("line", {
-            id: "dimension_line_x",
-            ref: lineXRef,
-            className: "dimensionLine",
-            visibility: "hidden"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("line", {
-            id: "dimension_line_z",
-            ref: lineZRef,
-            className: "dimensionLine",
-            visibility: "hidden"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("line", {
-            id: "dimension_line_y",
-            ref: lineYRef,
-            className: "dimensionLine",
-            visibility: "hidden"
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("defs", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("clipPath", {
+              id: "viewer-clip",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("circle", {
+                id: "viewer-clip-circle",
+                cx: "50%",
+                cy: "50%",
+                r: "40%"
+              })
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("g", {
+            clipPath: "url(#viewer-clip)",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("line", {
+              id: "dimension_line_x",
+              className: "dimensionLine",
+              visibility: "hidden"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("line", {
+              id: "dimension_line_z",
+              className: "dimensionLine",
+              visibility: "hidden"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("line", {
+              id: "dimension_line_y",
+              className: "dimensionLine",
+              visibility: "hidden"
+            })]
           })]
         })]
       })]
@@ -43562,172 +43525,135 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _Shared_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Shared.js */ "./src/3dComponents/Shared.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
 var CameraComponent = function CameraComponent(_ref) {
   var cameraSettings = _ref.cameraSettings,
-    onUpdateCameraSetting = _ref.onUpdateCameraSetting,
-    src = _ref.src;
-  var mv = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var defaultOrbit = "45deg 90deg 10m";
+    onUpdateCameraSetting = _ref.onUpdateCameraSetting;
+  var defaultOrbit = "45deg 60deg 1.2m";
   var targets = [{
     name: "Isometric",
-    target: "0m 0.05m 0m",
+    target: "0 0.05 0",
     orbit: "45deg 60deg 1.2m",
     fov: "35deg"
   }, {
     name: "Front Close",
-    target: "0m 0.05m 0.2m",
+    target: "0 0.05 0.2",
     orbit: "0deg 10deg 0.6m",
     fov: "30deg"
   }, {
     name: "Top",
-    target: "0m 0.2m 0m",
+    target: "0 0.2 0",
     orbit: "0deg 90deg 0.9m",
     fov: "45deg"
   }, {
     name: "Side",
-    target: "0.2m 0.05m 0m",
+    target: "0.2 0.05 0",
     orbit: "90deg 10deg 0.8m",
     fov: "30deg"
   }];
+  var getMV = function getMV() {
+    return document.getElementById("atlas_ar_model_viewer");
+  };
   var flyTo = function flyTo(t) {
-    var el = mv.current;
+    var el = getMV();
     if (!el) return;
-
-    // Update the model viewer
     el.setAttribute("camera-target", t.target);
     el.setAttribute("camera-orbit", t.orbit);
     el.setAttribute("field-of-view", t.fov);
-
-    // Update the parent state with the new camera settings
-    onUpdateCameraSetting('orbit', t.orbit);
-    onUpdateCameraSetting('fieldOfView', t.fov);
-    // Note: You might want to add 'target' to your cameraSettings if needed
+    onUpdateCameraSetting("orbit", t.orbit);
+    onUpdateCameraSetting("fieldOfView", t.fov);
   };
-
-  // Handler for manual camera setting changes
   var handleCameraChange = function handleCameraChange(field, value) {
     onUpdateCameraSetting(field, value);
-
-    // Also update the model viewer in real-time
-    var el = mv.current;
-    if (el) {
-      if (field === 'orbit') {
-        el.setAttribute("camera-orbit", value);
-      } else if (field === 'fieldOfView') {
-        el.setAttribute("field-of-view", value);
-      } else if (field === 'autoRotate') {
-        if (value) {
-          el.setAttribute("auto-rotate", "");
-        } else {
-          el.removeAttribute("auto-rotate");
-        }
+    var el = getMV();
+    if (!el) return;
+    if (field === "orbit") el.setAttribute("camera-orbit", value);
+    if (field === "fieldOfView") el.setAttribute("field-of-view", value);
+    if (field === "autoRotate") {
+      if (value) {
+        el.setAttribute("auto-rotate", "");
+      } else {
+        el.removeAttribute("auto-rotate");
       }
     }
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
+
+  // --- Sync autoRotate on initial render ---
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var el = getMV();
+    if (!el) return;
+    if (cameraSettings.autoRotate) {
+      el.setAttribute("auto-rotate", "");
+    } else {
+      el.removeAttribute("auto-rotate");
+    }
+  }, [cameraSettings.autoRotate]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.Section, {
     title: "Camera Controls",
-    description: "Adjust camera settings or jump to preset views."
-  },
-  /*#__PURE__*/
-  // Camera Settings Controls
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "art-grid art-grid-cols-2 art-gap-4 art-mb-4"
-  },
-  /*#__PURE__*/
-  // Auto Rotate
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "art-flex art-items-center art-gap-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-    type: "checkbox",
-    id: "autoRotate",
-    checked: cameraSettings.autoRotate,
-    onChange: function onChange(e) {
-      return handleCameraChange('autoRotate', e.target.checked);
-    },
-    className: "art-rounded"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
-    htmlFor: "autoRotate",
-    className: "art-text-sm"
-  }, "Auto Rotate")),
-  /*#__PURE__*/
-  // Field of View
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
-    className: "art-block art-text-sm art-font-medium art-mb-1"
-  }, "Field of View"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-    type: "range",
-    min: "10",
-    max: "100",
-    value: parseInt(cameraSettings.fieldOfView) || 30,
-    onChange: function onChange(e) {
-      return handleCameraChange('fieldOfView', "".concat(e.target.value, "deg"));
-    },
-    className: "art-w-full"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
-    className: "art-text-xs"
-  }, cameraSettings.fieldOfView)),
-  /*#__PURE__*/
-  // Camera Orbit (Manual Input)
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "art-col-span-2"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", {
-    className: "art-block art-text-sm art-font-medium art-mb-1"
-  }, "Camera Position"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
-    type: "text",
-    value: typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== "" ? cameraSettings.orbit : defaultOrbit,
-    // ✅ fallback to "45deg 90deg 10m"
-    onChange: function onChange(e) {
-      return handleCameraChange("orbit", e.target.value);
-    },
-    className: "art-w-full art-border art-rounded art-px-2 art-py-1 art-text-sm",
-    placeholder: defaultOrbit
-  }))),
-  /*#__PURE__*/
-  // Preset Buttons
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    className: "art-flex art-flex-wrap art-gap-2 art-mb-4"
-  }, targets.map(function (t) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-      key: t.name,
-      onClick: function onClick() {
-        return flyTo(t);
-      },
-      className: "art-px-4 art-py-2 art-rounded-xl art-border art-bg-white hover:art-bg-slate-100 art-text-sm art-shadow-sm art-transition"
-    }, t.name);
-  })),
-  /*#__PURE__*/
-  // Model Viewer
-  react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Shared_js__WEBPACK_IMPORTED_MODULE_1__.MV, _objectSpread(_objectSpread({
-    ref: mv,
-    src: src,
-    "camera-controls": true
-  }, cameraSettings.autoRotate ? {
-    "auto-rotate": true
-  } : {}), {}, {
-    "camera-orbit": typeof cameraSettings.orbit === "string" && cameraSettings.orbit.trim() !== "" ? cameraSettings.orbit : defaultOrbit,
-    // ✅ fallback
-    "field-of-view": cameraSettings.fieldOfView || "35deg"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    slot: "hotspot-front",
-    "data-position": "0 0.05 0.2",
-    "data-normal": "0 1 0",
-    "data-visibility-attribute": "visible",
-    className: "art-Hotspot"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Front Target")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    slot: "hotspot-side",
-    "data-position": "0.2 0.05 0",
-    "data-normal": "0 1 0",
-    "data-visibility-attribute": "visible",
-    className: "art-Hotspot"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Side Target"))));
+    description: "Adjust camera settings or jump to preset views.",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "art-grid art-grid-cols-2 art-gap-4 art-mb-4",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "art-flex art-items-center art-gap-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          type: "checkbox",
+          checked: cameraSettings.autoRotate || false,
+          onChange: function onChange(e) {
+            return handleCameraChange("autoRotate", e.target.checked);
+          },
+          className: "art-rounded"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          className: "art-text-sm",
+          children: "Auto Rotate"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          className: "art-block art-text-sm art-font-medium art-mb-1",
+          children: "Field of View"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          type: "range",
+          min: "10",
+          max: "100",
+          value: parseInt(cameraSettings.fieldOfView) || 35,
+          onChange: function onChange(e) {
+            return handleCameraChange("fieldOfView", "".concat(e.target.value, "deg"));
+          },
+          className: "art-w-full"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "art-text-xs",
+          children: cameraSettings.fieldOfView || "35deg"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "art-col-span-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          className: "art-block art-text-sm art-font-medium art-mb-1",
+          children: "Camera Orbit"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          type: "text",
+          value: cameraSettings.orbit || defaultOrbit,
+          onChange: function onChange(e) {
+            return handleCameraChange("orbit", e.target.value);
+          },
+          className: "art-w-full art-border art-rounded art-px-2 art-py-1 art-text-sm",
+          placeholder: defaultOrbit
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "art-flex art-flex-wrap art-gap-2 art-mb-4",
+      children: targets.map(function (t) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          onClick: function onClick() {
+            return flyTo(t);
+          },
+          className: "art-px-4 art-py-2 art-rounded-xl art-border art-bg-white hover:art-bg-slate-100 art-text-sm art-shadow-sm art-transition",
+          children: t.name
+        }, t.name);
+      })
+    })]
+  });
 };
 
 /***/ }),
@@ -43889,31 +43815,79 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+// HotspotsComponent.js
 
 
 var HotspotsComponent = function HotspotsComponent(_ref) {
-  var _newHotspot$visible;
+  var _new_hotspot$visible, _new_hotspot$id, _new_hotspot$label;
   var hotspots = _ref.hotspots,
-    onUpdateHotspot = _ref.onUpdateHotspot,
-    onAddHotspot = _ref.onAddHotspot,
-    onRemoveHotspot = _ref.onRemoveHotspot,
-    newHotspot = _ref.newHotspot,
+    setProductModel = _ref.setProductModel,
+    new_hotspot = _ref.new_hotspot,
     setNewHotspot = _ref.setNewHotspot;
+  // ---------- Hotspot CRUD ----------
+  var updateHotspot = function updateHotspot(index, updates) {
+    setProductModel(function (prev) {
+      var newHotspots = _toConsumableArray(prev.hotspots);
+      if (newHotspots[index]) {
+        newHotspots[index] = _objectSpread(_objectSpread({
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true
+        }, newHotspots[index]), updates);
+      }
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: newHotspots
+      });
+    });
+  };
+  var addHotspot = function addHotspot(hotspotData) {
+    var completeHotspot = _objectSpread({
+      id: "",
+      label: "",
+      position: "0 0 0",
+      normal: "0 0 1",
+      visible: true
+    }, hotspotData);
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: [].concat(_toConsumableArray(prev.hotspots), [completeHotspot]),
+        new_hotspot: {
+          id: "",
+          label: "",
+          position: "0 0 0",
+          normal: "0 0 1",
+          visible: true
+        }
+      });
+    });
+  };
+  var removeHotspot = function removeHotspot(index) {
+    setProductModel(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        hotspots: prev.hotspots.filter(function (_, i) {
+          return i !== index;
+        })
+      });
+    });
+  };
+
   // Update existing hotspots
   var handleInputChange = function handleInputChange(index, event) {
     var _event$target = event.target,
@@ -43922,8 +43896,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       type = _event$target.type,
       checked = _event$target.checked;
     var updates = _defineProperty({}, name, type === "checkbox" ? checked : value);
-
-    // Handle position and normal updates for individual hotspots
     if (name.startsWith("position-") || name.startsWith("normal-")) {
       var _name$split = name.split("-"),
         _name$split2 = _slicedToArray(_name$split, 2),
@@ -43936,28 +43908,38 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       if (axis === "z") newVector[2] = parseFloat(value) || 0;
       updates[typeStr] = newVector.join(" ");
     }
-    onUpdateHotspot(index, updates);
+    updateHotspot(index, updates);
   };
-
-  // Update new hotspot inputs manually (ID, Label, Visibility)
   var handleNewInputChange = function handleNewInputChange(event) {
     var _event$target2 = event.target,
       name = _event$target2.name,
       value = _event$target2.value,
       type = _event$target2.type,
       checked = _event$target2.checked;
-    setNewHotspot(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, name, type === "checkbox" ? checked : value));
-    });
+    var newValue = type === "checkbox" ? checked : value;
+    setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, name, newValue)));
   };
-
-  // Add hotspot manually
   var handleAddNewHotspot = function handleAddNewHotspot(event) {
     event.preventDefault();
-    if (newHotspot.id && newHotspot.label) {
-      onAddHotspot(newHotspot);
-      // Reset handled by AccordionComponent
+
+    // Validate that both id and label are provided
+    if (!new_hotspot.id.trim() || !new_hotspot.label.trim()) {
+      alert("Please provide both ID and Label for the hotspot");
+      return;
     }
+
+    // Check if ID already exists
+    var existingIds = hotspots.map(function (h) {
+      return h.id;
+    });
+    if (existingIds.includes(new_hotspot.id.trim())) {
+      alert("A hotspot with this ID already exists. Please use a unique ID.");
+      return;
+    }
+    addHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, {
+      id: new_hotspot.id.trim(),
+      label: new_hotspot.label.trim()
+    }));
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     className: "art-space-y-4",
@@ -43973,6 +43955,20 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h4", {
             className: "art-font-bold",
             children: hotspot.label || "Hotspot ".concat(index + 1)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+            className: "art-flex art-items-center art-gap-2 art-my-2",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
+              className: "art-text-sm art-w-24",
+              children: "ID"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+              type: "text",
+              name: "id",
+              value: hotspot.id || "",
+              onChange: function onChange(e) {
+                return handleInputChange(index, e);
+              },
+              className: "art-border art-rounded art-p-1 art-w-full"
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "art-flex art-items-center art-gap-2 art-my-2",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
@@ -44031,9 +44027,9 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
             onClick: function onClick() {
-              return onRemoveHotspot(index);
+              return removeHotspot(index);
             },
-            className: "art-absolute art-top-2 art-right-2 art-text-red-500 hover:art-text-red-700",
+            className: "art-absolute art-top-2 art-right-2 art-text-red-500 hover:art-text-red-700 art-text-xl art-w-6 art-h-6 art-flex art-items-center art-justify-center",
             children: "\xD7"
           })]
         }, index);
@@ -44051,8 +44047,9 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "id",
-          value: newHotspot.id || "",
+          value: new_hotspot.id || "",
           onChange: handleNewInputChange,
+          placeholder: "Enter unique ID",
           className: "art-border art-rounded art-p-1 art-w-full"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
@@ -44063,8 +44060,9 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "label",
-          value: newHotspot.label || "",
+          value: new_hotspot.label || "",
           onChange: handleNewInputChange,
+          placeholder: "Enter hotspot label",
           className: "art-border art-rounded art-p-1 art-w-full"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
@@ -44075,9 +44073,10 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "position",
-          value: newHotspot.position || "0 0 0",
+          value: new_hotspot.position || "0 0 0",
           readOnly: true,
-          className: "art-border art-rounded art-p-1 art-w-full bg-gray-200"
+          className: "art-border art-rounded art-p-1 art-w-full art-bg-gray-200",
+          title: "Click on the 3D model to set position"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "art-flex art-items-center art-gap-2 art-my-2",
@@ -44087,9 +44086,10 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "text",
           name: "normal",
-          value: newHotspot.normal || "0 0 1",
+          value: new_hotspot.normal || "0 0 1",
           readOnly: true,
-          className: "art-border art-rounded art-p-1 art-w-full bg-gray-200"
+          className: "art-border art-rounded art-p-1 art-w-full art-bg-gray-200",
+          title: "Automatically set when clicking on the 3D model"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "art-flex art-items-center art-gap-2 art-my-2",
@@ -44099,14 +44099,18 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
           type: "checkbox",
           name: "visible",
-          checked: (_newHotspot$visible = newHotspot.visible) !== null && _newHotspot$visible !== void 0 ? _newHotspot$visible : true,
+          checked: (_new_hotspot$visible = new_hotspot.visible) !== null && _new_hotspot$visible !== void 0 ? _new_hotspot$visible : true,
           onChange: handleNewInputChange,
           className: "art-w-4 art-h-4"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
         onClick: handleAddNewHotspot,
+        disabled: !((_new_hotspot$id = new_hotspot.id) !== null && _new_hotspot$id !== void 0 && _new_hotspot$id.trim()) || !((_new_hotspot$label = new_hotspot.label) !== null && _new_hotspot$label !== void 0 && _new_hotspot$label.trim()),
         className: "art-bg-blue-500 art-text-white art-px-4 art-py-2 art-rounded hover:art-bg-blue-600",
         children: "+ Add Hotspot"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+        className: "art-text-xs art-text-gray-500 art-mt-2",
+        children: "Click on the 3D model to set the position automatically"
       })]
     })]
   });
@@ -44229,23 +44233,17 @@ var Section = function Section(_ref4) {
 };
 
 // =====================
-// Reusable ModelViewer wrapper
+// Reusable ModelViewer wrapper (no refs, only ID)
 // =====================
-var MV = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function MV(_ref5, refFromProps) {
+var MV = function MV(_ref5) {
   var src = _ref5.src,
     children = _ref5.children,
     style = _ref5.style,
     rest = _objectWithoutProperties(_ref5, _excluded);
-  var innerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (!refFromProps) return;
-    if (typeof refFromProps === "function") refFromProps(innerRef.current);else refFromProps.current = innerRef.current;
-  }, [refFromProps]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     className: "art-w-full",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("model-viewer", _objectSpread(_objectSpread({
-      id: 'atlas_ar_model_viewer',
-      ref: innerRef,
+      id: "atlas_ar_model_viewer",
       src: src,
       ar: true,
       "camera-controls": true,
@@ -44263,7 +44261,7 @@ var MV = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(function MV(
       children: children
     }))
   });
-});
+};
 
 /***/ }),
 

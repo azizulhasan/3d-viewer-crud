@@ -283,6 +283,7 @@ DIMENSION CUSTOM CSS
   opacity: 0;
   pointer-events: none;
   display: block; /* must be measured */
+
 }
 
 .dimensionLineContainer {
@@ -292,6 +293,8 @@ DIMENSION CUSTOM CSS
   height: 100%;
   pointer-events: none;
   z-index: 50;
+
+ 
 }
 
 
@@ -299,6 +302,7 @@ DIMENSION CUSTOM CSS
   stroke-width: 2;
   stroke-dasharray: 6 6;
   stroke-linecap: round;
+     
 }
 
 
@@ -323,11 +327,13 @@ width: max-content;
 height: max-content;
 transform: translate3d(-50%, -50%, 0);
 pointer-events: none;
+
 }
 
 
 @media (max-width: 800px) {
 .dim { font-size: 3vw; }
+
 }
 
 

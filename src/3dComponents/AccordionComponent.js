@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AccordionIcon from "../activeAccordion/Accordion.js";
 import HotspotsComponent from "./HotspotsComponent.js";
 import { DimensionsComponent } from "./DimensionsComponent.js";
 import { MV } from "./Shared.js";
+import { CameraComponent } from "./CameraComponent.js";
 
 // ---------- Utility for unit conversion ----------
 const convertLength = (valueInMeters, unit) => {
@@ -22,16 +23,6 @@ const AccordionComponent = () => {
   const [activeTab, setActiveTab] = useState("settings");
   const [activeAccordion, setActiveAccordion] = useState(null);
 
-  // Ref for wrapper, svg and model-viewer
-  const viewerWrapRef = useRef(null);
-  const modelViewerRef = useRef(null);
-  const svgRef = useRef(null);
-
-  // SVG line refs
-  const lineXRef = useRef(null);
-  const lineYRef = useRef(null);
-  const lineZRef = useRef(null);
-
   const [productModel, setProductModel] = useState({
     src: "3dModels/Shoe.glb",
     hotspots: [],
@@ -45,12 +36,12 @@ const AccordionComponent = () => {
       unit: "m",
     },
     camera: {
-      orbit: { theta: "45deg", phi: "60deg", radius: "1.2m" },
+      orbit: "45deg 90deg 2m",
       autoRotate: true,
       autoRotateDelay: 0,
       fieldOfView: "30deg",
     },
-    newHotspot: {
+    new_hotspot: {
       id: "",
       label: "",
       position: "0 0 0",
@@ -60,65 +51,15 @@ const AccordionComponent = () => {
   });
 
   // ---------- UI helpers ----------
-  const toggleAccordion = (key) =>{
+  const toggleAccordion = (key) => {
     setActiveAccordion((prev) => (prev === key ? null : key));
-  }
-
-  // ---------- Hotspot CRUD ----------
-  const updateHotspot = (index, updates) => {
-    setProductModel((prev) => {
-      const newHotspots = [...prev.hotspots];
-      if (newHotspots[index]) {
-        newHotspots[index] = {
-          id: "",
-          label: "",
-          position: "0 0 0",
-          normal: "0 0 1",
-          visible: true,
-          ...newHotspots[index],
-          ...updates,
-        };
-      }
-      return { ...prev, hotspots: newHotspots };
-    });
-  };
-
-  const addHotspot = (hotspotData) => {
-    const completeHotspot = {
-      id: "",
-      label: "",
-      position: "0 0 0",
-      normal: "0 0 1",
-      visible: true,
-      ...hotspotData,
-    };
-
-    setProductModel((prev) => ({
-      ...prev,
-      hotspots: [...prev.hotspots, completeHotspot],
-      newHotspot: {
-        id: "",
-        label: "",
-        position: "0 0 0",
-        normal: "0 0 1",
-        visible: true,
-      },
-    }));
-  };
-
-  const removeHotspot = (index) => {
-    setProductModel((prev) => ({
-      ...prev,
-      hotspots: prev.hotspots.filter((_, i) => i !== index),
-    }));
   };
 
   // Attach click listener to model
   useEffect(() => {
-    const modelviewer = document.getElementById('atlas_ar_model_viewer')
-    console.log({modelviewer});
-    
+    const modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
+
     const handle3DClick = (event) => {
       if (!modelviewer.positionAndNormalFromPoint) return;
       const hit = modelviewer.positionAndNormalFromPoint(event.clientX, event.clientY);
@@ -126,24 +67,24 @@ const AccordionComponent = () => {
       const { position, normal } = hit;
       setProductModel((prev) => ({
         ...prev,
-        newHotspot: {
-          ...prev.newHotspot,
+        new_hotspot: {
+          ...prev.new_hotspot,
           position: `${position.x.toFixed(3)} ${position.y.toFixed(3)} ${position.z.toFixed(3)}`,
           normal: `${normal.x.toFixed(3)} ${normal.y.toFixed(3)} ${normal.z.toFixed(3)}`,
         },
       }));
     };
+
     modelviewer.addEventListener("click", handle3DClick);
     return () => modelviewer.removeEventListener("click", handle3DClick);
   }, []);
 
   // ---------- Dimensions ----------
   const updateDimensionState = useCallback(() => {
-    const modelviewer = document.getElementById('atlas_ar_model_viewer')
-    console.log({modelviewer});
+    const modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
 
-    const size = modelviewer.getDimensions ? modelviewer.getDimensions() : { x: 0, y: 0, z: 0 }; // meters
+    const size = modelviewer.getDimensions ? modelviewer.getDimensions() : { x: 0, y: 0, z: 0 };
     const center = modelviewer.getBoundingBoxCenter ? modelviewer.getBoundingBoxCenter() : { x: 0, y: 0, z: 0 };
     const unit = productModel.dimensions.unit;
 
@@ -197,34 +138,36 @@ const AccordionComponent = () => {
     requestAnimationFrame(drawLines);
   }, [productModel.dimensions.unit]);
 
-  // drawLines: compute coords relative to the SVG/wrapper, not relative to the model-viewer element
+  // drawLines with clipping
   const drawLines = useCallback(() => {
-    const modelviewer = document.getElementById('atlas_ar_model_viewer')
+    const modelviewer = document.getElementById("atlas_ar_model_viewer");
+    const svgEl = document.getElementById("dimension-svg");
+    const wrapperEl = document.getElementById("viewer-wrap");
 
-    const svgEl = svgRef.current;
-    const wrapperEl = viewerWrapRef.current;
     if (!modelviewer || !svgEl || !wrapperEl) return;
 
-    // bounding rect of the container that the SVG is absolutely positioned within
     const baseRect = svgEl.getBoundingClientRect();
+    const modelRect = modelviewer.getBoundingClientRect();
 
-    // helper to find a slotted element inside model-viewer by slot name
-    const q = (slot) => {
-      // First try to find the slotted node inside the model-viewer light DOM
-      let el = modelviewer.querySelector(`[slot="${slot}"]`);
-      // fallback to searching globally (rare cases)
-      if (!el) el = document.querySelector(`[slot="${slot}"]`);
-      return el;
-    };
+    // Calculate the circular clipping area
+    const centerX = modelRect.left + modelRect.width / 2 - baseRect.left;
+    const centerY = modelRect.top + modelRect.height / 2 - baseRect.top;
+    const radius = Math.min(modelRect.width, modelRect.height) / 2;
 
-    // center of an element relative to the SVG container (baseRect)
+    // Update the clipping circle
+    const clipCircle = document.getElementById("viewer-clip-circle");
+    if (clipCircle) {
+      clipCircle.setAttribute("cx", centerX);
+      clipCircle.setAttribute("cy", centerY);
+      clipCircle.setAttribute("r", radius);
+    }
+
+    const q = (slot) => modelviewer.querySelector(`[slot="${slot}"]`) || document.querySelector(`[slot="${slot}"]`);
+
     const centerOf = (el) => {
       if (!el) return null;
       const r = el.getBoundingClientRect();
-      return {
-        x: r.left + r.width / 2 - baseRect.left,
-        y: r.top + r.height / 2 - baseRect.top,
-      };
+      return { x: r.left + r.width / 2 - baseRect.left, y: r.top + r.height / 2 - baseRect.top };
     };
 
     const X0 = centerOf(q("hotspot-dim-x-start"));
@@ -236,37 +179,31 @@ const AccordionComponent = () => {
 
     const stroke = productModel.dimensions.color || "#16a5e6";
 
-    const setLine = (ref, A, B) => {
-      const el = ref.current;
+    const setLine = (id, A, B) => {
+      const el = document.getElementById(id);
       if (!el) return;
       if (!(A && B)) {
         el.setAttribute("visibility", "hidden");
         return;
       }
       el.setAttribute("visibility", "visible");
-      // prevent NaN values
-      const x1 = Number.isFinite(A.x) ? A.x : 0;
-      const y1 = Number.isFinite(A.y) ? A.y : 0;
-      const x2 = Number.isFinite(B.x) ? B.x : 0;
-      const y2 = Number.isFinite(B.y) ? B.y : 0;
-
-      el.setAttribute("x1", String(x1));
-      el.setAttribute("y1", String(y1));
-      el.setAttribute("x2", String(x2));
-      el.setAttribute("y2", String(y2));
+      el.setAttribute("x1", String(A.x || 0));
+      el.setAttribute("y1", String(A.y || 0));
+      el.setAttribute("x2", String(B.x || 0));
+      el.setAttribute("y2", String(B.y || 0));
       el.setAttribute("stroke", stroke);
       el.setAttribute("stroke-width", "2");
       el.setAttribute("stroke-dasharray", "6 6");
       el.setAttribute("stroke-linecap", "round");
     };
 
-    setLine(lineXRef, X0, X1);
-    setLine(lineZRef, Z0, Z1);
-    setLine(lineYRef, Y0, Y1);
+    setLine("dimension_line_x", X0, X1);
+    setLine("dimension_line_z", Z0, Z1);
+    setLine("dimension_line_y", Y0, Y1);
   }, [productModel.dimensions.color]);
 
   useEffect(() => {
-    const modelviewer = document.getElementById('atlas_ar_model_viewer')
+    const modelviewer = document.getElementById("atlas_ar_model_viewer");
     if (!modelviewer) return;
 
     const onUpdate = () => {
@@ -336,14 +273,12 @@ const AccordionComponent = () => {
                   <div className="art-p-4 art-bg-gray-50">
                     <HotspotsComponent
                       hotspots={productModel.hotspots}
-                      onUpdateHotspot={updateHotspot}
-                      onAddHotspot={addHotspot}
-                      onRemoveHotspot={removeHotspot}
-                      newHotspot={productModel.newHotspot}
+                      setProductModel={setProductModel}
+                      new_hotspot={productModel.new_hotspot}
                       setNewHotspot={(updater) =>
                         setProductModel((prev) => ({
                           ...prev,
-                          newHotspot: { ...prev.newHotspot, ...updater },
+                          new_hotspot: { ...prev.new_hotspot, ...updater },
                         }))
                       }
                     />
@@ -370,28 +305,57 @@ const AccordionComponent = () => {
                   </div>
                 )}
               </div>
+
+                {/* Camera Accordion */}
+                <div className="art-border art-rounded">
+                <button
+                    type="button"
+                    onClick={() => toggleAccordion("camera")}
+                    className="art-flex art-justify-between art-items-center art-w-full art-p-3 art-font-semibold"
+                >
+                    <span>Camera</span>
+                    <AccordionIcon status={activeAccordion === "camera"} />
+                </button>
+
+                {activeAccordion === "camera" && (
+                    <div className="art-p-4 art-bg-gray-50">
+                    <CameraComponent
+                        cameraSettings={productModel.camera}
+                        onUpdateCameraSetting={(field, value) =>
+                        setProductModel((prev) => ({
+                            ...prev,
+                            camera: { ...prev.camera, [field]: value },
+                        }))
+                        }
+                    />
+                    </div>
+                )}
+                </div>
+
+
+
             </>
           )}
         </div>
 
         {/* Right Panel */}
         <div
-          ref={viewerWrapRef}
-          className="art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative"
+          id="viewer-wrap"
+          className="art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative art-overflow-hidden"
         >
           <MV src={productModel.src}>
             {productModel.hotspots
-              .filter((h) => h && h.visible !== false)
-              .map((h, index) => (
+              .filter((hotspot) => hotspot && hotspot.visible !== false)
+              .map((hotspot, index) => (
                 <button
-                  key={h.id || `hotspot-${index}`}
-                  slot={`hotspot-${h.id || index}`}
-                  data-position={h.position || "0 0 0"}
-                  data-normal={h.normal || "0 0 1"}
+                  key={hotspot.id || `hotspot-${index}`}
+                  slot={`hotspot-${hotspot.id || index}`}
+                  data-position={hotspot.position || "0 0 0"}
+                  data-normal={hotspot.normal || "0 0 1"}
                   data-visibility-attribute="visible"
                   className="art-Hotspot"
                 >
-                  <div>{h.label || `Hotspot ${index + 1}`}</div>
+                  <div>{hotspot.label || `Hotspot ${index + 1}`}</div>
                 </button>
               ))}
 
@@ -421,20 +385,25 @@ const AccordionComponent = () => {
             )}
           </MV>
 
-          {/* SVG overlay for dashed lines */}
+          {/* SVG overlay for dashed lines with circular clipping */}
           <svg
-            ref={svgRef}
-            className={`dimensionLineContainer ${
-              productModel.dimensions.show ? "" : "hide"
-            }`}
+            id="dimension-svg"
+            className={`dimensionLineContainer ${productModel.dimensions.show ? "" : "hide"}`}
             width="100%"
             height="100%"
-            style={{ position: "absolute", inset: 0 }}
+            style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
             aria-hidden="true"
           >
-            <line id="dimension_line_x" ref={lineXRef} className="dimensionLine" visibility="hidden" />
-            <line id="dimension_line_z" ref={lineZRef} className="dimensionLine" visibility="hidden" />
-            <line id="dimension_line_y" ref={lineYRef} className="dimensionLine" visibility="hidden" />
+            <defs>
+              <clipPath id="viewer-clip">
+                <circle id="viewer-clip-circle" cx="50%" cy="50%" r="40%" />
+              </clipPath>
+            </defs>
+            <g clipPath="url(#viewer-clip)">
+              <line id="dimension_line_x" className="dimensionLine" visibility="hidden" />
+              <line id="dimension_line_z" className="dimensionLine" visibility="hidden" />
+              <line id="dimension_line_y" className="dimensionLine" visibility="hidden" />
+            </g>
           </svg>
         </div>
       </div>
