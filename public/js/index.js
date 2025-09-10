@@ -43055,7 +43055,7 @@ var AccordionComponent = function AccordionComponent() {
       src: "3dModels/Shoe.glb",
       hotspots: [],
       dimensions: {
-        show: false,
+        show: true,
         length: {
           value: 0,
           unit: "m"
@@ -43256,10 +43256,10 @@ var AccordionComponent = function AccordionComponent() {
             })]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
         id: "viewer-wrap",
         className: "art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative art-overflow-hidden",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_5__.MV, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_5__.MV, {
           src: productModel.src,
           children: [productModel.hotspots.filter(function (hotspot) {
             return hotspot && hotspot.visible !== false;
@@ -43274,77 +43274,82 @@ var AccordionComponent = function AccordionComponent() {
                 children: hotspot.label || "Hotspot ".concat(index + 1)
               })
             }, hotspot.id || "hotspot-".concat(index));
-          }), productModel.dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-              slot: "hotspot-dim-width",
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot+X-Y+Z",
+              className: "dot",
+              "data-position": "1 -1 1",
+              "data-normal": "1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dim+X-Y",
               className: "dim",
-              children: [productModel.dimensions.width.value.toFixed(2), " ", productModel.dimensions.width.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-              slot: "hotspot-dim-height",
+              "data-position": "1 -1 0",
+              "data-normal": "1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot+X-Y-Z",
+              className: "dot",
+              "data-position": "1 -1 -1",
+              "data-normal": "1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dim+X-Z",
               className: "dim",
-              children: [productModel.dimensions.height.value.toFixed(2), " ", productModel.dimensions.height.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
-              slot: "hotspot-dim-length",
+              "data-position": "1 0 -1",
+              "data-normal": "1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot+X+Y-Z",
+              className: "dot",
+              "data-position": "1 1 -1",
+              "data-normal": "0 1 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dim+Y-Z",
               className: "dim",
-              children: [productModel.dimensions.length.value.toFixed(2), " ", productModel.dimensions.length.unit]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-x-start",
-              className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-x-end",
-              className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-z-start",
-              className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-z-end",
-              className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-y-start",
-              className: "dot"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              slot: "hotspot-dim-y-end",
-              className: "dot"
+              "data-position": "0 -1 -1",
+              "data-normal": "0 1 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot-X+Y-Z",
+              className: "dot",
+              "data-position": "-1 1 -1",
+              "data-normal": "0 1 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dim-X-Z",
+              className: "dim",
+              "data-position": "-1 0 -1",
+              "data-normal": "-1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot-X-Y-Z",
+              className: "dot",
+              "data-position": "-1 -1 -1",
+              "data-normal": "-1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dim-X-Y",
+              className: "dim",
+              "data-position": "-1 -1 0",
+              "data-normal": "-1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+              slot: "hotspot-dot-X-Y+Z",
+              className: "dot",
+              "data-position": "-1 -1 1",
+              "data-normal": "-1 0 0"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("svg", {
+              id: "dimLines",
+              width: "100%",
+              height: "100%",
+              xmlns: "http://www.w3.org/2000/svg",
+              className: "dimensionLineContainer",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
+                className: "dimensionLine"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
+                className: "dimensionLine"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
+                className: "dimensionLine"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
+                className: "dimensionLine"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
+                className: "dimensionLine"
+              })]
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("svg", {
-          id: "dimension-svg",
-          className: "dimensionLineContainer ".concat(productModel.dimensions.show ? "" : "hide"),
-          width: "100%",
-          height: "100%",
-          style: {
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none"
-          },
-          "aria-hidden": "true",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("defs", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("clipPath", {
-              id: "viewer-clip",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("circle", {
-                id: "viewer-clip-circle",
-                cx: "50%",
-                cy: "50%",
-                r: "40%"
-              })
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("g", {
-            clipPath: "url(#viewer-clip)",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
-              id: "dimension_line_x",
-              className: "dimensionLine",
-              visibility: "hidden"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
-              id: "dimension_line_z",
-              className: "dimensionLine",
-              visibility: "hidden"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("line", {
-              id: "dimension_line_y",
-              className: "dimensionLine",
-              visibility: "hidden"
-            })]
-          })]
-        })]
+        })
       })]
     })]
   });
@@ -43512,6 +43517,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -43740,6 +43749,106 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
   var handleUnitChange = function handleUnitChange(e) {
     onUpdateDimension("unit", e.target.value);
   };
+  var calculateDimension = function calculateDimension(productModel) {
+    var modelViewer = document.querySelector('#atlas_ar_model_viewer');
+    var dimElements = [].concat(_toConsumableArray(modelViewer.querySelectorAll('button')), [modelViewer.querySelector('#dimLines')]);
+    function setVisibility(visible) {
+      dimElements.forEach(function (element) {
+        /**
+         * This is core code from model viewer. but when
+         * we uncomment then dimension line don't change
+         * when autorotate is enabled.
+         */
+        element.classList.toggle('hide', !visible);
+      });
+    }
+    setVisibility(productModel.dimensions.show);
+    modelViewer.addEventListener('ar-status', function (event) {
+      setVisibility(productModel.dimensions.show);
+    });
+    function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
+      if (dotHotspot1 && dotHotspot2) {
+        svgLine.setAttribute('x1', dotHotspot1.canvasPosition.x);
+        svgLine.setAttribute('y1', dotHotspot1.canvasPosition.y);
+        svgLine.setAttribute('x2', dotHotspot2.canvasPosition.x);
+        svgLine.setAttribute('y2', dotHotspot2.canvasPosition.y);
+        if (dimensionHotspot && !dimensionHotspot.facingCamera) {
+          svgLine.classList.add('hide');
+        } else {
+          svgLine.classList.remove('hide');
+        }
+      }
+    }
+    var dimLines = modelViewer.querySelectorAll('line');
+    var renderSVG = function renderSVG() {
+      drawLine(dimLines[0], modelViewer.queryHotspot('hotspot-dot+X-Y+Z'), modelViewer.queryHotspot('hotspot-dot+X-Y-Z'), modelViewer.queryHotspot('hotspot-dim+X-Y'));
+      drawLine(dimLines[1], modelViewer.queryHotspot('hotspot-dot+X-Y-Z'), modelViewer.queryHotspot('hotspot-dot+X+Y-Z'), modelViewer.queryHotspot('hotspot-dim+X-Z'));
+      drawLine(dimLines[2], modelViewer.queryHotspot('hotspot-dot+X+Y-Z'), modelViewer.queryHotspot('hotspot-dot-X+Y-Z'));
+      drawLine(dimLines[3], modelViewer.queryHotspot('hotspot-dot-X+Y-Z'), modelViewer.queryHotspot('hotspot-dot-X-Y-Z'), modelViewer.queryHotspot('hotspot-dim-X-Z'));
+      drawLine(dimLines[4], modelViewer.queryHotspot('hotspot-dot-X-Y-Z'), modelViewer.queryHotspot('hotspot-dot-X-Y+Z'), modelViewer.queryHotspot('hotspot-dim-X-Y'));
+    };
+    function showDimensions() {
+      var center = modelViewer.getBoundingBoxCenter();
+      var size = modelViewer.getDimensions();
+      var x2 = size.x / 2;
+      var y2 = size.y / 2;
+      var z2 = size.z / 2;
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot+X-Y+Z',
+        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
+      });
+      modelViewer.updateHotspot({
+        name: 'hotspot-dim+X-Y',
+        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+X-Y"]').textContent = "".concat((size.z * 100).toFixed(0), " cm");
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot+X-Y-Z',
+        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: 'hotspot-dim+X-Z',
+        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+X-Z"]').textContent = "".concat((size.y * 100).toFixed(0), " cm");
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot+X+Y-Z',
+        position: "".concat(center.x + x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: 'hotspot-dim+Y-Z',
+        position: "".concat(center.x, " ").concat(center.y + y2 * 1.1, " ").concat(center.z - z2 * 1.1)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+Y-Z"]').textContent = "".concat((size.x * 100).toFixed(0), " cm");
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot-X+Y-Z',
+        position: "".concat(center.x - x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: 'hotspot-dim-X-Z',
+        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim-X-Z"]').textContent = "".concat((size.y * 100).toFixed(0), " cm");
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot-X-Y-Z',
+        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: 'hotspot-dim-X-Y',
+        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim-X-Y"]').textContent = "".concat((size.z * 100).toFixed(0), " cm");
+      modelViewer.updateHotspot({
+        name: 'hotspot-dot-X-Y+Z',
+        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
+      });
+      modelViewer.addEventListener('camera-change', renderSVG);
+    }
+    showDimensions();
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    calculateDimension(productModel);
+  }, [productModel]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     className: "art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {

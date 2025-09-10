@@ -14,7 +14,7 @@ const AccordionComponent = () => {
     src: "3dModels/Shoe.glb",
     hotspots: [],
     dimensions: {
-      show: false,
+      show: true,
       length: { value: 0, unit: "m" },
       width: { value: 0, unit: "m" },
       height: { value: 0, unit: "m" },
@@ -220,51 +220,71 @@ const AccordionComponent = () => {
               ))}
 
             {/* Dimension labels & invisible endpoints */}
-            {productModel.dimensions.show && (
-              <>
-                <button slot="hotspot-dim-width" className="dim">
-                  {productModel.dimensions.width.value.toFixed(2)}{" "}
-                  {productModel.dimensions.width.unit}
-                </button>
-                <button slot="hotspot-dim-height" className="dim">
-                  {productModel.dimensions.height.value.toFixed(2)}{" "}
-                  {productModel.dimensions.height.unit}
-                </button>
-                <button slot="hotspot-dim-length" className="dim">
-                  {productModel.dimensions.length.value.toFixed(2)}{" "}
-                  {productModel.dimensions.length.unit}
-                </button>
+            {/*{productModel.dimensions.show && (*/}
+                <>
+                  {/*<button slot="hotspot-dim-width" className="dim">*/}
+                  {/*  {productModel.dimensions.width.value.toFixed(2)}{" "}*/}
+                  {/*  {productModel.dimensions.width.unit}*/}
+                  {/*</button>*/}
+                  {/*<button slot="hotspot-dim-height" className="dim">*/}
+                  {/*  {productModel.dimensions.height.value.toFixed(2)}{" "}*/}
+                  {/*  {productModel.dimensions.height.unit}*/}
+                  {/*</button>*/}
+                  {/*<button slot="hotspot-dim-length" className="dim">*/}
+                  {/*  {productModel.dimensions.length.value.toFixed(2)}{" "}*/}
+                  {/*  {productModel.dimensions.length.unit}*/}
+                  {/*</button>*/}
 
-                <div slot="hotspot-dim-x-start" className="dot" />
-                <div slot="hotspot-dim-x-end" className="dot" />
-                <div slot="hotspot-dim-z-start" className="dot" />
-                <div slot="hotspot-dim-z-end" className="dot" />
-                <div slot="hotspot-dim-y-start" className="dot" />
-                <div slot="hotspot-dim-y-end" className="dot" />
-              </>
-            )}
+                  {/*<div slot="hotspot-dim-x-start" className="dot"/>*/}
+                  {/*<div slot="hotspot-dim-x-end" className="dot"/>*/}
+                  {/*<div slot="hotspot-dim-z-start" className="dot"/>*/}
+                  {/*<div slot="hotspot-dim-z-end" className="dot"/>*/}
+                  {/*<div slot="hotspot-dim-y-start" className="dot"/>*/}
+                  {/*<div slot="hotspot-dim-y-end" className="dot"/>*/}
+                  {/* SVG overlay for dashed lines with circular clipping */}
+                  {/*<svg*/}
+                  {/*    id="dimension-svg"*/}
+                  {/*    className={`dimensionLineContainer ${productModel.dimensions.show ? "" : "hide"}`}*/}
+                  {/*    width="100%"*/}
+                  {/*    height="100%"*/}
+                  {/*    style={{position: "absolute", inset: 0, pointerEvents: "none"}}*/}
+                  {/*    aria-hidden="true"*/}
+                  {/*>*/}
+                  {/*  <defs>*/}
+                  {/*    <clipPath id="viewer-clip">*/}
+                  {/*      <circle id="viewer-clip-circle" cx="50%" cy="50%" r="40%"/>*/}
+                  {/*    </clipPath>*/}
+                  {/*  </defs>*/}
+                  {/*  <g clipPath="url(#viewer-clip)">*/}
+                  {/*    <line id="dimension_line_x" className="dimensionLine" visibility="hidden"/>*/}
+                  {/*    <line id="dimension_line_z" className="dimensionLine" visibility="hidden"/>*/}
+                  {/*    <line id="dimension_line_y" className="dimensionLine" visibility="hidden"/>*/}
+                  {/*  </g>*/}
+                  {/*</svg>*/}
+
+                  <button slot="hotspot-dot+X-Y+Z" className="dot" data-position="1 -1 1" data-normal="1 0 0"></button>
+                  <button slot="hotspot-dim+X-Y" className="dim" data-position="1 -1 0" data-normal="1 0 0"></button>
+                  <button slot="hotspot-dot+X-Y-Z" className="dot" data-position="1 -1 -1" data-normal="1 0 0"></button>
+                  <button slot="hotspot-dim+X-Z" className="dim" data-position="1 0 -1" data-normal="1 0 0"></button>
+                  <button slot="hotspot-dot+X+Y-Z" className="dot" data-position="1 1 -1" data-normal="0 1 0"></button>
+                  <button slot="hotspot-dim+Y-Z" className="dim" data-position="0 -1 -1" data-normal="0 1 0"></button>
+                  <button slot="hotspot-dot-X+Y-Z" className="dot" data-position="-1 1 -1" data-normal="0 1 0"></button>
+                  <button slot="hotspot-dim-X-Z" className="dim" data-position="-1 0 -1" data-normal="-1 0 0"></button>
+                  <button slot="hotspot-dot-X-Y-Z" className="dot" data-position="-1 -1 -1" data-normal="-1 0 0"></button>
+                  <button slot="hotspot-dim-X-Y" className="dim" data-position="-1 -1 0" data-normal="-1 0 0"></button>
+                  <button slot="hotspot-dot-X-Y+Z" className="dot" data-position="-1 -1 1" data-normal="-1 0 0"></button>
+                  <svg id="dimLines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="dimensionLineContainer">
+                    <line className="dimensionLine"></line>
+                    <line className="dimensionLine"></line>
+                    <line className="dimensionLine"></line>
+                    <line className="dimensionLine"></line>
+                    <line className="dimensionLine"></line>
+                  </svg>
+                </>
+            {/*)}*/}
           </MV>
 
-          {/* SVG overlay for dashed lines with circular clipping */}
-          <svg
-            id="dimension-svg"
-            className={`dimensionLineContainer ${productModel.dimensions.show ? "" : "hide"}`}
-            width="100%"
-            height="100%"
-            style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-            aria-hidden="true"
-          >
-            <defs>
-              <clipPath id="viewer-clip">
-                <circle id="viewer-clip-circle" cx="50%" cy="50%" r="40%" />
-              </clipPath>
-            </defs>
-            <g clipPath="url(#viewer-clip)">
-              <line id="dimension_line_x" className="dimensionLine" visibility="hidden" />
-              <line id="dimension_line_z" className="dimensionLine" visibility="hidden" />
-              <line id="dimension_line_y" className="dimensionLine" visibility="hidden" />
-            </g>
-          </svg>
+
         </div>
       </div>
     </div>
