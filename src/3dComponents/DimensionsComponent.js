@@ -1,84 +1,97 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 // ---------- Utility for unit conversion ----------
-const convertLength = (valueInMeters, unit) => {
+const convertLength = (valueInMeters, unit) => {  
+    // Converts dimensions from meters into the selected unit
     switch (unit) {
-        case "m":
+        case "m": // leave in meters
             return valueInMeters;
-        case "cm":
+        case "cm": // convert meters → centimeters
             return valueInMeters * 100;
-        case "inch":
+        case "inch": // convert meters → inches
             return valueInMeters * 39.3701;
-        default:
+        default: // fallback → meters
             return valueInMeters;
     }
 };
 
+// ---------- Main Dimensions Component ----------
 export const DimensionsComponent = ({
-                                        productModel,
-                                        setProductModel,
-                                        onUpdateDimension
-                                    }) => {
+    productModel,       // object that stores model state (unit, show/hide, width, height, length, color, etc.)
+    setProductModel,    // function to update productModel state
+    onUpdateDimension   // function passed from parent to update a single property of dimensions
+}) => {
+    // local state to toggle the "editor" section
     const [showEditor] = useState(true);
 
-    // ---------- Dimensions Logic ----------
-    const updateDimensionState = useCallback(() => {
-        const modelviewer = document.getElementById("atlas_ar_model_viewer");
-        if (!modelviewer) return;
+    // ---------- Function: Update Dimension State ----------
+    // const updateDimensionState = useCallback(() => {   
+    //     // Grab the <model-viewer> element
+    //     const modelviewer = document.getElementById("atlas_ar_model_viewer");
+    //     if (!modelviewer) return; // if missing, stop here
 
-        const size = modelviewer.getDimensions ? modelviewer.getDimensions() : {x: 0, y: 0, z: 0};
-        const center = modelviewer.getBoundingBoxCenter ? modelviewer.getBoundingBoxCenter() : {x: 0, y: 0, z: 0};
-        const unit = productModel.dimensions.unit;
+    //     // Get size of bounding box (width=x, height=y, length=z)
+    //     const size = modelviewer.getDimensions ? modelviewer.getDimensions() : {x: 0, y: 0, z: 0};
+    //     // Get center of bounding box
+    //     const center = modelviewer.getBoundingBoxCenter ? modelviewer.getBoundingBoxCenter() : {x: 0, y: 0, z: 0};
+    //     // Current unit (cm, m, inch) from productModel
+    //     const unit = productModel.dimensions.unit;
 
-        const width = convertLength(size.x, unit);
-        const height = convertLength(size.y, unit);
-        const length = convertLength(size.z, unit);
+    //     // Convert values from meters → selected unit
+    //     const width = convertLength(size.x, unit);
+    //     const height = convertLength(size.y, unit);
+    //     const length = convertLength(size.z, unit);
 
-        const x2 = size.x / 2,
-            y2 = size.y / 2,
-            z2 = size.z / 2;
+    //     // Half-dimensions (used to find corners of bounding box)
+    //     const x2 = size.x / 2, y2 = size.y / 2, z2 = size.z / 2;
 
-        // Define corners
-        const X_A = {x: center.x - x2, y: center.y - y2, z: center.z + z2};
-        const X_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
+    //     // Define hotspot points (bounding box corners for each axis)
+    //     const X_A = {x: center.x - x2, y: center.y - y2, z: center.z + z2};
+    //     const X_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
 
-        const Z_A = {x: center.x + x2, y: center.y - y2, z: center.z - z2};
-        const Z_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
+    //     const Z_A = {x: center.x + x2, y: center.y - y2, z: center.z - z2};
+    //     const Z_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
 
-        const Y_A = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
-        const Y_B = {x: center.x + x2, y: center.y + y2, z: center.z + z2};
+    //     const Y_A = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
+    //     const Y_B = {x: center.x + x2, y: center.y + y2, z: center.z + z2};
 
-        const setHS = (name, p) =>
-            modelviewer.updateHotspot ? modelviewer.updateHotspot({name, position: `${p.x} ${p.y} ${p.z}`}) : null;
+    //     // Helper: update hotspot position in <model-viewer>
+    //     const setHS = (name, p) =>
+    //         modelviewer.updateHotspot ? modelviewer.updateHotspot({name, position: `${p.x} ${p.y} ${p.z}`}) : null;
 
-        setHS("hotspot-dim-x-start", X_A);
-        setHS("hotspot-dim-x-end", X_B);
-        setHS("hotspot-dim-z-start", Z_A);
-        setHS("hotspot-dim-z-end", Z_B);
-        setHS("hotspot-dim-y-start", Y_A);
-        setHS("hotspot-dim-y-end", Y_B);
+    //     // Apply hotspots for X, Y, Z
+    //     setHS("hotspot-dim-x-start", X_A);
+    //     setHS("hotspot-dim-x-end", X_B);
+    //     setHS("hotspot-dim-z-start", Z_A);
+    //     setHS("hotspot-dim-z-end", Z_B);
+    //     setHS("hotspot-dim-y-start", Y_A);
+    //     setHS("hotspot-dim-y-end", Y_B);
 
-        const mid = (A, B) => ({
-            x: (A.x + B.x) / 2,
-            y: (A.y + B.y) / 2,
-            z: (A.z + B.z) / 2,
-        });
-        setHS("hotspot-dim-width", mid(X_A, X_B));
-        setHS("hotspot-dim-length", mid(Z_A, Z_B));
-        setHS("hotspot-dim-height", mid(Y_A, Y_B));
+    //     // Midpoint helper for dimension label positions
+    //     const mid = (A, B) => ({
+    //         x: (A.x + B.x) / 2,
+    //         y: (A.y + B.y) / 2,
+    //         z: (A.z + B.z) / 2,
+    //     });
+    //     // Apply hotspots for width, length, height labels
+    //     setHS("hotspot-dim-width", mid(X_A, X_B));
+    //     setHS("hotspot-dim-length", mid(Z_A, Z_B));
+    //     setHS("hotspot-dim-height", mid(Y_A, Y_B));
 
-        setProductModel((prev) => ({
-            ...prev,
-            dimensions: {
-                ...prev.dimensions,
-                width: {value: width, unit},
-                height: {value: height, unit},
-                length: {value: length, unit},
-            },
-        }));
+    //     // Update productModel state with new dimensions
+    //     setProductModel((prev) => ({
+    //         ...prev,
+    //         dimensions: {
+    //             ...prev.dimensions,
+    //             width: {value: width, unit},
+    //             height: {value: height, unit},
+    //             length: {value: length, unit},
+    //         },
+    //     }));
 
-        requestAnimationFrame(drawLines);
-    }, [productModel.dimensions.unit, setProductModel]);
+    //     // Trigger line drawing on next animation frame
+    //     requestAnimationFrame(drawLines);
+    // }, [productModel.dimensions.unit, setProductModel]);
 
     // drawLines with clipping
     const drawLines = useCallback(() => {
@@ -145,33 +158,33 @@ export const DimensionsComponent = ({
     }, [productModel.dimensions.color]);
 
     // Effect to handle model viewer events
-    useEffect(() => {
-        const modelviewer = document.getElementById("atlas_ar_model_viewer");
-        if (!modelviewer) return;
+    // useEffect(() => {
+    //     const modelviewer = document.getElementById("atlas_ar_model_viewer");
+    //     if (!modelviewer) return;
 
-        const onUpdate = () => {
-            if (productModel.dimensions.show) updateDimensionState();
-        };
+    //     const onUpdate = () => {
+    //         if (productModel.dimensions.show) updateDimensionState();
+    //     };
 
-        modelviewer.addEventListener("load", onUpdate);
-        modelviewer.addEventListener("camera-change", onUpdate);
-        window.addEventListener("resize", drawLines);
+    //     modelviewer.addEventListener("load", onUpdate);
+    //     modelviewer.addEventListener("camera-change", onUpdate);
+    //     window.addEventListener("resize", drawLines);
 
-        if (productModel.dimensions.show) updateDimensionState();
+    //     if (productModel.dimensions.show) updateDimensionState();
 
-        return () => {
-            modelviewer.removeEventListener("load", onUpdate);
-            modelviewer.removeEventListener("camera-change", onUpdate);
-            window.removeEventListener("resize", drawLines);
-        };
-    }, [drawLines, updateDimensionState, productModel.dimensions.show]);
+    //     return () => {
+    //         modelviewer.removeEventListener("load", onUpdate);
+    //         modelviewer.removeEventListener("camera-change", onUpdate);
+    //         window.removeEventListener("resize", drawLines);
+    //     };
+    // }, [drawLines, updateDimensionState, productModel.dimensions.show]);
 
     // Effect to update dimensions when unit or show changes
-    useEffect(() => {
-        if (productModel.dimensions.show) {
-            updateDimensionState();
-        }
-    }, [productModel.dimensions.unit, productModel.dimensions.show, updateDimensionState]);
+    // useEffect(() => {
+    //     if (productModel.dimensions.show) {
+    //         updateDimensionState();
+    //     }
+    // }, [productModel.dimensions.unit, productModel.dimensions.show, updateDimensionState]);
 
     // UI handlers
     const toggleDimensions = (visible) => {
@@ -186,28 +199,7 @@ export const DimensionsComponent = ({
     };
 
 
-    const calculateDimension = (productModel) => {
-        const modelViewer = document.querySelector('#atlas_ar_model_viewer');
-
-        const dimElements = [...modelViewer.querySelectorAll('button'), modelViewer.querySelector('#dimLines')];
-        function setVisibility(visible) {
-            dimElements.forEach((element) => {
-                /**
-                 * This is core code from model viewer. but when
-                 * we uncomment then dimension line don't change
-                 * when autorotate is enabled.
-                 */
-                element.classList.toggle('hide', !visible)
-            });
-        }
-
-        setVisibility(productModel.dimensions.show)
-
-        modelViewer.addEventListener('ar-status', (event) => {
-            setVisibility(productModel.dimensions.show);
-        });
-
-        function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
+    function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
             if (dotHotspot1 && dotHotspot2) {
                 svgLine.setAttribute('x1', dotHotspot1.canvasPosition.x);
                 svgLine.setAttribute('y1', dotHotspot1.canvasPosition.y);
@@ -221,7 +213,36 @@ export const DimensionsComponent = ({
             }
         }
 
+    
+    const calculateDimension = (productModel) => {
+        const modelViewer = document.querySelector('#atlas_ar_model_viewer');
+
+        const dimElements = [...modelViewer.querySelectorAll('button'), modelViewer.querySelector('#dimLines')];
+        function setVisibility(visible) {
+            dimElements.forEach((element) => {
+                /**
+                 * This is core code from model viewer. but when
+                 * we uncomment then dimension line don't change
+                 * when autorotate is enabled.
+                 */
+                element.classList.toggle('hide', !visible)
+            });
+
+        }
+
+
+
+
+        setVisibility(productModel.dimensions.show)
+
+        modelViewer.addEventListener('ar-status', (event) => {
+            setVisibility(productModel.dimensions.show);
+        });
+
+
+
         const dimLines = modelViewer.querySelectorAll('line');
+
 
         const renderSVG = () => {
             drawLine(dimLines[0], modelViewer.queryHotspot('hotspot-dot+X-Y+Z'), modelViewer.queryHotspot('hotspot-dot+X-Y-Z'), modelViewer.queryHotspot('hotspot-dim+X-Y'));
@@ -231,12 +252,28 @@ export const DimensionsComponent = ({
             drawLine(dimLines[4], modelViewer.queryHotspot('hotspot-dot-X-Y-Z'), modelViewer.queryHotspot('hotspot-dot-X-Y+Z'), modelViewer.queryHotspot('hotspot-dim-X-Y'));
         };
 
+
+    
+            
+
+
         function showDimensions() {
             const center = modelViewer.getBoundingBoxCenter();
             const size = modelViewer.getDimensions();
             const x2 = size.x / 2;
             const y2 = size.y / 2;
             const z2 = size.z / 2;
+
+            // Get current unit from productModel
+            const unit = productModel.dimensions.unit || 'cm';
+            
+            // Convert dimensions based on selected unit
+            const convertedSizeX = convertLength(size.x, unit);
+            const convertedSizeY = convertLength(size.y, unit);
+            const convertedSizeZ = convertLength(size.z, unit);
+
+            // Determine decimal places based on unit
+            const decimals = unit === 'm' ? 2 : 0;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot+X-Y+Z',
@@ -246,7 +283,7 @@ export const DimensionsComponent = ({
                 name: 'hotspot-dim+X-Y',
                 position: `${center.x + x2 * 1.2} ${center.y - y2 * 1.1} ${center.z}`
             });
-            modelViewer.querySelector('button[slot="hotspot-dim+X-Y"]').textContent = `${(size.z * 100).toFixed(0)} cm`;
+            modelViewer.querySelector('button[slot="hotspot-dim+X-Y"]').textContent = `${convertedSizeZ.toFixed(decimals)} ${unit}`;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot+X-Y-Z',
@@ -256,7 +293,7 @@ export const DimensionsComponent = ({
                 name: 'hotspot-dim+X-Z',
                 position: `${center.x + x2 * 1.2} ${center.y} ${center.z - z2 * 1.2}`
             });
-            modelViewer.querySelector('button[slot="hotspot-dim+X-Z"]').textContent = `${(size.y * 100).toFixed(0)} cm`;
+            modelViewer.querySelector('button[slot="hotspot-dim+X-Z"]').textContent = `${convertedSizeY.toFixed(decimals)} ${unit}`;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot+X+Y-Z',
@@ -266,7 +303,7 @@ export const DimensionsComponent = ({
                 name: 'hotspot-dim+Y-Z',
                 position: `${center.x} ${center.y + y2 * 1.1} ${center.z - z2 * 1.1}`
             });
-            modelViewer.querySelector('button[slot="hotspot-dim+Y-Z"]').textContent = `${(size.x * 100).toFixed(0)} cm`;
+            modelViewer.querySelector('button[slot="hotspot-dim+Y-Z"]').textContent = `${convertedSizeX.toFixed(decimals)} ${unit}`;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot-X+Y-Z',
@@ -276,7 +313,7 @@ export const DimensionsComponent = ({
                 name: 'hotspot-dim-X-Z',
                 position: `${center.x - x2 * 1.2} ${center.y} ${center.z - z2 * 1.2}`
             });
-            modelViewer.querySelector('button[slot="hotspot-dim-X-Z"]').textContent = `${(size.y * 100).toFixed(0)} cm`;
+            modelViewer.querySelector('button[slot="hotspot-dim-X-Z"]').textContent = `${convertedSizeY.toFixed(decimals)} ${unit}`;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot-X-Y-Z',
@@ -286,7 +323,7 @@ export const DimensionsComponent = ({
                 name: 'hotspot-dim-X-Y',
                 position: `${center.x - x2 * 1.2} ${center.y - y2 * 1.1} ${center.z}`
             });
-            modelViewer.querySelector('button[slot="hotspot-dim-X-Y"]').textContent = `${(size.z * 100).toFixed(0)} cm`;
+            modelViewer.querySelector('button[slot="hotspot-dim-X-Y"]').textContent = `${convertedSizeZ.toFixed(decimals)} ${unit}`;
 
             modelViewer.updateHotspot({
                 name: 'hotspot-dot-X-Y+Z',
@@ -300,8 +337,28 @@ export const DimensionsComponent = ({
     }
 
     useEffect(() => {
-        calculateDimension(productModel)
-    }, [productModel]);
+        const modelviewer = document.getElementById("atlas_ar_model_viewer")
+
+        modelviewer.addEventListener("load", calculateDimension[productModel]);
+        modelviewer.addEventListener("camera-change", calculateDimension[productModel]);
+        window.addEventListener("resize", drawLine);
+
+        if(productModel.dimensions.show){
+            calculateDimension(productModel)
+        } 
+   
+        
+
+        return () => {
+            modelviewer.removeEventListener("load", calculateDimension[productModel]);
+            modelviewer.removeEventListener("camera-change", calculateDimension[productModel]);
+            window.removeEventListener("resize", drawLine);
+        };
+
+   
+    }, [])
+
+
 
     return (
         <div className="art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4">
