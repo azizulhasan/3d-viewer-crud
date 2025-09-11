@@ -12,7 +12,6 @@ const AccordionComponent = () => {
 
   const [productModel, setProductModel] = useState({
     src: "3dModels/Shoe.glb",
-    hotspots: [],
     dimensions: {
       show: true,
       length: { value: 0, unit: "m" },
@@ -35,6 +34,7 @@ const AccordionComponent = () => {
       normal: "0 0 1",
       visible: true,
     },
+    hotspots: [],
     variant: "default",
   });
 
@@ -208,14 +208,13 @@ const AccordionComponent = () => {
               .filter((hotspot) => hotspot && hotspot.visible !== false)
               .map((hotspot, index) => (
                 <button
-                  key={hotspot.id || `hotspot-${index}`}
-                  slot={`hotspot-${hotspot.id || index}`}
+                  key={`hotspot-${index}`}
+                  slot={`hotspot-${hotspot.label}`}
                   data-position={hotspot.position || "0 0 0"}
                   data-normal={hotspot.normal || "0 0 1"}
-                  data-visibility-attribute="visible"
-                  className="art-Hotspot"
+                  className="hotspot"
                 >
-                  <div>{hotspot.label || `Hotspot ${index + 1}`}</div>
+                  <div className='annotation'>{hotspot.label || `Hotspot ${index + 1}`}</div>
                 </button>
               ))}
 

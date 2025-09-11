@@ -43053,7 +43053,6 @@ var AccordionComponent = function AccordionComponent() {
     setActiveAccordion = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       src: "3dModels/Shoe.glb",
-      hotspots: [],
       dimensions: {
         show: true,
         length: {
@@ -43085,6 +43084,7 @@ var AccordionComponent = function AccordionComponent() {
         normal: "0 0 1",
         visible: true
       },
+      hotspots: [],
       variant: "default"
     }),
     _useState6 = _slicedToArray(_useState5, 2),
@@ -43265,15 +43265,15 @@ var AccordionComponent = function AccordionComponent() {
             return hotspot && hotspot.visible !== false;
           }).map(function (hotspot, index) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-              slot: "hotspot-".concat(hotspot.id || index),
+              slot: "hotspot-".concat(hotspot.label),
               "data-position": hotspot.position || "0 0 0",
               "data-normal": hotspot.normal || "0 0 1",
-              "data-visibility-attribute": "visible",
-              className: "art-Hotspot",
+              className: "hotspot",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "annotation",
                 children: hotspot.label || "Hotspot ".concat(index + 1)
               })
-            }, hotspot.id || "hotspot-".concat(index));
+            }, "hotspot-".concat(index));
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
               slot: "hotspot-dot+X-Y+Z",
