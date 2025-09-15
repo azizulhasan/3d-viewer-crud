@@ -157,59 +157,52 @@ SLIDER CUSTOM CSS
 /***********************************************************
 SHARED CUSTOM CSS
 ************************************************************/
-          model-viewer::part(default-progress-bar) {
-    height: 3px;
-    background: linear-gradient(to right, #3b82f6, #9333ea);
-  }
-  .Hotspot {
-    border: none;
-    background: transparent;
-    transform: translate(-50%, -50%);
-  }
-  .Hotspot div {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 0.5rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    backdrop-filter: blur(6px);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .Hotspot:hover div {
-    transform: scale(1.05);
-    opacity: 0.95;
-  }
 
 
-
-
-/***********************************************************
-APP CUSTOM CSS
-************************************************************/
     model-viewer::part(default-progress-bar) {
     height: 3px;
     background: linear-gradient(to right, #3b82f6, #9333ea);
   }
-  .Hotspot {
-    border: none;
-    background: transparent;
-    transform: translate(-50%, -50%);
+  
+
+
+.hotspot {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        border: none;
+        background-color: blue;
+        box-sizing: border-box;
+        pointer-events: none;
+        }
+
+ .hotspot[slot="hotspot-hand"] {
+        --min-hotspot-opacity: 0;
+        background-color: red;
   }
-  .Hotspot div {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 0.5rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    backdrop-filter: blur(6px);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-  .Hotspot:hover div {
-    transform: scale(1.05);
-    opacity: 0.95;
-  }
+
+.hotspot[slot="hotspot-foot"]:not([data-visible]) {
+        background-color: transparent;
+        border: 3px solid blue;
+}
+
+.annotation {
+        background-color: #ffffff;
+        position: absolute;
+        transform: translate(10px, 10px);
+        border-radius: 10px;
+        padding: 10px;
+}
+
+/* This keeps child nodes hidden while the element loads */
+:not(:defined)>* {
+         display: none;
+}
+
+
+
+
 
 
 

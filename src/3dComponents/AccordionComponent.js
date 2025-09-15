@@ -110,17 +110,14 @@ const AccordionComponent = () => {
                 </button>
                 {activeAccordion === "hotspot" && (
                   <div className="art-p-4 art-bg-gray-50">
-                    <HotspotsComponent
-                      hotspots={productModel.hotspots}
-                      setProductModel={setProductModel}
-                      new_hotspot={productModel.new_hotspot}
-                      setNewHotspot={(updater) =>
-                        setProductModel((prev) => ({
-                          ...prev,
-                          new_hotspot: { ...prev.new_hotspot, ...updater },
-                        }))
-                      }
-                    />
+                <HotspotsComponent
+                hotspots={productModel.hotspots}
+                setProductModel={setProductModel}
+                new_hotspot={productModel.new_hotspot}
+                setNewHotspot={(hs) =>
+                    setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
+                }
+                />
                   </div>
                 )}
               </div>
@@ -209,7 +206,7 @@ const AccordionComponent = () => {
               .map((hotspot, index) => (
                 <button
                   key={`hotspot-${index}`}
-                  slot={`hotspot-${hotspot.label}`}
+                  slot={`hotspot-${(hotspot.label || `hs${index}`).replace(/\s+/g, "_")}`} //slot changes
                   data-position={hotspot.position || "0 0 0"}
                   data-normal={hotspot.normal || "0 0 1"}
                   className="hotspot"

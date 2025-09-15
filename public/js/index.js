@@ -43172,10 +43172,10 @@ var AccordionComponent = function AccordionComponent() {
                 hotspots: productModel.hotspots,
                 setProductModel: setProductModel,
                 new_hotspot: productModel.new_hotspot,
-                setNewHotspot: function setNewHotspot(updater) {
+                setNewHotspot: function setNewHotspot(hs) {
                   return setProductModel(function (prev) {
                     return _objectSpread(_objectSpread({}, prev), {}, {
-                      new_hotspot: _objectSpread(_objectSpread({}, prev.new_hotspot), updater)
+                      new_hotspot: hs
                     });
                   });
                 }
@@ -43265,7 +43265,8 @@ var AccordionComponent = function AccordionComponent() {
             return hotspot && hotspot.visible !== false;
           }).map(function (hotspot, index) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-              slot: "hotspot-".concat(hotspot.label),
+              slot: "hotspot-".concat((hotspot.label || "hs".concat(index)).replace(/\s+/g, "_")) //slot changes
+              ,
               "data-position": hotspot.position || "0 0 0",
               "data-normal": hotspot.normal || "0 0 1",
               className: "hotspot",
@@ -43997,19 +43998,17 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 var HotspotsComponent = function HotspotsComponent(_ref) {
-  var _new_hotspot$visible, _new_hotspot$id, _new_hotspot$label;
+  var _new_hotspot$visible;
   var hotspots = _ref.hotspots,
     setProductModel = _ref.setProductModel,
     new_hotspot = _ref.new_hotspot,
     setNewHotspot = _ref.setNewHotspot;
   // ---------- Hotspot CRUD ----------
   var updateHotspot = function updateHotspot(index, updates) {
-    //updates the hotspot
     setProductModel(function (prev) {
       var newHotspots = _toConsumableArray(prev.hotspots);
       if (newHotspots[index]) {
         newHotspots[index] = _objectSpread(_objectSpread({
-          id: "",
           label: "",
           position: "0 0 0",
           normal: "0 0 1",
@@ -44022,9 +44021,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     });
   };
   var addHotspot = function addHotspot(hotspotData) {
-    //adds the hotspot
     var completeHotspot = _objectSpread({
-      id: "",
       label: "",
       position: "0 0 0",
       normal: "0 0 1",
@@ -44034,7 +44031,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       return _objectSpread(_objectSpread({}, prev), {}, {
         hotspots: [].concat(_toConsumableArray(prev.hotspots), [completeHotspot]),
         new_hotspot: {
-          id: "",
           label: "",
           position: "0 0 0",
           normal: "0 0 1",
@@ -44044,7 +44040,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     });
   };
   var removeHotspot = function removeHotspot(index) {
-    //removes the hotspot
     setProductModel(function (prev) {
       return _objectSpread(_objectSpread({}, prev), {}, {
         hotspots: prev.hotspots.filter(function (_, i) {
@@ -44054,77 +44049,54 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     });
   };
 
-  /*
-  handleInputChange updates the form state dynamically whenever a user types in an input field, 
-  making sure only the changed field is updated while keeping all other fields intact.
-  */
+  // Handle existing hotspot changes
   var handleInputChange = function handleInputChange(index, event) {
     var _event$target = event.target,
       name = _event$target.name,
       value = _event$target.value,
       type = _event$target.type,
       checked = _event$target.checked;
-    var updates = _defineProperty({}, name, type === "checkbox" ? checked : value); //checkbox for visible the Hotspot
-
+    var updates = _defineProperty({}, name, type === "checkbox" ? checked : value);
     if (name.startsWith("position-") || name.startsWith("normal-")) {
-      // positions & normal (x, y, z)
       var _name$split = name.split("-"),
         _name$split2 = _slicedToArray(_name$split, 2),
         typeStr = _name$split2[0],
         axis = _name$split2[1];
-      var currentVector = (hotspots[index][typeStr] || "0 0 0" //initial position 0 0 0
-      ).split(" ").map(Number);
+      var currentVector = (hotspots[index][typeStr] || "0 0 0").split(" ").map(Number);
       var newVector = _toConsumableArray(currentVector);
       if (axis === "x") newVector[0] = parseFloat(value) || 0;
       if (axis === "y") newVector[1] = parseFloat(value) || 0;
       if (axis === "z") newVector[2] = parseFloat(value) || 0;
-      updates[typeStr] = newVector.join(" "); //updates the co-ordinates of the position & normal
+      updates[typeStr] = newVector.join(" ");
     }
     updateHotspot(index, updates);
   };
 
-  /*
-      Updating the new_hotspot state whenever a form field
-      (text input, checkbox, etc.) changes.
-  */
+  // Handle new hotspot form
   var handleNewInputChange = function handleNewInputChange(event) {
     var _event$target2 = event.target,
       name = _event$target2.name,
       value = _event$target2.value,
       type = _event$target2.type,
-      checked = _event$target2.checked; //It grabs the changed input’s name, value, type, and checked.
-    var newValue = type === "checkbox" ? checked : value; //Figures out the correct value to store (checked for checkboxes, value otherwise).
-
+      checked = _event$target2.checked;
+    var newValue = type === "checkbox" ? checked : value;
     setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, name, newValue)));
   };
   var handleAddNewHotspot = function handleAddNewHotspot(event) {
-    //handles newly added hotspot
     event.preventDefault();
-
-    // Validate that both id and label are provided
-    if (!new_hotspot.id.trim() || !new_hotspot.label.trim()) {
-      alert("Please provide both ID and Label for the hotspot");
-      return;
-    }
-
-    // Check if ID already exists
-    var existingIds = hotspots.map(function (h) {
-      return h.id;
-    });
-    if (existingIds.includes(new_hotspot.id.trim())) {
-      alert("A hotspot with this ID already exists. Please use a unique ID.");
+    if (!new_hotspot.label.trim()) {
+      alert("Please provide Label for the hotspot");
       return;
     }
     addHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, {
-      id: new_hotspot.id.trim(),
       label: new_hotspot.label.trim()
     }));
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: "art-space-y-4",
+    className: "art-space-y-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", {
-      className: "art-text-lg art-font-semibold art-mb-2",
-      children: "Existing Hotspots"
+      className: "art-text-lg art-font-semibold",
+      children: "Manage Hotspots"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
       className: "art-space-y-4",
       children: hotspots.map(function (hotspot, index) {
@@ -44138,53 +44110,11 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             className: "art-flex art-items-center art-gap-2 art-my-2",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
               className: "art-text-sm art-w-24",
-              children: "ID"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-              type: "text",
-              name: "id",
-              value: hotspot.id || "",
-              onChange: function onChange(e) {
-                return handleInputChange(index, e);
-              },
-              className: "art-border art-rounded art-p-1 art-w-full"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "art-flex art-items-center art-gap-2 art-my-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-              className: "art-text-sm art-w-24",
               children: "Label"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
               type: "text",
               name: "label",
               value: hotspot.label || "",
-              onChange: function onChange(e) {
-                return handleInputChange(index, e);
-              },
-              className: "art-border art-rounded art-p-1 art-w-full"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "art-flex art-items-center art-gap-2 art-my-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-              className: "art-text-sm art-w-24",
-              children: "Position (x y z)"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-              type: "text",
-              name: "position",
-              value: hotspot.position || "0 0 0",
-              onChange: function onChange(e) {
-                return handleInputChange(index, e);
-              },
-              className: "art-border art-rounded art-p-1 art-w-full"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: "art-flex art-items-center art-gap-2 art-my-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-              className: "art-text-sm art-w-24",
-              children: "Normal (x y z)"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-              type: "text",
-              name: "normal",
-              value: hotspot.normal || "0 0 1",
               onChange: function onChange(e) {
                 return handleInputChange(index, e);
               },
@@ -44208,7 +44138,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
             onClick: function onClick() {
               return removeHotspot(index);
             },
-            className: "art-absolute art-top-2 art-right-2 art-text-red-500 hover:art-text-red-700 art-text-xl art-w-6 art-h-6 art-flex art-items-center art-justify-center",
+            className: "art-absolute art-top-2 art-right-2 art-text-red-500 hover:art-text-red-700",
             children: "\xD7"
           })]
         }, index);
@@ -44218,19 +44148,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", {
         className: "art-font-semibold art-mb-2",
         children: "Add New Hotspot"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "art-flex art-items-center art-gap-2 art-my-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-          className: "art-text-sm art-w-24",
-          children: "ID"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-          type: "text",
-          name: "id",
-          value: new_hotspot.id || "",
-          onChange: handleNewInputChange,
-          placeholder: "Enter unique ID",
-          className: "art-border art-rounded art-p-1 art-w-full"
-        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         className: "art-flex art-items-center art-gap-2 art-my-2",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
@@ -44248,32 +44165,6 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         className: "art-flex art-items-center art-gap-2 art-my-2",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
           className: "art-text-sm art-w-24",
-          children: "Position (x y z)"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-          type: "text",
-          name: "position",
-          value: new_hotspot.position || "0 0 0",
-          readOnly: true,
-          className: "art-border art-rounded art-p-1 art-w-full art-bg-gray-200",
-          title: "Click on the 3D model to set position"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "art-flex art-items-center art-gap-2 art-my-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-          className: "art-text-sm art-w-24",
-          children: "Normal (x y z)"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-          type: "text",
-          name: "normal",
-          value: new_hotspot.normal || "0 0 1",
-          readOnly: true,
-          className: "art-border art-rounded art-p-1 art-w-full art-bg-gray-200",
-          title: "Automatically set when clicking on the 3D model"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "art-flex art-items-center art-gap-2 art-my-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-          className: "art-text-sm art-w-24",
           children: "Visible"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
           type: "checkbox",
@@ -44284,12 +44175,8 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
         onClick: handleAddNewHotspot,
-        disabled: !((_new_hotspot$id = new_hotspot.id) !== null && _new_hotspot$id !== void 0 && _new_hotspot$id.trim()) || !((_new_hotspot$label = new_hotspot.label) !== null && _new_hotspot$label !== void 0 && _new_hotspot$label.trim()),
         className: "art-bg-blue-500 art-text-white art-px-4 art-py-2 art-rounded hover:art-bg-blue-600",
         children: "+ Add Hotspot"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
-        className: "art-text-xs art-text-gray-500 art-mt-2",
-        children: "Click on the 3D model to set the position automatically"
       })]
     })]
   });
