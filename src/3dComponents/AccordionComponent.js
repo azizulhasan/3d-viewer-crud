@@ -28,7 +28,6 @@ const AccordionComponent = () => {
       fieldOfView: "30deg",
     },
     new_hotspot: {
-      id: "",
       label: "",
       position: "0 0 0",
       normal: "0 0 1",
@@ -202,11 +201,11 @@ const AccordionComponent = () => {
         >
           <MV src={productModel.src}>
             {productModel.hotspots
-              .filter((hotspot) => hotspot && hotspot.visible !== false)
+              .filter((hotspot) => hotspot?.visible)
               .map((hotspot, index) => (
                 <button
                   key={`hotspot-${index}`}
-                  slot={`hotspot-${(hotspot.label || `hs${index}`).replace(/\s+/g, "_")}`} //slot changes
+                  slot={`hotspot-${hotspot.label?.toLowerCase().replace(/\s+/g, '-') || index}`}
                   data-position={hotspot.position || "0 0 0"}
                   data-normal={hotspot.normal || "0 0 1"}
                   className="hotspot"

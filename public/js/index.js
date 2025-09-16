@@ -43078,7 +43078,6 @@ var AccordionComponent = function AccordionComponent() {
         fieldOfView: "30deg"
       },
       new_hotspot: {
-        id: "",
         label: "",
         position: "0 0 0",
         normal: "0 0 1",
@@ -43262,11 +43261,11 @@ var AccordionComponent = function AccordionComponent() {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_5__.MV, {
           src: productModel.src,
           children: [productModel.hotspots.filter(function (hotspot) {
-            return hotspot && hotspot.visible !== false;
+            return hotspot === null || hotspot === void 0 ? void 0 : hotspot.visible;
           }).map(function (hotspot, index) {
+            var _hotspot$label;
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-              slot: "hotspot-".concat((hotspot.label || "hs".concat(index)).replace(/\s+/g, "_")) //slot changes
-              ,
+              slot: "hotspot-".concat(((_hotspot$label = hotspot.label) === null || _hotspot$label === void 0 ? void 0 : _hotspot$label.toLowerCase().replace(/\s+/g, '-')) || index),
               "data-position": hotspot.position || "0 0 0",
               "data-normal": hotspot.normal || "0 0 1",
               className: "hotspot",
@@ -43517,6 +43516,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -43532,19 +43537,14 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 // ---------- Utility for unit conversion ----------
 
 var convertLength = function convertLength(valueInMeters, unit) {
-  // Converts dimensions from meters into the selected unit
   switch (unit) {
     case "m":
-      // leave in meters
       return valueInMeters;
     case "cm":
-      // convert meters → centimeters
       return valueInMeters * 100;
     case "inch":
-      // convert meters → inches
       return valueInMeters * 39.3701;
     default:
-      // fallback → meters
       return valueInMeters;
   }
 };
@@ -43555,171 +43555,171 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
   var productModel = _ref.productModel,
     setProductModel = _ref.setProductModel,
     onUpdateDimension = _ref.onUpdateDimension;
-  // local state to toggle the "editor" section
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 1),
     showEditor = _useState2[0];
 
-  // ---------- Function: Update Dimension State ----------
-  // const updateDimensionState = useCallback(() => {   
-  //     // Grab the <model-viewer> element
-  //     const modelviewer = document.getElementById("atlas_ar_model_viewer");
-  //     if (!modelviewer) return; // if missing, stop here
-
-  //     // Get size of bounding box (width=x, height=y, length=z)
-  //     const size = modelviewer.getDimensions ? modelviewer.getDimensions() : {x: 0, y: 0, z: 0};
-  //     // Get center of bounding box
-  //     const center = modelviewer.getBoundingBoxCenter ? modelviewer.getBoundingBoxCenter() : {x: 0, y: 0, z: 0};
-  //     // Current unit (cm, m, inch) from productModel
-  //     const unit = productModel.dimensions.unit;
-
-  //     // Convert values from meters → selected unit
-  //     const width = convertLength(size.x, unit);
-  //     const height = convertLength(size.y, unit);
-  //     const length = convertLength(size.z, unit);
-
-  //     // Half-dimensions (used to find corners of bounding box)
-  //     const x2 = size.x / 2, y2 = size.y / 2, z2 = size.z / 2;
-
-  //     // Define hotspot points (bounding box corners for each axis)
-  //     const X_A = {x: center.x - x2, y: center.y - y2, z: center.z + z2};
-  //     const X_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
-
-  //     const Z_A = {x: center.x + x2, y: center.y - y2, z: center.z - z2};
-  //     const Z_B = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
-
-  //     const Y_A = {x: center.x + x2, y: center.y - y2, z: center.z + z2};
-  //     const Y_B = {x: center.x + x2, y: center.y + y2, z: center.z + z2};
-
-  //     // Helper: update hotspot position in <model-viewer>
-  //     const setHS = (name, p) =>
-  //         modelviewer.updateHotspot ? modelviewer.updateHotspot({name, position: `${p.x} ${p.y} ${p.z}`}) : null;
-
-  //     // Apply hotspots for X, Y, Z
-  //     setHS("hotspot-dim-x-start", X_A);
-  //     setHS("hotspot-dim-x-end", X_B);
-  //     setHS("hotspot-dim-z-start", Z_A);
-  //     setHS("hotspot-dim-z-end", Z_B);
-  //     setHS("hotspot-dim-y-start", Y_A);
-  //     setHS("hotspot-dim-y-end", Y_B);
-
-  //     // Midpoint helper for dimension label positions
-  //     const mid = (A, B) => ({
-  //         x: (A.x + B.x) / 2,
-  //         y: (A.y + B.y) / 2,
-  //         z: (A.z + B.z) / 2,
-  //     });
-  //     // Apply hotspots for width, length, height labels
-  //     setHS("hotspot-dim-width", mid(X_A, X_B));
-  //     setHS("hotspot-dim-length", mid(Z_A, Z_B));
-  //     setHS("hotspot-dim-height", mid(Y_A, Y_B));
-
-  //     // Update productModel state with new dimensions
-  //     setProductModel((prev) => ({
-  //         ...prev,
-  //         dimensions: {
-  //             ...prev.dimensions,
-  //             width: {value: width, unit},
-  //             height: {value: height, unit},
-  //             length: {value: length, unit},
-  //         },
-  //     }));
-
-  //     // Trigger line drawing on next animation frame
-  //     requestAnimationFrame(drawLines);
-  // }, [productModel.dimensions.unit, setProductModel]);
-
-  // drawLines with clipping
-  var drawLines = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
-    var modelviewer = document.getElementById("atlas_ar_model_viewer");
-    var svgEl = document.getElementById("dimension-svg");
-    var wrapperEl = document.getElementById("viewer-wrap");
-    if (!modelviewer || !svgEl || !wrapperEl) return;
-    var baseRect = svgEl.getBoundingClientRect();
-    var modelRect = modelviewer.getBoundingClientRect();
-
-    // Calculate the circular clipping area
-    var centerX = modelRect.left + modelRect.width / 2 - baseRect.left;
-    var centerY = modelRect.top + modelRect.height / 2 - baseRect.top;
-    var radius = Math.min(modelRect.width, modelRect.height) / 2;
-
-    // Update the clipping circle
-    var clipCircle = document.getElementById("viewer-clip-circle");
-    if (clipCircle) {
-      clipCircle.setAttribute("cx", centerX);
-      clipCircle.setAttribute("cy", centerY);
-      clipCircle.setAttribute("r", radius);
-    }
-    var q = function q(slot) {
-      return modelviewer.querySelector("[slot=\"".concat(slot, "\"]")) || document.querySelector("[slot=\"".concat(slot, "\"]"));
-    };
-    var centerOf = function centerOf(el) {
-      if (!el) return null;
-      var r = el.getBoundingClientRect();
-      return {
-        x: r.left + r.width / 2 - baseRect.left,
-        y: r.top + r.height / 2 - baseRect.top
-      };
-    };
-    var X0 = centerOf(q("hotspot-dim-x-start"));
-    var X1 = centerOf(q("hotspot-dim-x-end"));
-    var Z0 = centerOf(q("hotspot-dim-z-start"));
-    var Z1 = centerOf(q("hotspot-dim-z-end"));
-    var Y0 = centerOf(q("hotspot-dim-y-start"));
-    var Y1 = centerOf(q("hotspot-dim-y-end"));
-    var stroke = productModel.dimensions.color || "#16a5e6";
-    var setLine = function setLine(id, A, B) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      if (!(A && B)) {
-        el.setAttribute("visibility", "hidden");
-        return;
+  /* Helper: draw SVG lines between hotspot pairs.
+  drawLine function manipulates the DOM directly. It takes an SVG <lines> element
+  & two hotspot objects representing the start & end points of a dimension line.
+  */
+  var drawLine = function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
+    if (dotHotspot1 && dotHotspot2) {
+      svgLine.setAttribute("x1", dotHotspot1.canvasPosition.x);
+      svgLine.setAttribute("y1", dotHotspot1.canvasPosition.y);
+      svgLine.setAttribute("x2", dotHotspot2.canvasPosition.x);
+      svgLine.setAttribute("y2", dotHotspot2.canvasPosition.y);
+      if (dimensionHotspot && !dimensionHotspot.facingCamera) {
+        svgLine.classList.add("hide");
+      } else {
+        svgLine.classList.remove("hide");
       }
-      el.setAttribute("visibility", "visible");
-      el.setAttribute("x1", String(A.x || 0));
-      el.setAttribute("y1", String(A.y || 0));
-      el.setAttribute("x2", String(B.x || 0));
-      el.setAttribute("y2", String(B.y || 0));
-      el.setAttribute("stroke", stroke);
-      el.setAttribute("stroke-width", "2");
-      el.setAttribute("stroke-dasharray", "6 6");
-      el.setAttribute("stroke-linecap", "round");
+    }
+  };
+
+  /* Core function: calculate and update dimensions 
+  useCallback hook memoizes this function to prevent unnecessary re-renders, as its used in a useEffect
+  dependency array.Its job is to compute the model's size and update the visual dimension indicators.
+  */
+
+  var calculateDimension = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+    var modelViewer = document.getElementById("atlas_ar_model_viewer");
+    if (!modelViewer) return;
+    var dimElements = [].concat(_toConsumableArray(modelViewer.querySelectorAll("button")), [modelViewer.querySelector("#dimLines")]);
+
+    // Show/hide dimensions
+    function setVisibility(visible) {
+      dimElements.forEach(function (element) {
+        element.classList.toggle("hide", !visible);
+      });
+    }
+    setVisibility(productModel.dimensions.show);
+
+    // Handle AR session toggling visibility
+    modelViewer.addEventListener("ar-status", function () {
+      setVisibility(productModel.dimensions.show);
+    });
+    var dimLines = modelViewer.querySelectorAll("line");
+
+    /* Render/update SVG lines.
+    This function calls drawLine for each edge of the model's bounding box, 
+    connecting the dot hotspots with lines.Draws 5 lines for the bounding box
+     */
+    var renderSVG = function renderSVG() {
+      drawLine(dimLines[0], modelViewer.queryHotspot("hotspot-dot+X-Y+Z"), modelViewer.queryHotspot("hotspot-dot+X-Y-Z"), modelViewer.queryHotspot("hotspot-dim+X-Y"));
+      drawLine(dimLines[1], modelViewer.queryHotspot("hotspot-dot+X-Y-Z"), modelViewer.queryHotspot("hotspot-dot+X+Y-Z"), modelViewer.queryHotspot("hotspot-dim+X-Z"));
+      drawLine(dimLines[2], modelViewer.queryHotspot("hotspot-dot+X+Y-Z"), modelViewer.queryHotspot("hotspot-dot-X+Y-Z"));
+      drawLine(dimLines[3], modelViewer.queryHotspot("hotspot-dot-X+Y-Z"), modelViewer.queryHotspot("hotspot-dot-X-Y-Z"), modelViewer.queryHotspot("hotspot-dim-X-Z"));
+      drawLine(dimLines[4], modelViewer.queryHotspot("hotspot-dot-X-Y-Z"), modelViewer.queryHotspot("hotspot-dot-X-Y+Z"), modelViewer.queryHotspot("hotspot-dim-X-Y"));
     };
-    setLine("dimension_line_x", X0, X1);
-    setLine("dimension_line_z", Z0, Z1);
-    setLine("dimension_line_y", Y0, Y1);
-  }, [productModel.dimensions.color]);
 
-  // Effect to handle model viewer events
-  // useEffect(() => {
-  //     const modelviewer = document.getElementById("atlas_ar_model_viewer");
-  //     if (!modelviewer) return;
+    // Initial hotspot placement & labels
+    var showDimensions = function showDimensions() {
+      var center = modelViewer.getBoundingBoxCenter();
+      var size = modelViewer.getDimensions();
+      var x2 = size.x / 2;
+      var y2 = size.y / 2;
+      var z2 = size.z / 2;
+      var unit = productModel.dimensions.unit || "cm";
+      var decimals = unit === "m" ? 2 : 0;
+      var convertedX = convertLength(size.x, unit);
+      var convertedY = convertLength(size.y, unit);
+      var convertedZ = convertLength(size.z, unit);
 
-  //     const onUpdate = () => {
-  //         if (productModel.dimensions.show) updateDimensionState();
-  //     };
+      // Position hotspots + update labels
+      modelViewer.updateHotspot({
+        name: "hotspot-dot+X-Y+Z",
+        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
+      });
+      modelViewer.updateHotspot({
+        name: "hotspot-dim+X-Y",
+        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+X-Y"]').textContent = "".concat(convertedZ.toFixed(decimals), " ").concat(unit);
+      modelViewer.updateHotspot({
+        name: "hotspot-dot+X-Y-Z",
+        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: "hotspot-dim+X-Z",
+        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+X-Z"]').textContent = "".concat(convertedY.toFixed(decimals), " ").concat(unit);
+      modelViewer.updateHotspot({
+        name: "hotspot-dot+X+Y-Z",
+        position: "".concat(center.x + x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: "hotspot-dim+Y-Z",
+        position: "".concat(center.x, " ").concat(center.y + y2 * 1.1, " ").concat(center.z - z2 * 1.1)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim+Y-Z"]').textContent = "".concat(convertedX.toFixed(decimals), " ").concat(unit);
+      modelViewer.updateHotspot({
+        name: "hotspot-dot-X+Y-Z",
+        position: "".concat(center.x - x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: "hotspot-dim-X-Z",
+        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim-X-Z"]').textContent = "".concat(convertedY.toFixed(decimals), " ").concat(unit);
+      modelViewer.updateHotspot({
+        name: "hotspot-dot-X-Y-Z",
+        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
+      });
+      modelViewer.updateHotspot({
+        name: "hotspot-dim-X-Y",
+        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
+      });
+      modelViewer.querySelector('button[slot="hotspot-dim-X-Y"]').textContent = "".concat(convertedZ.toFixed(decimals), " ").concat(unit);
+      modelViewer.updateHotspot({
+        name: "hotspot-dot-X-Y+Z",
+        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
+      });
 
-  //     modelviewer.addEventListener("load", onUpdate);
-  //     modelviewer.addEventListener("camera-change", onUpdate);
-  //     window.addEventListener("resize", drawLines);
+      // Keep SVG in sync
+      renderSVG();
+      modelViewer.addEventListener("camera-change", renderSVG);
 
-  //     if (productModel.dimensions.show) updateDimensionState();
+      // Update React state with dimensions
+      setProductModel(function (prev) {
+        return _objectSpread(_objectSpread({}, prev), {}, {
+          dimensions: _objectSpread(_objectSpread({}, prev.dimensions), {}, {
+            width: {
+              value: convertedX,
+              unit: unit
+            },
+            height: {
+              value: convertedY,
+              unit: unit
+            },
+            length: {
+              value: convertedZ,
+              unit: unit
+            }
+          })
+        });
+      });
+    };
+    showDimensions();
+  }, [productModel, setProductModel]);
 
-  //     return () => {
-  //         modelviewer.removeEventListener("load", onUpdate);
-  //         modelviewer.removeEventListener("camera-change", onUpdate);
-  //         window.removeEventListener("resize", drawLines);
-  //     };
-  // }, [drawLines, updateDimensionState, productModel.dimensions.show]);
+  // React effect: attach events
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
+    if (!modelviewer) return;
+    modelviewer.addEventListener("load", calculateDimension);
+    modelviewer.addEventListener("camera-change", calculateDimension);
+    if (productModel.dimensions.show) {
+      calculateDimension();
+    }
+    return function () {
+      modelviewer.removeEventListener("load", calculateDimension);
+      modelviewer.removeEventListener("camera-change", calculateDimension);
+    };
+  }, [calculateDimension, productModel.dimensions.show]);
 
-  // Effect to update dimensions when unit or show changes
-  // useEffect(() => {
-  //     if (productModel.dimensions.show) {
-  //         updateDimensionState();
-  //     }
-  // }, [productModel.dimensions.unit, productModel.dimensions.show, updateDimensionState]);
-
-  // UI handlers
+  // UI Handlers
   var toggleDimensions = function toggleDimensions(visible) {
     onUpdateDimension("show", visible);
     if (visible && !productModel.dimensions.unit) {
@@ -43729,128 +43729,6 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
   var handleUnitChange = function handleUnitChange(e) {
     onUpdateDimension("unit", e.target.value);
   };
-  function drawLine(svgLine, dotHotspot1, dotHotspot2, dimensionHotspot) {
-    if (dotHotspot1 && dotHotspot2) {
-      svgLine.setAttribute('x1', dotHotspot1.canvasPosition.x);
-      svgLine.setAttribute('y1', dotHotspot1.canvasPosition.y);
-      svgLine.setAttribute('x2', dotHotspot2.canvasPosition.x);
-      svgLine.setAttribute('y2', dotHotspot2.canvasPosition.y);
-      if (dimensionHotspot && !dimensionHotspot.facingCamera) {
-        svgLine.classList.add('hide');
-      } else {
-        svgLine.classList.remove('hide');
-      }
-    }
-  }
-  var calculateDimension = function calculateDimension(productModel) {
-    var modelViewer = document.querySelector('#atlas_ar_model_viewer');
-    var dimElements = [].concat(_toConsumableArray(modelViewer.querySelectorAll('button')), [modelViewer.querySelector('#dimLines')]);
-    function setVisibility(visible) {
-      dimElements.forEach(function (element) {
-        /**
-         * This is core code from model viewer. but when
-         * we uncomment then dimension line don't change
-         * when autorotate is enabled.
-         */
-        element.classList.toggle('hide', !visible);
-      });
-    }
-    setVisibility(productModel.dimensions.show);
-    modelViewer.addEventListener('ar-status', function (event) {
-      setVisibility(productModel.dimensions.show);
-    });
-    var dimLines = modelViewer.querySelectorAll('line');
-    var renderSVG = function renderSVG() {
-      drawLine(dimLines[0], modelViewer.queryHotspot('hotspot-dot+X-Y+Z'), modelViewer.queryHotspot('hotspot-dot+X-Y-Z'), modelViewer.queryHotspot('hotspot-dim+X-Y'));
-      drawLine(dimLines[1], modelViewer.queryHotspot('hotspot-dot+X-Y-Z'), modelViewer.queryHotspot('hotspot-dot+X+Y-Z'), modelViewer.queryHotspot('hotspot-dim+X-Z'));
-      drawLine(dimLines[2], modelViewer.queryHotspot('hotspot-dot+X+Y-Z'), modelViewer.queryHotspot('hotspot-dot-X+Y-Z'));
-      drawLine(dimLines[3], modelViewer.queryHotspot('hotspot-dot-X+Y-Z'), modelViewer.queryHotspot('hotspot-dot-X-Y-Z'), modelViewer.queryHotspot('hotspot-dim-X-Z'));
-      drawLine(dimLines[4], modelViewer.queryHotspot('hotspot-dot-X-Y-Z'), modelViewer.queryHotspot('hotspot-dot-X-Y+Z'), modelViewer.queryHotspot('hotspot-dim-X-Y'));
-    };
-    function showDimensions() {
-      var center = modelViewer.getBoundingBoxCenter();
-      var size = modelViewer.getDimensions();
-      var x2 = size.x / 2;
-      var y2 = size.y / 2;
-      var z2 = size.z / 2;
-
-      // Get current unit from productModel
-      var unit = productModel.dimensions.unit || 'cm';
-
-      // Convert dimensions based on selected unit
-      var convertedSizeX = convertLength(size.x, unit);
-      var convertedSizeY = convertLength(size.y, unit);
-      var convertedSizeZ = convertLength(size.z, unit);
-
-      // Determine decimal places based on unit
-      var decimals = unit === 'm' ? 2 : 0;
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot+X-Y+Z',
-        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
-      });
-      modelViewer.updateHotspot({
-        name: 'hotspot-dim+X-Y',
-        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
-      });
-      modelViewer.querySelector('button[slot="hotspot-dim+X-Y"]').textContent = "".concat(convertedSizeZ.toFixed(decimals), " ").concat(unit);
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot+X-Y-Z',
-        position: "".concat(center.x + x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
-      });
-      modelViewer.updateHotspot({
-        name: 'hotspot-dim+X-Z',
-        position: "".concat(center.x + x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
-      });
-      modelViewer.querySelector('button[slot="hotspot-dim+X-Z"]').textContent = "".concat(convertedSizeY.toFixed(decimals), " ").concat(unit);
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot+X+Y-Z',
-        position: "".concat(center.x + x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
-      });
-      modelViewer.updateHotspot({
-        name: 'hotspot-dim+Y-Z',
-        position: "".concat(center.x, " ").concat(center.y + y2 * 1.1, " ").concat(center.z - z2 * 1.1)
-      });
-      modelViewer.querySelector('button[slot="hotspot-dim+Y-Z"]').textContent = "".concat(convertedSizeX.toFixed(decimals), " ").concat(unit);
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot-X+Y-Z',
-        position: "".concat(center.x - x2, " ").concat(center.y + y2, " ").concat(center.z - z2)
-      });
-      modelViewer.updateHotspot({
-        name: 'hotspot-dim-X-Z',
-        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y, " ").concat(center.z - z2 * 1.2)
-      });
-      modelViewer.querySelector('button[slot="hotspot-dim-X-Z"]').textContent = "".concat(convertedSizeY.toFixed(decimals), " ").concat(unit);
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot-X-Y-Z',
-        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z - z2)
-      });
-      modelViewer.updateHotspot({
-        name: 'hotspot-dim-X-Y',
-        position: "".concat(center.x - x2 * 1.2, " ").concat(center.y - y2 * 1.1, " ").concat(center.z)
-      });
-      modelViewer.querySelector('button[slot="hotspot-dim-X-Y"]').textContent = "".concat(convertedSizeZ.toFixed(decimals), " ").concat(unit);
-      modelViewer.updateHotspot({
-        name: 'hotspot-dot-X-Y+Z',
-        position: "".concat(center.x - x2, " ").concat(center.y - y2, " ").concat(center.z + z2)
-      });
-      modelViewer.addEventListener('camera-change', renderSVG);
-    }
-    showDimensions();
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var modelviewer = document.getElementById("atlas_ar_model_viewer");
-    modelviewer.addEventListener("load", calculateDimension[productModel]);
-    modelviewer.addEventListener("camera-change", calculateDimension[productModel]);
-    window.addEventListener("resize", drawLine);
-    if (productModel.dimensions.show) {
-      calculateDimension(productModel);
-    }
-    return function () {
-      modelviewer.removeEventListener("load", calculateDimension[productModel]);
-      modelviewer.removeEventListener("camera-change", calculateDimension[productModel]);
-      window.removeEventListener("resize", drawLine);
-    };
-  }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     className: "art-bg-white art-rounded-2xl art-shadow-md art-border art-border-slate-200 art-p-4",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
@@ -43895,11 +43773,11 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
       }), productModel.dimensions.show && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "art-space-y-2 art-text-sm art-text-slate-600",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          children: ["Width: ", ((_productModel$dimensi = productModel.dimensions.width) === null || _productModel$dimensi === void 0 || (_productModel$dimensi = _productModel$dimensi.value) === null || _productModel$dimensi === void 0 ? void 0 : _productModel$dimensi.toFixed(2)) || 0, " ", ((_productModel$dimensi2 = productModel.dimensions.width) === null || _productModel$dimensi2 === void 0 ? void 0 : _productModel$dimensi2.unit) || productModel.dimensions.unit]
+          children: ["Width:", " ", ((_productModel$dimensi = productModel.dimensions.width) === null || _productModel$dimensi === void 0 || (_productModel$dimensi = _productModel$dimensi.value) === null || _productModel$dimensi === void 0 ? void 0 : _productModel$dimensi.toFixed(2)) || 0, " ", ((_productModel$dimensi2 = productModel.dimensions.width) === null || _productModel$dimensi2 === void 0 ? void 0 : _productModel$dimensi2.unit) || productModel.dimensions.unit]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          children: ["Height: ", ((_productModel$dimensi3 = productModel.dimensions.height) === null || _productModel$dimensi3 === void 0 || (_productModel$dimensi3 = _productModel$dimensi3.value) === null || _productModel$dimensi3 === void 0 ? void 0 : _productModel$dimensi3.toFixed(2)) || 0, " ", ((_productModel$dimensi4 = productModel.dimensions.height) === null || _productModel$dimensi4 === void 0 ? void 0 : _productModel$dimensi4.unit) || productModel.dimensions.unit]
+          children: ["Height:", " ", ((_productModel$dimensi3 = productModel.dimensions.height) === null || _productModel$dimensi3 === void 0 || (_productModel$dimensi3 = _productModel$dimensi3.value) === null || _productModel$dimensi3 === void 0 ? void 0 : _productModel$dimensi3.toFixed(2)) || 0, " ", ((_productModel$dimensi4 = productModel.dimensions.height) === null || _productModel$dimensi4 === void 0 ? void 0 : _productModel$dimensi4.unit) || productModel.dimensions.unit]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          children: ["Length: ", ((_productModel$dimensi5 = productModel.dimensions.length) === null || _productModel$dimensi5 === void 0 || (_productModel$dimensi5 = _productModel$dimensi5.value) === null || _productModel$dimensi5 === void 0 ? void 0 : _productModel$dimensi5.toFixed(2)) || 0, " ", ((_productModel$dimensi6 = productModel.dimensions.length) === null || _productModel$dimensi6 === void 0 ? void 0 : _productModel$dimensi6.unit) || productModel.dimensions.unit]
+          children: ["Length:", " ", ((_productModel$dimensi5 = productModel.dimensions.length) === null || _productModel$dimensi5 === void 0 || (_productModel$dimensi5 = _productModel$dimensi5.value) === null || _productModel$dimensi5 === void 0 ? void 0 : _productModel$dimensi5.toFixed(2)) || 0, " ", ((_productModel$dimensi6 = productModel.dimensions.length) === null || _productModel$dimensi6 === void 0 ? void 0 : _productModel$dimensi6.unit) || productModel.dimensions.unit]
         })]
       })]
     })]
@@ -44003,23 +43881,40 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     setProductModel = _ref.setProductModel,
     new_hotspot = _ref.new_hotspot,
     setNewHotspot = _ref.setNewHotspot;
+  // ---------- Dynamic attribute functions for model-viewer ----------
+  var getDataPosition = function getDataPosition(hotspot) {
+    return hotspot.position || "0 0 0";
+  };
+  var getDataNormal = function getDataNormal(hotspot) {
+    return hotspot.normal || "0 0 1";
+  };
+  var getDataVisibilityAttribute = function getDataVisibilityAttribute(hotspot) {
+    return hotspot.visible ? "visible" : "hidden";
+  };
+  var getSlotName = function getSlotName(hotspot, index) {
+    var _hotspot$label;
+    return "hotspot-".concat(((_hotspot$label = hotspot.label) === null || _hotspot$label === void 0 ? void 0 : _hotspot$label.toLowerCase().replace(/\s+/g, '-')) || index);
+  };
+
   // ---------- Hotspot CRUD ----------
+
+  // Updates a single property of an existing hotspot at a specific index.
   var updateHotspot = function updateHotspot(index, updates) {
     setProductModel(function (prev) {
       var newHotspots = _toConsumableArray(prev.hotspots);
       if (newHotspots[index]) {
-        newHotspots[index] = _objectSpread(_objectSpread({
-          label: "",
-          position: "0 0 0",
-          normal: "0 0 1",
-          visible: true
-        }, newHotspots[index]), updates);
+        newHotspots[index] = _objectSpread(_objectSpread({}, newHotspots[index]), updates);
       }
       return _objectSpread(_objectSpread({}, prev), {}, {
         hotspots: newHotspots
       });
     });
   };
+
+  /* Takes a hotspotData object, ensures it has all necessary properties
+   with defaults, adds it to the hotspots array, and 
+   resets the new_hotspot form. */
+
   var addHotspot = function addHotspot(hotspotData) {
     var completeHotspot = _objectSpread({
       label: "",
@@ -44039,6 +43934,8 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       });
     });
   };
+
+  // Removes the hotspot at the specified index from the hotspots array.
   var removeHotspot = function removeHotspot(index) {
     setProductModel(function (prev) {
       return _objectSpread(_objectSpread({}, prev), {}, {
@@ -44049,7 +43946,10 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     });
   };
 
-  // Handle existing hotspot changes
+  /* Handles onChange events for inputs in the list of existing hotspots. It has 
+  special logic to handle the individual x,y,z inputs and combine them back into 
+  a single space-separated string for the position or normal property. 
+  */
   var handleInputChange = function handleInputChange(index, event) {
     var _event$target = event.target,
       name = _event$target.name,
@@ -44072,7 +43972,8 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
     updateHotspot(index, updates);
   };
 
-  // Handle new hotspot form
+  /* Handles onChange events for the "Add New Hotspot" form inputs. It 
+  updates the new_hotspot state directly. */
   var handleNewInputChange = function handleNewInputChange(event) {
     var _event$target2 = event.target,
       name = _event$target2.name,
@@ -44080,8 +43981,24 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       type = _event$target2.type,
       checked = _event$target2.checked;
     var newValue = type === "checkbox" ? checked : value;
+    if (name.startsWith("position-") || name.startsWith("normal-")) {
+      var _name$split3 = name.split("-"),
+        _name$split4 = _slicedToArray(_name$split3, 2),
+        typeStr = _name$split4[0],
+        axis = _name$split4[1];
+      var currentVector = (new_hotspot[typeStr] || "0 0 0").split(" ").map(Number);
+      var newVector = _toConsumableArray(currentVector);
+      if (axis === "x") newVector[0] = parseFloat(value) || 0;
+      if (axis === "y") newVector[1] = parseFloat(value) || 0;
+      if (axis === "z") newVector[2] = parseFloat(value) || 0;
+      setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, typeStr, newVector.join(" "))));
+      return;
+    }
     setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, name, newValue)));
   };
+
+  /* Handles the form submit event when adding a new hotspot. It performs
+  validation and then calls addHotspot. */
   var handleAddNewHotspot = function handleAddNewHotspot(event) {
     event.preventDefault();
     if (!new_hotspot.label.trim()) {
@@ -44092,6 +44009,15 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       label: new_hotspot.label.trim()
     }));
   };
+
+  // ---------- Helper function to parse vector values ----------
+
+  /* A simple utility to convert a space-separated string (e.g., "1 2 3") 
+  into an array of numbers (e.g., [1, 2, 3]).
+  This is used to populate the individual x, y, z input fields.*/
+  var parseVector = function parseVector(vectorStr) {
+    return (vectorStr || "0 0 0").split(" ").map(Number);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
     className: "art-space-y-6",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", {
@@ -44101,11 +44027,16 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
       className: "art-space-y-4",
       children: hotspots.map(function (hotspot, index) {
         var _hotspot$visible;
+        var position = parseVector(hotspot.position);
+        var normal = parseVector(hotspot.normal);
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
           className: "art-border art-rounded art-p-3 art-bg-white art-relative",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
             className: "art-font-bold",
             children: hotspot.label || "Hotspot ".concat(index + 1)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+            className: "art-text-xs art-text-gray-500 art-mb-2",
+            children: ["Slot: ", getSlotName(hotspot, index)]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
             className: "art-flex art-items-center art-gap-2 art-my-2",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
