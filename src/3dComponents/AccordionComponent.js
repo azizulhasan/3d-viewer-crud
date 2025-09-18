@@ -23,6 +23,7 @@ const AccordionComponent = () => {
     },
     camera: {
       orbit: "45deg 90deg 2m",
+      target: "0 0.05 0",      
       autoRotate: true,
       autoRotateDelay: 0,
       fieldOfView: "30deg",
@@ -114,7 +115,7 @@ const AccordionComponent = () => {
                 setProductModel={setProductModel}
                 new_hotspot={productModel.new_hotspot}
                 setNewHotspot={(hs) =>
-                    setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
+                setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
                 }
                 />
                   </div>
@@ -149,7 +150,7 @@ const AccordionComponent = () => {
                   onClick={() => toggleAccordion("camera")}
                   className="art-flex art-justify-between art-items-center art-w-full art-p-3 art-font-semibold"
                 >
-                  <span>Camera</span>
+                  <span>Camera Views</span>
                   <AccordionIcon status={activeAccordion === "camera"} />
                 </button>
 
@@ -204,7 +205,7 @@ const AccordionComponent = () => {
               .filter((hotspot) => hotspot?.visible)
               .map((hotspot, index) => (
                 <button
-                  key={`hotspot-${index}`}
+                  key={hotspot.id || `hotspot-fallback-${index}`} // using unique id instead of index to remove the hotspot
                   slot={`hotspot-${hotspot.label?.toLowerCase().replace(/\s+/g, '-') || index}`}
                   data-position={hotspot.position || "0 0 0"}
                   data-normal={hotspot.normal || "0 0 1"}

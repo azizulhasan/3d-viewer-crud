@@ -5,17 +5,17 @@ const HotspotsComponent = ({
   setNewHotspot,
 }) => {
   // ---------- Dynamic attribute functions for model-viewer ----------
-  const getDataPosition = (hotspot) => {
-    return hotspot.position || "0 0 0";
-  };
+  // const getDataPosition = (hotspot) => {
+  //   return hotspot.position || "0 0 0";
+  // };
 
-  const getDataNormal = (hotspot) => {
-    return hotspot.normal || "0 0 1";
-  };
+  // const getDataNormal = (hotspot) => {
+  //   return hotspot.normal || "0 0 1";
+  // };
 
-  const getDataVisibilityAttribute = (hotspot) => {
-    return hotspot.visible ? "visible" : "hidden";
-  };
+  // const getDataVisibilityAttribute = (hotspot) => {
+  //   return hotspot.visible ? "visible" : "hidden";
+  // };
 
   const getSlotName = (hotspot, index) => {
     return `hotspot-${hotspot.label?.toLowerCase().replace(/\s+/g, '-') || index}`;
@@ -45,6 +45,7 @@ const HotspotsComponent = ({
   
   const addHotspot = (hotspotData) => {
     const completeHotspot = {
+      id: Date.now() + Math.random(), // to prevent the multiple remove hotspot 
       label: "",
       position: "0 0 0",
       normal: "0 0 1",
@@ -175,7 +176,7 @@ const HotspotsComponent = ({
           
           return (
             <div
-              key={index}
+              key={hotspot.id || index}
               className="art-border art-rounded art-p-3 art-bg-white art-relative"
             >
               <h4 className="art-font-bold">
@@ -273,7 +274,7 @@ const HotspotsComponent = ({
               </div> */}
 
               {/* Visible toggle */}
-              <div className="art-flex art-items-center art-gap-2 art-my-2">
+              {/* <div className="art-flex art-items-center art-gap-2 art-my-2">
                 <label className="art-text-sm art-w-24">Visible</label>
                 <input
                   type="checkbox"
@@ -282,7 +283,7 @@ const HotspotsComponent = ({
                   onChange={(e) => handleInputChange(index, e)}
                   className="art-w-4 art-h-4"
                 />
-              </div>
+              </div> */}
 
               <button
                 onClick={() => removeHotspot(index)}
@@ -350,7 +351,7 @@ const HotspotsComponent = ({
             ))}
           </div>
         </div> */}
-
+{/* 
         <div className="art-flex art-items-center art-gap-2 art-my-2">
           <label className="art-text-sm art-w-24">Visible</label>
           <input
@@ -360,7 +361,7 @@ const HotspotsComponent = ({
             onChange={handleNewInputChange}
             className="art-w-4 art-h-4"
           />
-        </div>
+        </div> */}
 
         <button
           onClick={handleAddNewHotspot}
