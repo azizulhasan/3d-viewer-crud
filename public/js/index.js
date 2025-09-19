@@ -43078,12 +43078,12 @@ var AccordionComponent = function AccordionComponent() {
         autoRotateDelay: 0,
         fieldOfView: "30deg"
       },
-      new_hotspot: {
-        label: "",
-        position: "0 0 0",
-        normal: "0 0 1",
-        visible: true
-      },
+      // new_hotspot: {
+      //   label: "Your Hotspot",
+      //   position: "0 0 0",
+      //   normal: "0 0 1",
+      //   visible: true,
+      // },
       hotspots: [],
       variant: "default"
     }),
@@ -43097,31 +43097,6 @@ var AccordionComponent = function AccordionComponent() {
       return prev === key ? null : key;
     });
   };
-
-  // Attach click listener to model
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var modelviewer = document.getElementById("atlas_ar_model_viewer");
-    if (!modelviewer) return;
-    var handle3DClick = function handle3DClick(event) {
-      if (!modelviewer.positionAndNormalFromPoint) return;
-      var hit = modelviewer.positionAndNormalFromPoint(event.clientX, event.clientY);
-      if (!hit) return;
-      var position = hit.position,
-        normal = hit.normal;
-      setProductModel(function (prev) {
-        return _objectSpread(_objectSpread({}, prev), {}, {
-          new_hotspot: _objectSpread(_objectSpread({}, prev.new_hotspot), {}, {
-            position: "".concat(position.x.toFixed(3), " ").concat(position.y.toFixed(3), " ").concat(position.z.toFixed(3)),
-            normal: "".concat(normal.x.toFixed(3), " ").concat(normal.y.toFixed(3), " ").concat(normal.z.toFixed(3))
-          })
-        });
-      });
-    };
-    modelviewer.addEventListener("click", handle3DClick);
-    return function () {
-      return modelviewer.removeEventListener("click", handle3DClick);
-    };
-  }, []);
 
   // Update dimension function for DimensionsComponent
   var updateDimension = function updateDimension(key, value) {
@@ -43169,16 +43144,12 @@ var AccordionComponent = function AccordionComponent() {
             }), activeAccordion === "hotspot" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
               className: "art-p-4 art-bg-gray-50",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_HotspotsComponent_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                hotspots: productModel.hotspots,
-                setProductModel: setProductModel,
-                new_hotspot: productModel.new_hotspot,
-                setNewHotspot: function setNewHotspot(hs) {
-                  return setProductModel(function (prev) {
-                    return _objectSpread(_objectSpread({}, prev), {}, {
-                      new_hotspot: hs
-                    });
-                  });
-                }
+                productModel: productModel,
+                setProductModel: setProductModel
+                // new_hotspot={productModel.new_hotspot}
+                // setNewHotspot={(hs) =>
+                // setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
+                // }
               })
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
@@ -43219,6 +43190,7 @@ var AccordionComponent = function AccordionComponent() {
               className: "art-p-4 art-bg-gray-50",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_CameraComponent_js__WEBPACK_IMPORTED_MODULE_6__.CameraComponent, {
                 cameraSettings: productModel.camera,
+                activeAccordion: activeAccordion,
                 onUpdateCameraSetting: function onUpdateCameraSetting(field, value) {
                   return setProductModel(function (prev) {
                     return _objectSpread(_objectSpread({}, prev), {}, {
@@ -43261,21 +43233,21 @@ var AccordionComponent = function AccordionComponent() {
         className: "art-col-span-8 art-bg-white art-rounded-xl art-shadow-md art-p-2 relative art-overflow-hidden",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Shared_js__WEBPACK_IMPORTED_MODULE_5__.MV, {
           src: productModel.src,
-          children: [productModel.hotspots.filter(function (hotspot) {
-            return hotspot === null || hotspot === void 0 ? void 0 : hotspot.visible;
-          }).map(function (hotspot, index) {
-            var _hotspot$label;
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
-              // using unique id instead of index to remove the hotspot
-              slot: "hotspot-".concat(((_hotspot$label = hotspot.label) === null || _hotspot$label === void 0 ? void 0 : _hotspot$label.toLowerCase().replace(/\s+/g, '-')) || index),
-              "data-position": hotspot.position || "0 0 0",
-              "data-normal": hotspot.normal || "0 0 1",
-              className: "hotspot",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-                className: "annotation",
-                children: hotspot.label || "Hotspot ".concat(index + 1)
-              })
-            }, hotspot.id || "hotspot-fallback-".concat(index));
+          children: [productModel.hotspots.map(function (hotspot, index) {
+            console.log(index);
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
+                "data-id": hotspot.id,
+                slot: "hotspot-".concat(hotspot.id),
+                "data-position": hotspot.position,
+                "data-normal": hotspot.normal,
+                className: "hotspot",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "annotation",
+                  children: hotspot.label
+                })
+              }, hotspot.id)
+            });
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
               slot: "hotspot-dot+X-Y+Z",
@@ -43394,7 +43366,8 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 var CameraComponent = function CameraComponent(_ref) {
   var cameraSettings = _ref.cameraSettings,
-    onUpdateCameraSetting = _ref.onUpdateCameraSetting;
+    onUpdateCameraSetting = _ref.onUpdateCameraSetting,
+    activeAccordion = _ref.activeAccordion;
   // const defaultOrbit = "45deg 60deg 1.2m";
 
   // State for custom hotspots
@@ -43415,6 +43388,14 @@ var CameraComponent = function CameraComponent(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     newHotspot = _useState6[0],
     setNewHotspot = _useState6[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    console.log({
+      activeAccordion: activeAccordion
+    });
+    if (activeAccordion == "camera") {
+      document.getElementById("atlas_ar_model_viewer").src = "3dModels/thor.glb";
+    }
+  }, [activeAccordion]);
 
   // const targets = [
   //   { name: "Isometric", target: "0 0.05 0", orbit: "45deg 60deg 1.2m", fov: "35deg" },
@@ -43827,6 +43808,13 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
 
       // Update React state with dimensions
       setProductModel(function (prev) {
+        var _prev$dimensions$widt, _prev$dimensions$heig, _prev$dimensions$leng;
+        // if the new values are the same as the old ones, do nothing
+        if (((_prev$dimensions$widt = prev.dimensions.width) === null || _prev$dimensions$widt === void 0 ? void 0 : _prev$dimensions$widt.value) === convertedX && ((_prev$dimensions$heig = prev.dimensions.height) === null || _prev$dimensions$heig === void 0 ? void 0 : _prev$dimensions$heig.value) === convertedY && ((_prev$dimensions$leng = prev.dimensions.length) === null || _prev$dimensions$leng === void 0 ? void 0 : _prev$dimensions$leng.value) === convertedZ && prev.dimensions.unit === unit) {
+          return prev; // <-- React sees "state didn’t change", so no re-render
+        }
+
+        // otherwise, update the state with new values
         return _objectSpread(_objectSpread({}, prev), {}, {
           dimensions: _objectSpread(_objectSpread({}, prev.dimensions), {}, {
             width: {
@@ -43846,7 +43834,7 @@ var DimensionsComponent = function DimensionsComponent(_ref) {
       });
     };
     showDimensions();
-  }, [productModel, setProductModel]);
+  }, [productModel.dimensions.show, productModel.dimensions.unit, setProductModel]);
 
   // React effect: attach events
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -44001,13 +43989,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -44019,24 +44003,24 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+
+
 var HotspotsComponent = function HotspotsComponent(_ref) {
   var hotspots = _ref.hotspots,
     setProductModel = _ref.setProductModel,
     new_hotspot = _ref.new_hotspot,
-    setNewHotspot = _ref.setNewHotspot;
+    setNewHotspot = _ref.setNewHotspot,
+    productModel = _ref.productModel;
   // ---------- Dynamic attribute functions for model-viewer ----------
-  // const getDataPosition = (hotspot) => {
-  //   return hotspot.position || "0 0 0";
-  // };
-
-  // const getDataNormal = (hotspot) => {
-  //   return hotspot.normal || "0 0 1";
-  // };
-
-  // const getDataVisibilityAttribute = (hotspot) => {
-  //   return hotspot.visible ? "visible" : "hidden";
-  // };
-
+  var getDataPosition = function getDataPosition(hotspot) {
+    return hotspot.position || "0 0 0";
+  };
+  var getDataNormal = function getDataNormal(hotspot) {
+    return hotspot.normal || "0 0 1";
+  };
+  var getDataVisibilityAttribute = function getDataVisibilityAttribute(hotspot) {
+    return hotspot.visible ? "visible" : "hidden";
+  };
   var getSlotName = function getSlotName(hotspot, index) {
     var _hotspot$label;
     return "hotspot-".concat(((_hotspot$label = hotspot.label) === null || _hotspot$label === void 0 ? void 0 : _hotspot$label.toLowerCase().replace(/\s+/g, '-')) || index);
@@ -44044,43 +44028,26 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
 
   // ---------- Hotspot CRUD ----------
 
-  // Updates a single property of an existing hotspot at a specific index.
-  var updateHotspot = function updateHotspot(index, updates) {
-    setProductModel(function (prev) {
-      var newHotspots = _toConsumableArray(prev.hotspots);
-      if (newHotspots[index]) {
-        newHotspots[index] = _objectSpread(_objectSpread({}, newHotspots[index]), updates);
-      }
-      return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: newHotspots
-      });
-    });
-  };
-
   /* Takes a hotspotData object, ensures it has all necessary properties
    with defaults, adds it to the hotspots array, and 
    resets the new_hotspot form. */
 
-  var addHotspot = function addHotspot(hotspotData) {
-    var completeHotspot = _objectSpread({
-      id: Date.now() + Math.random(),
-      // to prevent the multiple remove hotspot 
-      label: "",
-      position: "0 0 0",
-      normal: "0 0 1",
-      visible: true
-    }, hotspotData);
-    setProductModel(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, {
-        hotspots: [].concat(_toConsumableArray(prev.hotspots), [completeHotspot]),
-        new_hotspot: {
-          label: "",
-          position: "0 0 0",
-          normal: "0 0 1",
-          visible: true
-        }
-      });
+  var addHotspot = function addHotspot() {
+    var hotspotData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var tempProductModel = structuredClone(productModel);
+    var tempHotSpots = tempProductModel.hotspots;
+    console.log({
+      tempHotSpots: tempHotSpots
     });
+    var hotspotId = tempHotSpots.length + 1;
+    var newHotspots = {
+      id: (hotspotData === null || hotspotData === void 0 ? void 0 : hotspotData.id) || hotspotId,
+      position: (hotspotData === null || hotspotData === void 0 ? void 0 : hotspotData.position) || "0 0 0",
+      normal: (hotspotData === null || hotspotData === void 0 ? void 0 : hotspotData.normal) || "0 0 1",
+      label: (hotspotData === null || hotspotData === void 0 ? void 0 : hotspotData.label) || "new hotspot " + hotspotId
+    };
+    tempProductModel.hotspots = [].concat(_toConsumableArray(tempHotSpots), [newHotspots]);
+    setProductModel(tempProductModel);
   };
 
   // Removes the hotspot at the specified index from the hotspots array.
@@ -44099,64 +44066,56 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
   a single space-separated string for the position or normal property. 
   */
   var handleInputChange = function handleInputChange(index, event) {
+    var _tempProductModel$hot;
+    event.preventDefault();
     var _event$target = event.target,
       name = _event$target.name,
       value = _event$target.value,
       type = _event$target.type,
       checked = _event$target.checked;
-    var updates = _defineProperty({}, name, type === "checkbox" ? checked : value);
-    if (name.startsWith("position-") || name.startsWith("normal-")) {
-      var _name$split = name.split("-"),
-        _name$split2 = _slicedToArray(_name$split, 2),
-        typeStr = _name$split2[0],
-        axis = _name$split2[1];
-      var currentVector = (hotspots[index][typeStr] || "0 0 0").split(" ").map(Number);
-      var newVector = _toConsumableArray(currentVector);
-      if (axis === "x") newVector[0] = parseFloat(value) || 0;
-      if (axis === "y") newVector[1] = parseFloat(value) || 0;
-      if (axis === "z") newVector[2] = parseFloat(value) || 0;
-      updates[typeStr] = newVector.join(" ");
-    }
-    updateHotspot(index, updates);
-  };
 
-  /* Handles onChange events for the "Add New Hotspot" form inputs. It 
-  updates the new_hotspot state directly. */
-  var handleNewInputChange = function handleNewInputChange(event) {
-    var _event$target2 = event.target,
-      name = _event$target2.name,
-      value = _event$target2.value,
-      type = _event$target2.type,
-      checked = _event$target2.checked;
-    var newValue = type === "checkbox" ? checked : value;
-    if (name.startsWith("position-") || name.startsWith("normal-")) {
-      var _name$split3 = name.split("-"),
-        _name$split4 = _slicedToArray(_name$split3, 2),
-        typeStr = _name$split4[0],
-        axis = _name$split4[1];
-      var currentVector = (new_hotspot[typeStr] || "0 0 0").split(" ").map(Number);
-      var newVector = _toConsumableArray(currentVector);
-      if (axis === "x") newVector[0] = parseFloat(value) || 0;
-      if (axis === "y") newVector[1] = parseFloat(value) || 0;
-      if (axis === "z") newVector[2] = parseFloat(value) || 0;
-      setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, typeStr, newVector.join(" "))));
-      return;
-    }
-    setNewHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, _defineProperty({}, name, newValue)));
-  };
+    // if (name.startsWith("position-") || name.startsWith("normal-")) {
+    //   const [typeStr, axis] = name.split("-");
+    //   const currentVector = (productModel.hotspots[index][typeStr] || "0 0 0")
+    //     .split(" ")
+    //     .map(Number);
+    //   const newVector = [...currentVector];
 
-  /* Handles the form submit event when adding a new hotspot. It performs
-  validation and then calls addHotspot. */
-  var handleAddNewHotspot = function handleAddNewHotspot(event) {
-    event.preventDefault();
-    if (!new_hotspot.label.trim()) {
-      alert("Please provide Label for the hotspot");
-      return;
-    }
-    addHotspot(_objectSpread(_objectSpread({}, new_hotspot), {}, {
-      label: new_hotspot.label.trim()
-    }));
+    //   if (axis === "x") newVector[0] = parseFloat(value) || 0;
+    //   if (axis === "y") newVector[1] = parseFloat(value) || 0;
+    //   if (axis === "z") newVector[2] = parseFloat(value) || 0;
+    //   updates[typeStr] = newVector.join(" ");
+    // }
+    var tempProductModel = structuredClone(productModel);
+    var currentHotspot = tempProductModel === null || tempProductModel === void 0 || (_tempProductModel$hot = tempProductModel.hotspots) === null || _tempProductModel$hot === void 0 ? void 0 : _tempProductModel$hot[index];
+    currentHotspot.label = value;
+    tempProductModel.hotspots[index] = currentHotspot;
+    setProductModel(tempProductModel);
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var modelviewer = document.getElementById("atlas_ar_model_viewer");
+    var handle3DClick = function handle3DClick(event, productModel) {
+      event.preventDefault();
+      if (!modelviewer.positionAndNormalFromPoint) return;
+      var hit = modelviewer.positionAndNormalFromPoint(event.clientX, event.clientY);
+      if (!hit) return;
+      var position = hit.position,
+        normal = hit.normal;
+      var tempProductModel = structuredClone(productModel);
+      var tempHotSpots = tempProductModel.hotspots;
+      var hotspotId = tempHotSpots.length + 1;
+      var newHotspots = {
+        id: hotspotId,
+        position: "".concat(position.x.toFixed(3), " ").concat(position.y.toFixed(3), " ").concat(position.z.toFixed(3)),
+        normal: "".concat(normal.x.toFixed(3), " ").concat(normal.y.toFixed(3), " ").concat(normal.z.toFixed(3)),
+        label: "new hotspot " + hotspotId
+      };
+      addHotspot(newHotspots);
+    };
+    modelviewer.addEventListener("click", function (e) {
+      return handle3DClick(e, productModel);
+    });
+  }, []);
 
   // ---------- Helper function to parse vector values ----------
 
@@ -44166,30 +44125,30 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
   var parseVector = function parseVector(vectorStr) {
     return (vectorStr || "0 0 0").split(" ").map(Number);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     className: "art-space-y-6",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
       className: "art-text-lg art-font-semibold",
       children: "Manage Hotspots"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       className: "art-space-y-4",
-      children: hotspots.map(function (hotspot, index) {
+      children: productModel.hotspots.map(function (hotspot, index) {
         var position = parseVector(hotspot.position);
         var normal = parseVector(hotspot.normal);
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           className: "art-border art-rounded art-p-3 art-bg-white art-relative",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h4", {
             className: "art-font-bold",
             children: hotspot.label || "Hotspot ".concat(index + 1)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "art-text-xs art-text-gray-500 art-mb-2",
             children: ["Slot: ", getSlotName(hotspot, index)]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "art-flex art-items-center art-gap-2 art-my-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
               className: "art-text-sm art-w-24",
               children: "Label"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "text",
               name: "label",
               value: hotspot.label || "",
@@ -44198,7 +44157,7 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
               },
               className: "art-border art-rounded art-p-1 art-w-full"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
             onClick: function onClick() {
               return removeHotspot(index);
             },
@@ -44207,29 +44166,10 @@ var HotspotsComponent = function HotspotsComponent(_ref) {
           })]
         }, hotspot.id || index);
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-      className: "art-border art-rounded art-p-3 art-bg-gray-50",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", {
-        className: "art-font-semibold art-mb-2",
-        children: "Add New Hotspot"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "art-flex art-items-center art-gap-2 art-my-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("label", {
-          className: "art-text-sm art-w-24",
-          children: "Label"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", {
-          type: "text",
-          name: "label",
-          value: new_hotspot.label || "",
-          onChange: handleNewInputChange,
-          placeholder: "Enter hotspot label",
-          className: "art-border art-rounded art-p-1 art-w-full"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-        onClick: handleAddNewHotspot,
-        className: "art-bg-blue-500 art-text-white art-px-4 art-py-2 art-rounded hover:art-bg-blue-600",
-        children: "+ Add Hotspot"
-      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+      onClick: addHotspot,
+      className: "art-bg-blue-500 art-text-white art-px-4 art-py-2 art-rounded hover:art-bg-blue-600",
+      children: "+ Add Hotspot"
     })]
   });
 };

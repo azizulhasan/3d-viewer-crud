@@ -195,19 +195,32 @@ export const DimensionsComponent = ({
       modelViewer.addEventListener("camera-change", renderSVG);
 
       // Update React state with dimensions
-      setProductModel((prev) => ({
-        ...prev,
-        dimensions: {
-          ...prev.dimensions,
-          width: { value: convertedX, unit },
-          height: { value: convertedY, unit },
-          length: { value: convertedZ, unit },
-        },
-      }));
+    setProductModel((prev) => {
+        // if the new values are the same as the old ones, do nothing
+        if (
+            prev.dimensions.width?.value === convertedX &&
+            prev.dimensions.height?.value === convertedY &&
+            prev.dimensions.length?.value === convertedZ &&
+            prev.dimensions.unit === unit
+        ) {
+            return prev; // <-- React sees "state didn’t change", so no re-render
+        }
+
+        // otherwise, update the state with new values
+        return {
+            ...prev,
+            dimensions: {
+            ...prev.dimensions,
+            width: { value: convertedX, unit },
+            height: { value: convertedY, unit },
+            length: { value: convertedZ, unit },
+            },
+        };
+        });
     };
 
-    showDimensions();
-  }, [productModel, setProductModel]);
+  showDimensions();
+}, [productModel.dimensions.show, productModel.dimensions.unit, setProductModel]);
 
   // React effect: attach events
   useEffect(() => {

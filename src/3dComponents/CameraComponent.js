@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Section } from "./Shared.js";
 
-export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
+export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting, activeAccordion }) => {
   // const defaultOrbit = "45deg 60deg 1.2m";
   
   // State for custom hotspots
@@ -13,6 +13,16 @@ export const CameraComponent = ({ cameraSettings, onUpdateCameraSetting }) => {
     orbit: "45deg 60deg 1.2m",
     fov: "35deg"
   });
+
+
+  useEffect(()=>{
+    console.log({activeAccordion});
+    
+    if(activeAccordion == "camera" ){
+      document.getElementById("atlas_ar_model_viewer").src= "3dModels/thor.glb"
+    }
+
+  },[activeAccordion])
 
   // const targets = [
   //   { name: "Isometric", target: "0 0.05 0", orbit: "45deg 60deg 1.2m", fov: "35deg" },

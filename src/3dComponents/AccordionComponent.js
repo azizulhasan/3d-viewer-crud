@@ -28,12 +28,12 @@ const AccordionComponent = () => {
       autoRotateDelay: 0,
       fieldOfView: "30deg",
     },
-    new_hotspot: {
-      label: "",
-      position: "0 0 0",
-      normal: "0 0 1",
-      visible: true,
-    },
+    // new_hotspot: {
+    //   label: "Your Hotspot",
+    //   position: "0 0 0",
+    //   normal: "0 0 1",
+    //   visible: true,
+    // },
     hotspots: [],
     variant: "default",
   });
@@ -43,29 +43,7 @@ const AccordionComponent = () => {
     setActiveAccordion((prev) => (prev === key ? null : key));
   };
 
-  // Attach click listener to model
-  useEffect(() => {
-    const modelviewer = document.getElementById("atlas_ar_model_viewer");
-    if (!modelviewer) return;
 
-    const handle3DClick = (event) => {
-      if (!modelviewer.positionAndNormalFromPoint) return;
-      const hit = modelviewer.positionAndNormalFromPoint(event.clientX, event.clientY);
-      if (!hit) return;
-      const { position, normal } = hit;
-      setProductModel((prev) => ({
-        ...prev,
-        new_hotspot: {
-          ...prev.new_hotspot,
-          position: `${position.x.toFixed(3)} ${position.y.toFixed(3)} ${position.z.toFixed(3)}`,
-          normal: `${normal.x.toFixed(3)} ${normal.y.toFixed(3)} ${normal.z.toFixed(3)}`,
-        },
-      }));
-    };
-
-    modelviewer.addEventListener("click", handle3DClick);
-    return () => modelviewer.removeEventListener("click", handle3DClick);
-  }, []);
 
   // Update dimension function for DimensionsComponent
   const updateDimension = (key, value) => {
@@ -111,12 +89,12 @@ const AccordionComponent = () => {
                 {activeAccordion === "hotspot" && (
                   <div className="art-p-4 art-bg-gray-50">
                 <HotspotsComponent
-                hotspots={productModel.hotspots}
+                productModel={productModel}
                 setProductModel={setProductModel}
-                new_hotspot={productModel.new_hotspot}
-                setNewHotspot={(hs) =>
-                setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
-                }
+                // new_hotspot={productModel.new_hotspot}
+                // setNewHotspot={(hs) =>
+                // setProductModel((prev) => ({ ...prev, new_hotspot: hs }))
+                // }
                 />
                   </div>
                 )}
@@ -158,6 +136,7 @@ const AccordionComponent = () => {
                   <div className="art-p-4 art-bg-gray-50">
                     <CameraComponent
                       cameraSettings={productModel.camera}
+                      activeAccordion={activeAccordion}
                       onUpdateCameraSetting={(field, value) =>
                         setProductModel((prev) => ({
                           ...prev,
@@ -202,18 +181,21 @@ const AccordionComponent = () => {
         >
           <MV src={productModel.src}>
             {productModel.hotspots
-              .filter((hotspot) => hotspot?.visible)
-              .map((hotspot, index) => (
-                <button
-                  key={hotspot.id || `hotspot-fallback-${index}`} // using unique id instead of index to remove the hotspot
-                  slot={`hotspot-${hotspot.label?.toLowerCase().replace(/\s+/g, '-') || index}`}
-                  data-position={hotspot.position || "0 0 0"}
-                  data-normal={hotspot.normal || "0 0 1"}
-                  className="hotspot"
-                >
-                  <div className='annotation'>{hotspot.label || `Hotspot ${index + 1}`}</div>
-                </button>
-              ))}
+              .map((hotspot, index) => {
+                console.log(index)
+                return <>
+                  <button
+                    key={hotspot.id}
+                    data-id={hotspot.id}
+                    slot={`hotspot-${hotspot.id}`}
+                    data-position={hotspot.position }
+                    data-normal={hotspot.normal}
+                    className="hotspot"
+                  >
+                    <div className='annotation'>{hotspot.label}</div>
+                  </button>
+                </>
+              })}
 
             {/* Dimension labels & invisible endpoints */}
             {/*{productModel.dimensions.show && (*/}
