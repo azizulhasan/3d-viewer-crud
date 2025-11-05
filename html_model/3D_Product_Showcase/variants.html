@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lamborghini Color Variants</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { 
+      text-align: center; 
+      background: white; 
+      color: black; 
+      font-family: sans-serif; 
+    }
+    .controls {
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    select {
+      padding: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lamborghini Color Variants</h1>
+
+<model-viewer 
+    id="carViewer"
+    src="lambo.glb"
+    alt="Lamborghini Model"
+    auto-rotate
+    camera-controls
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    style="width: 100%; max-width: 700px; height: 500px;"
+    exposure="1"
+    shadow-intensity="1">
+</model-viewer>
+
+  <div class="controls">
+    <label for="variant">Variant: </label>
+    <select id="variant">
+      <option value="default">Default</option>
+      <option value="red">Red</option>
+      <option value="limegreen">Green</option>
+      <option value="black">Black</option>
+      <option value="blue">Blue</option>
+      <option value="#4a32a8">Random</option>
+      <option value="purple">purple</option>
+      <option value="green">Green</option>
+
+    </select>
+  </div>
+
+<script>
+  const modelViewer = document.getElementById('carViewer');
+  const variantSelect = document.getElementById('variant');
+
+  modelViewer.addEventListener("load", () => {
+  // 1. Try official variants
+  const variants = modelViewer.availableVariants;
+  
+  if (variants.length > 0) {
+    console.log("Model has variants:", variants);
+  } else {
+    // 2. No variants → check materials
+    const materials = modelViewer.model.materials;
+    console.log("No variants, but materials available:", materials.map(m => m.name));
+    console.log("Total materials:", materials.length);
+  }
+});
+
+
+  modelViewer.addEventListener('load', () => {
+    const material = modelViewer.model.materials[0];
+    console.log({metarial: modelViewer.model.materials})
+const variants = modelViewer.availableVariants;
+        console.log({variants: variants})
+
+    // Store original yellow color
+    material.originalColor = [...material.pbrMetallicRoughness.baseColorFactor];
+  });
+
+  variantSelect.addEventListener('change', () => {
+    const color = variantSelect.value;
+    const material = modelViewer.model.materials[0];
+
+    if (color === 'default') {
+      // Restore stored yellow color
+      if (material.originalColor) {
+        material.pbrMetallicRoughness.setBaseColorFactor(material.originalColor);
+        material.pbrMetallicRoughness.baseColorTexture = null;
+      }
+    } else {
+      // Change to new color
+      material.pbrMetallicRoughness.setBaseColorFactor(color);
+      material.pbrMetallicRoughness.baseColorTexture = null;
+    }
+  });
+</script>
+
+</body>
+</html>

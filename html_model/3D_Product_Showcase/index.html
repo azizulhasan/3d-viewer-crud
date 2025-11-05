@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3D Model Carousel</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+</head>
+<body>
+
+<div class="carousel-container">
+  <button class="arrow-btn arrow-left" id="prevBtn">&#8249;</button>
+  
+  <model-viewer id="viewer" src="Analog_clock.glb" camera-controls auto-rotate ar></model-viewer>
+  
+  <button class="arrow-btn arrow-right" id="nextBtn">&#8250;</button>
+</div>
+
+
+<script src="model.js"></script>
+</body>
+</html>

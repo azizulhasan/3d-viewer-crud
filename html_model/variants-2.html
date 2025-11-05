@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh; /* full height */
+      display: flex;
+      justify-content: center; /* horizontal center */
+      align-items: center;     /* vertical center */
+      background: #f4f4f4;     /* light background */
+    }
+
+    model-viewer {
+      width: 600px;
+      height: 500px;
+      display: block;
+    }
+
+    .controls {
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <model-viewer id="shoe" camera-controls touch-action="pan-y" 
+      src="Shoe.glb" ar alt="A 3D model of a Shoe">
+    </model-viewer>
+
+    <div class="controls glass">
+      <div>Variant: <select id="variant"></select></div>
+    </div>
+  </div>
+
+  <script>
+    const modelViewerVariants = document.querySelector("model-viewer#shoe");
+    const select = document.querySelector('#variant');
+
+    modelViewerVariants.addEventListener('load', () => {
+      const names = modelViewerVariants.availableVariants;
+      for (const name of names) {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      }
+      // Add default option
+      const option = document.createElement('option');
+      option.value = 'default';
+      option.textContent = 'Default';
+      select.appendChild(option);
+    });
+
+    select.addEventListener('input', (event) => {
+      modelViewerVariants.variantName = event.target.value === 'default' ? null : event.target.value;
+    });
+  </script>
+
+</body>
+</html>
