@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Hotspots</title>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        background: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      model-viewer {
+        width: 80vw;
+        height: 80vh;
+      }
+      .hotspot {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        border: none;
+        background-color: blue;
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+      .annotation {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        position: absolute;
+        transform: translate(10px, 10px);
+        border-radius: 10px;
+        padding: 4px 8px;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      :not(:defined) > * {
+        display: none;
+      }
+      #controls {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(6px);
+        padding: 12px;
+        border-radius: 8px;
+        color: white;
+      }
+      input, button {
+        margin-top: 5px;
+      }
+    </style>w
+  </head>
+  <body>
+    <model-viewer
+      id="hotspot-viewer"
+      ar
+      camera-controls
+      touch-action="pan-y"
+      src="Shoe.glb"
+      tone-mapping="aces"
+      shadow-intensity="1"
+      alt="A 3D model with dynamic hotspots."
+    ></model-viewer>
+
+    <div id="controls">
+      <button id="addHotspot">+ Add Hotspot</button>
+      <div id="hotspotList"></div>
+    </div>
+
+    <script type="module">
+      function displayHotspots(modelViewer, hotspotSettings) {
+        let hotspots = hotspotSettings?.hotspots || [];
+
+        const hotspotListContainer = document.getElementById("hotspotList");
+        const addButton = document.getElementById("addHotspot");
+
+        // ---------- UTILITIES ----------
+        const generateSlot = (label, index) =>
+          `hotspot-${index}`; // simplified to avoid label issues
+
+        const createHotspotElement = (hotspot, index) => {
+          const button = document.createElement("button");
+          button.className = "hotspot";
+          button.slot = generateSlot(hotspot.label, index);
+          button.dataset.position = hotspot.position || "0 0 0";
+          button.dataset.normal = hotspot.normal || "0 0 1";
+          button.title = hotspot.label;
+
+          // Visible label on model
+          const annotation = document.createElement("div");
+          annotation.className = "annotation";
+          annotation.textContent = hotspot.label;
+          button.appendChild(annotation);
+
+          modelViewer.appendChild(button);
+        };
+
+        const renderHotspots = () => {
+          // Clear existing
+          modelViewer.querySelectorAll(".hotspot").forEach((h) => h.remove());
+          hotspotListContainer.innerHTML = "";
+
+          hotspots.forEach((hotspot, index) => {
+            createHotspotElement(hotspot, index);
+
+            // Create list item
+            const div = document.createElement("div");
+            div.style.marginTop = "6px";
+            div.innerHTML = `
+              <input type="text" value="${hotspot.label}" id="label-${index}" style="width:140px;"/>
+              <button data-index="${index}" class="removeBtn">🗑️</button>
+            `;
+            hotspotListContainer.appendChild(div);
+
+            // Label change handler (no full re-render)
+            const inputEl = div.querySelector(`#label-${index}`);
+            inputEl.addEventListener("input", (e) => {
+              hotspots[index].label = e.target.value;
+
+              // Update label on the model
+              const hotspotEl = modelViewer.querySelector(
+                `[slot="${generateSlot(hotspot.label, index)}"]`
+              );
+              if (hotspotEl) {
+                const annotation = hotspotEl.querySelector(".annotation");
+                if (annotation) annotation.textContent = e.target.value;
+                hotspotEl.title = e.target.value;
+              }
+            });
+
+            // Remove hotspot
+            div.querySelector(".removeBtn").addEventListener("click", () => {
+              hotspots.splice(index, 1);
+              renderHotspots();
+            });
+          });
+        };
+
+        // ---------- ADD HOTSPOT ----------
+        const addHotspot = (pos, normal) => {
+          const id = hotspots.length + 1;
+          const newHotspot = {
+            id,
+            label: `new hotspot ${id}`,
+            position: pos || "0 0 0",
+            normal: normal || "0 0 1",
+          };
+          hotspots.push(newHotspot);
+          renderHotspots();
+        };
+
+        // ---------- CLICK TO ADD ----------
+        modelViewer.addEventListener("click", (event) => {
+          const hit = modelViewer.positionAndNormalFromPoint?.(
+            event.clientX,
+            event.clientY
+          );
+          if (!hit) return;
+          const pos = `${hit.position.x.toFixed(3)} ${hit.position.y.toFixed(
+            3
+          )} ${hit.position.z.toFixed(3)}`;
+          const norm = `${hit.normal.x.toFixed(3)} ${hit.normal.y.toFixed(
+            3
+          )} ${hit.normal.z.toFixed(3)}`;
+          addHotspot(pos, norm);
+        });
+
+        // ---------- BUTTON CLICK ----------
+        addButton.addEventListener("click", () => addHotspot());
+
+        renderHotspots();
+      }
+
+      // Initialize
+      const modelViewer = document.getElementById("hotspot-viewer");
+      displayHotspots(modelViewer, {
+        hotspots: [
+          {
+            id: 1,
+            label: "visor",
+            position: "0 1.75 0.35",
+            normal: "0 0 1",
+          },
+          {
+            id: 2,
+            label: "hand",
+            position: "-0.54 0.93 0.1",
+            normal: "-0.73 0.05 0.69",
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
