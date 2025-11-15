@@ -1,581 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dynamic 3D Model Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Model Viewer Slider</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Roboto Regular, Helvetica Neue, sans-serif;
-            background: #f5f5f5;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .upload-section {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .upload-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        input[type="file"]:hover {
-            border-color: #4285f4;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .btn-add {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s;
-            width: 100%;
-        }
-
-        .btn-add:hover {
-            background: #357ae8;
-        }
-
-        .btn-add:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* This keeps child nodes hidden while the element loads */
-        :not(:defined) > * {
-            display: none;
-        }
-
-        model-viewer {
-            background-color: #eee;
-            overflow-x: hidden;
-            width: 100%;
-            height: 600px;
-            border-radius: 12px;
-        }
-
-        .viewer-container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        #ar-button {
-            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBmaWxsPSIjNDI4NWY0IiBkPSJNMjQgNEMxMi45NSA0IDQgMTIuOTUgNCAyNHM4Ljk1IDIwIDIwIDIwIDIwLTguOTUgMjAtMjBTMzUuMDUgNCAyNCA0em0wIDM2Yy04LjgyIDAtMTYtNy4xOC0xNi0xNlMxNS4xOCA4IDI0IDhzMTYgNy4xOCAxNiAxNi03LjE4IDE2LTE2IDE2em0tNC00aDh2LThoLTh2OHptMC0xMmg4di04aC04djh6Ii8+PC9zdmc+);
-            background-repeat: no-repeat;
-            background-size: 20px 20px;
-            background-position: 12px 50%;
-            background-color: #fff;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            bottom: 132px;
-            padding: 0px 16px 0px 40px;
-            font-family: Roboto Regular, Helvetica Neue, sans-serif;
-            font-size: 14px;
-            color: #4285f4;
-            height: 36px;
-            line-height: 36px;
-            border-radius: 18px;
-            border: 1px solid #DADCE0;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        #ar-button:active {
-            background-color: #E8EAED;
-        }
-
-        #ar-button:focus {
-            outline: none;
-        }
-
-        #ar-button:focus-visible {
-            outline: 1px solid #4285f4;
-        }
-
-        @keyframes circle {
-            from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
-            to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
-        }
-
-        @keyframes elongate {
-            from { transform: translateX(100px); }
-            to   { transform: translateX(-100px); }
-        }
-
-        model-viewer > #ar-prompt {
-            position: absolute;
-            left: 50%;
-            bottom: 175px;
-            animation: elongate 2s infinite ease-in-out alternate;
-            display: none;
-        }
-
-        model-viewer[ar-status="session-started"] > #ar-prompt {
-            display: block;
-        }
-
-        model-viewer > #ar-prompt > img {
-            animation: circle 4s linear infinite;
-        }
-
-        model-viewer > #ar-failure {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 175px;
-            display: none;
-        }
-
-        model-viewer[ar-tracking="not-tracking"] > #ar-failure {
-            display: block;
-        }
-
-        .slider {
-            width: 100%;
-            text-align: center;
-            overflow: hidden;
-            position: absolute;
-            bottom: 16px;
-            left: 0;
-            padding: 0 20px;
-        }
-
-        .slides {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            gap: 10px;
-            padding-bottom: 10px;
-        }
-
-        .slide {
-            scroll-snap-align: start;
-            flex-shrink: 0;
-            width: 100px;
-            height: 100px;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: #fff;
-            border-radius: 10px;
-            border: none;
-            display: flex;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .slide:hover {
-            transform: scale(1.05);
-        }
-
-        .slide.selected {
-            border: 2px solid #4285f4;
-        }
-
-        .slide:focus {
-            outline: none;
-        }
-
-        .slide:focus-visible {
-            outline: 1px solid #4285f4;
-        }
-
-        .slide-remove {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #f44336;
-            color: white;
-            border: 2px solid white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            line-height: 1;
-            font-weight: bold;
-            transition: background 0.3s, transform 0.2s;
-            z-index: 10;
-        }
-
-        .slide-remove:hover {
-            background: #d32f2f;
-            transform: scale(1.1);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 100px 20px;
-            color: #999;
-        }
-
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        @media (max-width: 768px) {
-            .upload-grid {
-                grid-template-columns: 1fr;
-            }
-
-            model-viewer {
-                height: 400px;
-            }
-
-            .slide {
-                width: 80px;
-                height: 80px;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Dynamic 3D Model Viewer</h1>
 
-        <div class="upload-section">
-            <div class="upload-grid">
-                <div class="upload-group">
-                    <label for="glb-file">GLB Model File *</label>
-                    <input type="file" id="glb-file" accept=".glb,.gltf" />
-                </div>
-                <div class="upload-group">
-                    <label for="thumbnail-file">Thumbnail Image (Optional)</label>
-                    <input type="file" id="thumbnail-file" accept="image/*" />
-                </div>
-            </div>
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="use-default-thumbnail" />
-                <label for="use-default-thumbnail" style="margin: 0;">Use default thumbnail (auto-generate from 3D model)</label>
-            </div>
+<style>
+  :not(:defined) > * {
+    display: none;
+  }
 
-            <button class="btn-add" id="add-model-btn" disabled>Add Model</button>
-        </div>
+  body {
+    margin: 0;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
-        <div class="viewer-container">
-            <model-viewer 
-                id="model-viewer"
-                src=""
-                poster=""
-                shadow-intensity="1" 
-                ar 
-                ar-modes="webxr scene-viewer quick-look"
-                camera-controls 
-                touch-action="pan-y"
-                auto-rotate
-                auto-rotate-delay="0"
-                alt="A 3D model carousel">
-                
-                <button slot="ar-button" id="ar-button">
-                    View in your space
-                </button>
+  model-viewer {
+    width: 80vw;
+    height: 80vh;
+    background-color: #eee;
+    overflow-x: hidden;
+  }
 
-                <div id="ar-prompt">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjQgNEMxMi45NSA0IDQgMTIuOTUgNCAyNHM4Ljk1IDIwIDIwIDIwIDIwLTguOTUgMjAtMjBTMzUuMDUgNCAyNCA0em0wIDM2Yy04LjgyIDAtMTYtNy4xOC0xNi0xNlMxNS4xOCA4IDI0IDhzMTYgNy4xOCAxNiAxNi03LjE4IDE2LTE2IDE2eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" alt="AR hand icon">
-                </div>
+  #ar-button {
+    background-image: url(../../assets/ic_view_in_ar_new_googblue_48dp.png);
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 12px 50%;
+    background-color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    bottom: 132px;
+    padding: 0px 16px 0px 40px;
+    font-family: Roboto Regular, Helvetica Neue, sans-serif;
+    font-size: 14px;
+    color:#4285f4;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    border: 1px solid #DADCE0;
+  }
 
-                <button id="ar-failure">
-                    AR is not tracking!
-                </button>
+  #ar-button:active {
+    background-color: #E8EAED;
+  }
 
-                <div class="slider">
-                    <div class="slides" id="slides-container">
-                        <!-- ekhane slider dynamically add hobe -->
-                    </div>
-                </div>
-            </model-viewer>
+  #ar-button:focus {
+    outline: none;
+  }
 
-            <div class="empty-state" id="empty-state">
-                <h3>No models added yet</h3>
-                <p>Upload a GLB file above to get started</p>
-            </div>
-        </div>
+  #ar-button:focus-visible {
+    outline: 1px solid #4285f4;
+  }
+
+  @keyframes circle {
+    from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
+    to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
+  }
+
+  @keyframes elongate {
+    from { transform: translateX(100px); }
+    to   { transform: translateX(-100px); }
+  }
+
+  model-viewer > #ar-prompt {
+    position: absolute;
+    left: 50%;
+    bottom: 175px;
+    animation: elongate 2s infinite ease-in-out alternate;
+    display: none;
+  }
+
+  model-viewer[ar-status="session-started"] > #ar-prompt {
+    display: block;
+  }
+
+  model-viewer > #ar-prompt > img {
+    animation: circle 4s linear infinite;
+  }
+
+  model-viewer > #ar-failure {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 175px;
+    display: none;
+  }
+
+  model-viewer[ar-tracking="not-tracking"] > #ar-failure {
+    display: block;
+  }
+
+  .slider {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    bottom: 16px;
+  }
+
+  .slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slide {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff;
+    margin-right: 10px;
+    border-radius: 10px;
+    border: none;
+    display: flex;
+  }
+
+  .slide.selected {
+    border: 2px solid #4285f4;
+  }
+
+  .slide:focus {
+    outline: none;
+  }
+
+  .slide:focus-visible {
+    outline: 1px solid #4285f4;
+  }
+</style>
+
+<model-viewer id="slider-demo" 
+              src="../../assets/ShopifyModels/Chair.glb" 
+              poster="../../assets/ShopifyModels/Chair.webp" 
+              shadow-intensity="1" 
+              ar 
+              camera-controls 
+              touch-action="pan-y" 
+              alt="A 3D model carousel">
+  
+  <button slot="ar-button" id="ar-button">
+    View in your space
+  </button>
+
+  <div id="ar-prompt">
+    <img src="../../assets/hand.png">
+  </div>
+
+  <button id="ar-failure">
+    AR is not tracking!
+  </button>
+
+  <div class="slider">
+    <div class="slides">
+      <button class="slide selected" onclick="switchSrc(this, 'Chair')" style="background-image: url('../../assets/ShopifyModels/Chair.webp');"></button>
+      <button class="slide" onclick="switchSrc(this, 'Mixer')" style="background-image: url('../../assets/ShopifyModels/Mixer.webp');"></button>
+      <button class="slide" onclick="switchSrc(this, 'GeoPlanter')" style="background-image: url('../../assets/ShopifyModels/GeoPlanter.webp');"></button>
+      <button class="slide" onclick="switchSrc(this, 'ToyTrain')" style="background-image: url('../../assets/ShopifyModels/ToyTrain.webp');"></button>
+      <button class="slide" onclick="switchSrc(this, 'Canoe')" style="background-image: url('../../assets/ShopifyModels/Canoe.webp');"></button>
     </div>
+  </div>
+</model-viewer>
 
-    <script type="module">
+<script type="module">
+  function displaySlider(modelViewer) {
+    const basePath = "../../assets/ShopifyModels/";
 
-        function displaySlider(modelViewer) {
-            const slidesContainer = modelViewer.querySelector('#slides-container');
-            const glbFileInput = document.querySelector('#glb-file');
-            const thumbnailFileInput = document.querySelector('#thumbnail-file');
-            const useDefaultCheckbox = document.querySelector('#use-default-thumbnail');
-            const addModelBtn = document.querySelector('#add-model-btn');
-            const emptyState = document.querySelector('#empty-state');
+    window.switchSrc = (element, name) => {
+      const base = basePath + name;
+      modelViewer.src = base + '.glb';
+      modelViewer.poster = base + '.webp';
+      const slides = modelViewer.querySelectorAll(".slide");
+      slides.forEach((el) => {
+        el.classList.remove("selected");
+      });
+      element.classList.add("selected");
+    };
 
-            let models = [];
-            let currentModelIndex = -1;
+    modelViewer.querySelector(".slider").addEventListener('beforexrselect', (ev) => {
+      // Keep slider interactions from affecting the XR scene.
+      ev.preventDefault();
+    });
+  }
 
-            // thumbnail option main ta disable hoye jabe jokhn checkbox true hobe..that means user shudhu either default thumbnail or direct upload kore use korte parbe..
-            useDefaultCheckbox.addEventListener('change', () => {
-                thumbnailFileInput.disabled = useDefaultCheckbox.checked;
-                if (useDefaultCheckbox.checked) {
-                    thumbnailFileInput.value = '';
-                }
-            });
+  const modelViewer = document.querySelector('#slider-demo');
+  displaySlider(modelViewer);
+</script>
 
-            // glb file select howar porei add button visible hobe
-            glbFileInput.addEventListener('change', () => {
-                addModelBtn.disabled = !glbFileInput.files[0];
-            });
-
-            // Add model functionality
-            addModelBtn.addEventListener('click', async () => {
-                const glbFile = glbFileInput.files[0];
-                if (!glbFile) return;
-
-                const glbUrl = URL.createObjectURL(glbFile);
-                let thumbnailUrl = null;
-
-                if (useDefaultCheckbox.checked) {
-                    thumbnailUrl = await generateThumbnail(glbUrl);
-                } else if (thumbnailFileInput.files[0]) {
-                    thumbnailUrl = URL.createObjectURL(thumbnailFileInput.files[0]);
-                } else {
-                    thumbnailUrl = await generateThumbnail(glbUrl);
-                }
-
-                const model = {
-                    id: Date.now(),
-                    glbUrl,
-                    thumbnailUrl,
-                    name: glbFile.name
-                };
-
-                models.push(model);
-                addSlide(model);
-
-                // Reset form
-                glbFileInput.value = '';
-                thumbnailFileInput.value = '';
-                useDefaultCheckbox.checked = false;
-                thumbnailFileInput.disabled = false;
-                addModelBtn.disabled = true;
-
-                // Show first model if this is the first one
-                if (models.length === 1) {
-                    switchSrc(0);
-                }
-            });
-
-            // Switch model source dynamically
-            window.switchSrc = (index) => {
-                if (index < 0 || index >= models.length) return;
-
-                currentModelIndex = index;
-                const model = models[index];
-
-                // Update model-viewer src and poster attributes dynamically
-                modelViewer.src = model.glbUrl;
-                modelViewer.poster = model.thumbnailUrl;
-
-                // Update selected state on slides
-                const slides = slidesContainer.querySelectorAll('.slide');
-                slides.forEach((slide, i) => {
-                    if (i === index) {
-                        slide.classList.add('selected');
-                    } else {
-                        slide.classList.remove('selected');
-                    }
-                });
-            };
-
-            function addSlide(model) {
-                const index = models.length - 1;
-                const slide = document.createElement('button');
-                slide.className = 'slide';
-                slide.style.backgroundImage = `url('${model.thumbnailUrl}')`;
-                slide.dataset.modelId = model.id;
-                slide.setAttribute('aria-label', `View ${model.name}`);
-                
-                // Use onclick attribute like the original code
-                slide.onclick = () => {
-                    const idx = models.findIndex(m => m.id === model.id);
-                    window.switchSrc(idx);
-                };
-
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'slide-remove';
-                removeBtn.innerHTML = '×';
-                removeBtn.setAttribute('aria-label', 'Remove model');
-                removeBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    removeModel(model.id);
-                };
-
-                slide.appendChild(removeBtn);
-                slidesContainer.appendChild(slide);
-                updateEmptyState();
-            }
-
-            function removeModel(modelId) {
-                const index = models.findIndex(m => m.id === modelId);
-                if (index === -1) return;
-
-                const model = models[index];
-                
-                // Revoke object URLs to free memory
-                URL.revokeObjectURL(model.glbUrl);
-                if (model.thumbnailUrl && !model.thumbnailUrl.startsWith('data:')) {
-                    URL.revokeObjectURL(model.thumbnailUrl);
-                }
-
-                // Remove from array
-                models.splice(index, 1);
-
-                // Remove slide from DOM
-                const slides = slidesContainer.querySelectorAll('.slide');
-                slides[index].remove();
-
-                // Update current model
-                if (models.length === 0) {
-                    currentModelIndex = -1;
-                    modelViewer.src = '';
-                    modelViewer.poster = '';
-                    updateEmptyState();
-                } else if (index === currentModelIndex) {
-                    // If we removed the current model, show another one
-                    const newIndex = Math.min(index, models.length - 1);
-                    window.switchSrc(newIndex);
-                } else if (index < currentModelIndex) {
-                    // Adjust current index if we removed a model before it
-                    currentModelIndex--;
-                }
-            }
-
-            function updateEmptyState() {
-                if (models.length === 0) {
-                    emptyState.style.display = 'block';
-                    modelViewer.style.display = 'none';
-                } else {
-                    emptyState.style.display = 'none';
-                    modelViewer.style.display = 'block';
-                }
-            }
-
-            async function generateThumbnail(glbUrl) {
-                return new Promise((resolve) => {
-                    const tempViewer = document.createElement('model-viewer');
-                    tempViewer.src = glbUrl;
-                    tempViewer.style.width = '200px';
-                    tempViewer.style.height = '200px';
-                    tempViewer.style.position = 'fixed';
-                    tempViewer.style.left = '-9999px';
-                    document.body.appendChild(tempViewer);
-
-                    tempViewer.addEventListener('load', async () => {
-                        try {
-                            await new Promise(r => setTimeout(r, 500));
-                            
-                            const blob = await tempViewer.toBlob({
-                                idealAspect: true,
-                                width: 200,
-                                height: 200
-                            });
-                            
-                            const url = URL.createObjectURL(blob);
-                            document.body.removeChild(tempViewer);
-                            resolve(url);
-                        } catch (error) {
-                            console.error('Error generating thumbnail:', error);
-                            document.body.removeChild(tempViewer);
-                            resolve('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zRCBNb2RlbDwvdGV4dD48L3N2Zz4=');
-                        }
-                    });
-
-                    setTimeout(() => {
-                        if (document.body.contains(tempViewer)) {
-                            document.body.removeChild(tempViewer);
-                            resolve('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zRCBNb2RlbDwvdGV4dD48L3N2Zz4=');
-                        }
-                    }, 3000);
-                });
-            }
-
-            // Prevent slider interactions from affecting the XR scene
-            modelViewer.querySelector('.slider').addEventListener('beforexrselect', (ev) => {
-                ev.preventDefault();
-            });
-
-            updateEmptyState();
-        }
-
-        const modelViewer = document.querySelector('#model-viewer');
-        displaySlider(modelViewer);
-    </script>
 </body>
 </html>
