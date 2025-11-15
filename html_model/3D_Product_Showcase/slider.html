@@ -1,545 +1,581 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slider</title>
-    <script
-      type="module"
-      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
-    ></script>
-
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dynamic 3D Model Viewer</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-      :not(:defined) > * {
-        display: none;
-      }
-
-      body {
-        background: #eee;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        height: 100vh;
-      }
-
-      model-viewer {
-        width: 80vw;
-        height: 80vh;
-        background-color: #eee;
-        overflow-x: hidden;
-        position: relative;
-      }
-
-      #ar-button {
-        background-image: url(../../assets/ic_view_in_ar_new_googblue_48dp.png);
-        background-repeat: no-repeat;
-        background-size: 20px 20px;
-        background-position: 12px 50%;
-        background-color: #fff;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
-        bottom: 132px;
-        padding: 0px 16px 0px 40px;
-        font-family: Roboto Regular, Helvetica Neue, sans-serif;
-        font-size: 14px;
-        color: #4285f4;
-        height: 36px;
-        line-height: 36px;
-        border-radius: 18px;
-        border: 1px solid #dadce0;
-        cursor: pointer;
-      }
-
-      #ar-button:active {
-        background-color: #e8eaed;
-      }
-      #ar-button:focus {
-        outline: none;
-      }
-      #ar-button:focus-visible {
-        outline: 1px solid #4285f4;
-      }
-
-      @keyframes circle {
-        from {
-          transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg);
+        * {
+            box-sizing: border-box;
         }
-        to {
-          transform: translateX(-50%) rotate(360deg) translateX(50px)
-            rotate(-360deg);
+
+        body {
+            margin: 0;
+            font-family: Roboto Regular, Helvetica Neue, sans-serif;
+            background: #f5f5f5;
         }
-      }
 
-      @keyframes elongate {
-        from {
-          transform: translateX(100px);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        to {
-          transform: translateX(-100px);
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
         }
-      }
 
-      model-viewer > #ar-prompt {
-        position: absolute;
-        left: 50%;
-        bottom: 175px;
-        animation: elongate 2s infinite ease-in-out alternate;
-        display: none;
-      }
+        .upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
 
-      model-viewer[ar-status="session-started"] > #ar-prompt {
-        display: block;
-      }
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
 
-      model-viewer > #ar-prompt > img {
-        animation: circle 4s linear infinite;
-      }
+        .upload-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-      model-viewer > #ar-failure {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 175px;
-        display: none;
-      }
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
 
-      model-viewer[ar-tracking="not-tracking"] > #ar-failure {
-        display: block;
-      }
+        input[type="file"] {
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
 
-      .slider {
-        width: 100%;
-        text-align: center;
-        overflow: hidden;
-        position: absolute;
-        bottom: 16px;
-      }
+        input[type="file"]:hover {
+            border-color: #4285f4;
+        }
 
-      .slides {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-      }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
 
-      .slide {
-        scroll-snap-align: start;
-        flex-shrink: 0;
-        width: 100px;
-        height: 100px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: #fff;
-        margin-right: 10px;
-        border-radius: 10px;
-        border: none;
-        display: flex;
-        cursor: pointer;
-      }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
 
-      .slide.selected {
-        border: 2px solid #4285f4;
-      }
+        .btn-add {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
 
-      .upload-section {
-        margin-top: 20px;
-        text-align: center;
-      }
+        .btn-add:hover {
+            background: #357ae8;
+        }
 
-      .upload-group {
-        margin: 10px 0;
-        padding: 15px;
-        border: 2px solid #4285f4;
-        border-radius: 8px;
-        background: #f9f9f9;
-      }
+        .btn-add:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
 
-      .upload-group h4 {
-        margin: 0 0 10px 0;
-        font-size: 16px;
-        color: #333;
-      }
+        /* This keeps child nodes hidden while the element loads */
+        :not(:defined) > * {
+            display: none;
+        }
 
-      .upload-note {
-        font-size: 12px;
-        color: #666;
-        margin-top: 5px;
-      }
+        model-viewer {
+            background-color: #eee;
+            overflow-x: hidden;
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+        }
 
-      .btn-primary {
-        background: #4285f4;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        margin: 5px;
-      }
+        .viewer-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
 
-      .btn-primary:hover {
-        background: #3367d6;
-      }
+        #ar-button {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBmaWxsPSIjNDI4NWY0IiBkPSJNMjQgNEMxMi45NSA0IDQgMTIuOTUgNCAyNHM4Ljk1IDIwIDIwIDIwIDIwLTguOTUgMjAtMjBTMzUuMDUgNCAyNCA0em0wIDM2Yy04LjgyIDAtMTYtNy4xOC0xNi0xNlMxNS4xOCA4IDI0IDhzMTYgNy4xOCAxNiAxNi03LjE4IDE2LTE2IDE2em0tNC00aDh2LThoLTh2OHptMC0xMmg4di04aC04djh6Ii8+PC9zdmc+);
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+            background-position: 12px 50%;
+            background-color: #fff;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            bottom: 132px;
+            padding: 0px 16px 0px 40px;
+            font-family: Roboto Regular, Helvetica Neue, sans-serif;
+            font-size: 14px;
+            color: #4285f4;
+            height: 36px;
+            line-height: 36px;
+            border-radius: 18px;
+            border: 1px solid #DADCE0;
+            cursor: pointer;
+            z-index: 2;
+        }
 
-      .btn-primary:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
+        #ar-button:active {
+            background-color: #E8EAED;
+        }
 
-      .btn-success {
-        background: #34a853;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 12px;
-        margin: 5px;
-      }
+        #ar-button:focus {
+            outline: none;
+        }
 
-      .btn-success:hover {
-        background: #2d8e47;
-      }
+        #ar-button:focus-visible {
+            outline: 1px solid #4285f4;
+        }
 
-      .btn-danger {
-        background: #ea4335;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 12px;
-        margin: 5px;
-      }
+        @keyframes circle {
+            from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
+            to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
+        }
 
-      .btn-danger:hover {
-        background: #c5221f;
-      }
+        @keyframes elongate {
+            from { transform: translateX(100px); }
+            to   { transform: translateX(-100px); }
+        }
 
-      .pending-model-box {
-        border: 2px dashed #4285f4;
-        border-radius: 8px;
-        padding: 15px;
-        background: #e8f0fe;
-        margin: 10px 0;
-      }
+        model-viewer > #ar-prompt {
+            position: absolute;
+            left: 50%;
+            bottom: 175px;
+            animation: elongate 2s infinite ease-in-out alternate;
+            display: none;
+        }
 
-      .pending-model-box h4 {
-        color: #1967d2;
-        margin: 0 0 10px 0;
-      }
+        model-viewer[ar-status="session-started"] > #ar-prompt {
+            display: block;
+        }
 
-      .pending-model-box p {
-        font-size: 13px;
-        color: #174ea6;
-        margin: 5px 0;
-      }
+        model-viewer > #ar-prompt > img {
+            animation: circle 4s linear infinite;
+        }
 
-      input[type="file"] {
-        display: none;
-      }
+        model-viewer > #ar-failure {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 175px;
+            display: none;
+        }
+
+        model-viewer[ar-tracking="not-tracking"] > #ar-failure {
+            display: block;
+        }
+
+        .slider {
+            width: 100%;
+            text-align: center;
+            overflow: hidden;
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            padding: 0 20px;
+        }
+
+        .slides {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #fff;
+            border-radius: 10px;
+            border: none;
+            display: flex;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .slide:hover {
+            transform: scale(1.05);
+        }
+
+        .slide.selected {
+            border: 2px solid #4285f4;
+        }
+
+        .slide:focus {
+            outline: none;
+        }
+
+        .slide:focus-visible {
+            outline: 1px solid #4285f4;
+        }
+
+        .slide-remove {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f44336;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+            z-index: 10;
+        }
+
+        .slide-remove:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            model-viewer {
+                height: 400px;
+            }
+
+            .slide {
+                width: 80px;
+                height: 80px;
+            }
+        }
     </style>
-  </head>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic 3D Model Viewer</h1>
 
-  <body>
-    <model-viewer
-      id="slider-viewer"
-      shadow-intensity="1"
-      ar
-      camera-controls
-      touch-action="pan-y"
-      alt="A 3D model carousel"
-      src="lambo.glb"
-      poster="lambo.png"
-    >
-      <button slot="ar-button" id="ar-button">View in your space</button>
+        <div class="upload-section">
+            <div class="upload-grid">
+                <div class="upload-group">
+                    <label for="glb-file">GLB Model File *</label>
+                    <input type="file" id="glb-file" accept=".glb,.gltf" />
+                </div>
+                <div class="upload-group">
+                    <label for="thumbnail-file">Thumbnail Image (Optional)</label>
+                    <input type="file" id="thumbnail-file" accept="image/*" />
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="use-default-thumbnail" />
+                <label for="use-default-thumbnail" style="margin: 0;">Use default thumbnail (auto-generate from 3D model)</label>
+            </div>
 
-      <div id="ar-prompt">
-        <img src="../../assets/hand.png" />
-      </div>
-
-      <div class="slider">
-        <div class="slides"></div>
-      </div>
-    </model-viewer>
-
-    <div class="upload-section">
-      <div class="upload-group">
-        <h4>Upload GLB Model</h4>
-        <input type="file" id="modelUpload" accept=".glb" />
-        <button
-          class="btn-primary"
-          id="uploadBtn"
-          onclick="document.getElementById('modelUpload').click()"
-        >
-          Choose GLB File
-        </button>
-        <div class="upload-note">Supports .glb files only.</div>
-      </div>
-
-      <!-- Pending Model Box (Hidden by default) -->
-      <div id="pendingBox" class="pending-model-box" style="display: none">
-        <h4>Add Thumbnail (Optional)</h4>
-        <p id="pendingModelName">Model uploaded successfully!</p>
-        <input type="file" id="thumbnailUpload" accept="image/*" />
-        <button
-          class="btn-primary"
-          onclick="document.getElementById('thumbnailUpload').click()"
-        >
-          Upload Thumbnail
-        </button>
-        <div class="upload-note">
-          PNG, JPG, WEBP supported. Recommended: 200x200px
+            <button class="btn-add" id="add-model-btn" disabled>Add Model</button>
         </div>
-        <div style="margin-top: 10px">
-          <button class="btn-success" id="useDefaultBtn">
-            Use Default Thumbnail
-          </button>
-          <button class="btn-danger" id="cancelBtn">Cancel</button>
+
+        <div class="viewer-container">
+            <model-viewer 
+                id="model-viewer"
+                src=""
+                poster=""
+                shadow-intensity="1" 
+                ar 
+                ar-modes="webxr scene-viewer quick-look"
+                camera-controls 
+                touch-action="pan-y"
+                auto-rotate
+                auto-rotate-delay="0"
+                alt="A 3D model carousel">
+                
+                <button slot="ar-button" id="ar-button">
+                    View in your space
+                </button>
+
+                <div id="ar-prompt">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjQgNEMxMi45NSA0IDQgMTIuOTUgNCAyNHM4Ljk1IDIwIDIwIDIwIDIwLTguOTUgMjAtMjBTMzUuMDUgNCAyNCA0em0wIDM2Yy04LjgyIDAtMTYtNy4xOC0xNi0xNlMxNS4xOCA4IDI0IDhzMTYgNy4xOCAxNiAxNi03LjE4IDE2LTE2IDE2eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" alt="AR hand icon">
+                </div>
+
+                <button id="ar-failure">
+                    AR is not tracking!
+                </button>
+
+                <div class="slider">
+                    <div class="slides" id="slides-container">
+                        <!-- ekhane slider dynamically add hobe -->
+                    </div>
+                </div>
+            </model-viewer>
+
+            <div class="empty-state" id="empty-state">
+                <h3>No models added yet</h3>
+                <p>Upload a GLB file above to get started</p>
+            </div>
         </div>
-      </div>
     </div>
 
     <script type="module">
-      let pendingModel = null;
 
-      function displaySlider(modelViewer, models) {
-        const slidesContainer = modelViewer.querySelector(".slides");
+        function displaySlider(modelViewer) {
+            const slidesContainer = modelViewer.querySelector('#slides-container');
+            const glbFileInput = document.querySelector('#glb-file');
+            const thumbnailFileInput = document.querySelector('#thumbnail-file');
+            const useDefaultCheckbox = document.querySelector('#use-default-thumbnail');
+            const addModelBtn = document.querySelector('#add-model-btn');
+            const emptyState = document.querySelector('#empty-state');
 
-        function renderSlides() {
-          slidesContainer.innerHTML = "";
+            let models = [];
+            let currentModelIndex = -1;
 
-          models.forEach((model, index) => {
-            const slideBtn = document.createElement("button");
-            slideBtn.className = "slide" + (index === 0 ? " selected" : "");
-            slideBtn.style.backgroundImage = `url('${model.thumbnail}')`;
-
-            // Click to switch model
-            slideBtn.addEventListener("click", () => {
-              modelViewer.src = model.src;
-              modelViewer.poster = model.thumbnail;
-
-              slidesContainer
-                .querySelectorAll(".slide")
-                .forEach((s) => s.classList.remove("selected"));
-              slideBtn.classList.add("selected");
-            });
-
-            const deleteBtn = document.createElement("span");
-            deleteBtn.innerHTML = "&times;";
-            deleteBtn.style.cssText = `
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        background: rgba(255,255,255,0.8);
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        line-height: 18px;
-        cursor: pointer;
-        font-weight: bold;
-        z-index: 10;
-      `;
-
-            deleteBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-
-              // Store if this was the selected model
-              const wasSelected = modelViewer.src === model.src;
-
-              // Remove from array
-              const modelIndex = models.indexOf(model);
-              if (modelIndex > -1) {
-                models.splice(modelIndex, 1);
-              }
-
-              // Re-render slides
-              renderSlides();
-
-              // If deleted model was selected and there are models left, switch to first
-              if (wasSelected) {
-                if (models.length > 0) {
-                  modelViewer.src = models[0].src;
-                  modelViewer.poster = models[0].thumbnail;
-                } else {
-                  // If no models left, clear the viewer
-                  modelViewer.src = "";
-                  modelViewer.poster = "";
+            // thumbnail option main ta disable hoye jabe jokhn checkbox true hobe..that means user shudhu either default thumbnail or direct upload kore use korte parbe..
+            useDefaultCheckbox.addEventListener('change', () => {
+                thumbnailFileInput.disabled = useDefaultCheckbox.checked;
+                if (useDefaultCheckbox.checked) {
+                    thumbnailFileInput.value = '';
                 }
-              }
             });
 
-            slideBtn.style.position = "relative";
-            slideBtn.appendChild(deleteBtn);
+            // glb file select howar porei add button visible hobe
+            glbFileInput.addEventListener('change', () => {
+                addModelBtn.disabled = !glbFileInput.files[0];
+            });
 
-            slidesContainer.appendChild(slideBtn);
-          });
-        }
+            // Add model functionality
+            addModelBtn.addEventListener('click', async () => {
+                const glbFile = glbFileInput.files[0];
+                if (!glbFile) return;
 
-        // --- Initial render ---
-        renderSlides();
+                const glbUrl = URL.createObjectURL(glbFile);
+                let thumbnailUrl = null;
 
-        // --- Prevent XR interference ---
-        modelViewer
-          .querySelector(".slider")
-          .addEventListener("beforexrselect", (ev) => ev.preventDefault());
+                if (useDefaultCheckbox.checked) {
+                    thumbnailUrl = await generateThumbnail(glbUrl);
+                } else if (thumbnailFileInput.files[0]) {
+                    thumbnailUrl = URL.createObjectURL(thumbnailFileInput.files[0]);
+                } else {
+                    thumbnailUrl = await generateThumbnail(glbUrl);
+                }
 
-        // --- AR prompt handling ---
-        modelViewer.addEventListener("ar-status", (event) => {
-          const prompt = modelViewer.querySelector("#ar-prompt");
-          prompt.style.display =
-            event.detail.status === "session-started" ? "block" : "none";
-        });
+                const model = {
+                    id: Date.now(),
+                    glbUrl,
+                    thumbnailUrl,
+                    name: glbFile.name
+                };
 
-        // --- Generate default thumbnail ---
-        function generateDefaultThumbnail(fileName) {
-          const canvas = document.createElement("canvas");
-          canvas.width = 200;
-          canvas.height = 200;
-          const ctx = canvas.getContext("2d");
+                models.push(model);
+                addSlide(model);
 
-          // Create gradient background
-          const gradient = ctx.createLinearGradient(0, 0, 200, 200);
-          gradient.addColorStop(0, "#3b82f6");
-          gradient.addColorStop(1, "#1e40af");
-          ctx.fillStyle = gradient;
-          ctx.fillRect(0, 0, 200, 200);
+                // Reset form
+                glbFileInput.value = '';
+                thumbnailFileInput.value = '';
+                useDefaultCheckbox.checked = false;
+                thumbnailFileInput.disabled = false;
+                addModelBtn.disabled = true;
 
-          // Add text
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "bold 16px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("3D Model", 100, 90);
-          ctx.font = "12px Arial";
-          const displayName =
-            fileName.length > 15 ? fileName.slice(0, 15) + "..." : fileName;
-          ctx.fillText(displayName, 100, 110);
-          ctx.fillText("No Thumbnail", 100, 130);
+                // Show first model if this is the first one
+                if (models.length === 1) {
+                    switchSrc(0);
+                }
+            });
 
-          return canvas.toDataURL();
-        }
+            // Switch model source dynamically
+            window.switchSrc = (index) => {
+                if (index < 0 || index >= models.length) return;
 
-        // --- Step 1: Handle GLB file upload ---
-        const fileInput = document.getElementById("modelUpload");
-        const pendingBox = document.getElementById("pendingBox");
-        const pendingModelName = document.getElementById("pendingModelName");
+                currentModelIndex = index;
+                const model = models[index];
 
-        fileInput.addEventListener("change", (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
+                // Update model-viewer src and poster attributes dynamically
+                modelViewer.src = model.glbUrl;
+                modelViewer.poster = model.thumbnailUrl;
 
-          // Validate file type
-          if (!file.name.toLowerCase().endsWith(".glb")) {
-            alert("Please upload a .glb file");
-            e.target.value = "";
-            return;
-          }
+                // Update selected state on slides
+                const slides = slidesContainer.querySelectorAll('.slide');
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.classList.add('selected');
+                    } else {
+                        slide.classList.remove('selected');
+                    }
+                });
+            };
 
-          const glbURL = URL.createObjectURL(file);
-          const baseName = file.name.replace(".glb", "");
-          const defaultThumbnail = generateDefaultThumbnail(baseName);
+            function addSlide(model) {
+                const index = models.length - 1;
+                const slide = document.createElement('button');
+                slide.className = 'slide';
+                slide.style.backgroundImage = `url('${model.thumbnailUrl}')`;
+                slide.dataset.modelId = model.id;
+                slide.setAttribute('aria-label', `View ${model.name}`);
+                
+                // Use onclick attribute like the original code
+                slide.onclick = () => {
+                    const idx = models.findIndex(m => m.id === model.id);
+                    window.switchSrc(idx);
+                };
 
-          // Store pending model
-          pendingModel = {
-            name: baseName,
-            src: glbURL,
-            thumbnail: defaultThumbnail,
-            file: file,
-          };
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'slide-remove';
+                removeBtn.innerHTML = '×';
+                removeBtn.setAttribute('aria-label', 'Remove model');
+                removeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeModel(model.id);
+                };
 
-          // Show pending box
-          pendingBox.style.display = "block";
-          pendingModelName.textContent = `Model "${baseName}" uploaded successfully!`;
-
-          // Reset file input
-          e.target.value = "";
-        });
-
-        // --- Step 2: Handle thumbnail upload ---
-        const thumbnailInput = document.getElementById("thumbnailUpload");
-
-        thumbnailInput.addEventListener("change", (e) => {
-          const file = e.target.files[0];
-          if (!file || !pendingModel) return;
-
-          // Validate file type
-          if (!file.type.startsWith("image/")) {
-            alert("Please upload an image file (PNG, JPG, WEBP)");
-            e.target.value = "";
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            // Update pending model with custom thumbnail
-            pendingModel.thumbnail = event.target.result;
-
-            // Add model to collection
-            addModelToCollection();
-          };
-
-          reader.readAsDataURL(file);
-          e.target.value = "";
-        });
-
-        // --- Use default thumbnail button ---
-        document
-          .getElementById("useDefaultBtn")
-          .addEventListener("click", () => {
-            if (pendingModel) {
-              addModelToCollection();
+                slide.appendChild(removeBtn);
+                slidesContainer.appendChild(slide);
+                updateEmptyState();
             }
-          });
 
-        // --- Cancel button ---
-        document.getElementById("cancelBtn").addEventListener("click", () => {
-          if (pendingModel) {
-            URL.revokeObjectURL(pendingModel.src);
-            pendingModel = null;
-            pendingBox.style.display = "none";
-          }
-        });
+            function removeModel(modelId) {
+                const index = models.findIndex(m => m.id === modelId);
+                if (index === -1) return;
 
-        // --- Add model to collection ---
-        function addModelToCollection() {
-          if (!pendingModel) return;
+                const model = models[index];
+                
+                // Revoke object URLs to free memory
+                URL.revokeObjectURL(model.glbUrl);
+                if (model.thumbnailUrl && !model.thumbnailUrl.startsWith('data:')) {
+                    URL.revokeObjectURL(model.thumbnailUrl);
+                }
 
-          models.push({
-            name: pendingModel.name,
-            src: pendingModel.src,
-            thumbnail: pendingModel.thumbnail,
-          });
+                // Remove from array
+                models.splice(index, 1);
 
-          renderSlides();
+                // Remove slide from DOM
+                const slides = slidesContainer.querySelectorAll('.slide');
+                slides[index].remove();
 
-          // Select the newly added model
-          const newIndex = models.length - 1;
-          modelViewer.src = models[newIndex].src;
-          modelViewer.poster = models[newIndex].thumbnail;
+                // Update current model
+                if (models.length === 0) {
+                    currentModelIndex = -1;
+                    modelViewer.src = '';
+                    modelViewer.poster = '';
+                    updateEmptyState();
+                } else if (index === currentModelIndex) {
+                    // If we removed the current model, show another one
+                    const newIndex = Math.min(index, models.length - 1);
+                    window.switchSrc(newIndex);
+                } else if (index < currentModelIndex) {
+                    // Adjust current index if we removed a model before it
+                    currentModelIndex--;
+                }
+            }
 
-          // Clear pending model
-          pendingModel = null;
-          pendingBox.style.display = "none";
+            function updateEmptyState() {
+                if (models.length === 0) {
+                    emptyState.style.display = 'block';
+                    modelViewer.style.display = 'none';
+                } else {
+                    emptyState.style.display = 'none';
+                    modelViewer.style.display = 'block';
+                }
+            }
+
+            async function generateThumbnail(glbUrl) {
+                return new Promise((resolve) => {
+                    const tempViewer = document.createElement('model-viewer');
+                    tempViewer.src = glbUrl;
+                    tempViewer.style.width = '200px';
+                    tempViewer.style.height = '200px';
+                    tempViewer.style.position = 'fixed';
+                    tempViewer.style.left = '-9999px';
+                    document.body.appendChild(tempViewer);
+
+                    tempViewer.addEventListener('load', async () => {
+                        try {
+                            await new Promise(r => setTimeout(r, 500));
+                            
+                            const blob = await tempViewer.toBlob({
+                                idealAspect: true,
+                                width: 200,
+                                height: 200
+                            });
+                            
+                            const url = URL.createObjectURL(blob);
+                            document.body.removeChild(tempViewer);
+                            resolve(url);
+                        } catch (error) {
+                            console.error('Error generating thumbnail:', error);
+                            document.body.removeChild(tempViewer);
+                            resolve('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zRCBNb2RlbDwvdGV4dD48L3N2Zz4=');
+                        }
+                    });
+
+                    setTimeout(() => {
+                        if (document.body.contains(tempViewer)) {
+                            document.body.removeChild(tempViewer);
+                            resolve('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj4zRCBNb2RlbDwvdGV4dD48L3N2Zz4=');
+                        }
+                    }, 3000);
+                });
+            }
+
+            // Prevent slider interactions from affecting the XR scene
+            modelViewer.querySelector('.slider').addEventListener('beforexrselect', (ev) => {
+                ev.preventDefault();
+            });
+
+            updateEmptyState();
         }
-      }
 
-      let modelData = [
-        {
-          name: "Chair",
-          src: "lambo.glb",
-          thumbnail: "lambo.png",
-        },
-      ];
-
-      const modelViewer = document.querySelector("#slider-viewer");
-      displaySlider(modelViewer, modelData);
+        const modelViewer = document.querySelector('#model-viewer');
+        displaySlider(modelViewer);
     </script>
-  </body>
+</body>
 </html>
